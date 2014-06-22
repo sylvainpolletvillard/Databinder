@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Databinder tests</title>
+	<script type="text/javascript" src="../databinder.js"></script>
+	<script type="text/javascript" src="lib/qunit-1.14.0.js"></script>
+	<link rel="stylesheet" href="style/qunit-1.14.0.css"/>
+	<link rel="stylesheet" href="style/reset.css"/>
+	<link rel="stylesheet" href="style/test.css"/>
+</head>
+<body>
+<div id="qunit"></div>
+
+<hr>
+<section id="test1">
+	<h2>Binding content and attributes</h2>
+	<a data-bind="text: label, href: url, title: tooltip"></a>
+	<p data-bind="embed.scope.value"></p>
+</section>
+
+<hr>
+<section id="test2">
+	<h2>Loops over Arrays</h2>
+	<h3>Tic Tac Toe</h3>
+	<table class="tictactoe">
+		<tbody data-bind="loop: { in: grid, as: row }">
+			<tr data-bind="loop: { in: row, as: cell }">
+				<td data-bind="cell">
+			</tr>
+		</tbody>
+	</table>
+	<ul data-bind="loop: emptylist, if: emptylist.length">
+		<li>should not be here</li>
+	</ul>
+</section>
+
+<section>
+	<h2>Traversing properties and indexes</h2>
+	<div id="palette">
+		<ul data-bind="loop: { in: palette, at: name, as: hex }">
+			<li data-bind="text: name, style: { color: hex }"></li>
+		</ul>
+		<ol data-bind="loop: { in: favorites, as: color, at: num }">
+			<li data-bind="style: { backgroundColor: getColorValue }">
+				Favorite <b data-bind="num"></b>
+			</li>
+		</ol>
+	</div>
+</section>
+
+<section id="test4">
+	<h2>class binding</h2>
+	<input data-bind="class: properties" />
+	<button data-bind="class: classNames">Click me</button>
+	<section class="old classes" data-bind="class: otherClasses"></section>
+	<p class="stuff" data-bind="text: message, class: { important: isImportant, business: isBusiness }"></p>
+</section>
+
+<section id="test5">
+	<h2>if and ifnot bindings</h2>
+	<section data-bind="if: bool"><p>I should be here</p></section>
+
+	<ul data-bind="loop: arr">
+		<li data-bind="if: showOrHide, text: loopValue"></li>
+	</ul>
+
+	<div data-bind="if: lvl1">
+		<div data-bind="if: lvl2">
+			<div data-bind="if: lvl3">
+				text
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="test6">
+	<h2>visible and hidden bindings</h2>
+	<ol data-bind="loop: items">
+		<li data-bind="text: loopValue, hidden: autocensor"></li>
+	</ol>
+	<ul data-bind="loop: items">
+		<li data-bind="text: loopValue, visible: autocensor"></li>
+	</ul>
+</section>
+
+<section id="test7">
+	<h2>functions and generators</h2>
+	<h3>Prime Numbers In Fibonacci Suite</h3>
+	<p data-bind="loop: { in: suiteGenerator, as: number }">
+		<span data-bind="text: number, class: { prime: isPrime }">
+		</span> ;
+	</p>
+</section>
+
+<section id="test8">
+	<h2>style binding</h2>
+	<input style="background-color: lime;" data-bind="style: otherRules" />
+	<button  data-bind="style: ruleSet">Click me</button>
+	<p data-bind="text: message, style: { fontSize: size, color: color }"></p>
+</section>
+
+<section id="test9">
+	<h2>with binding</h2>
+	<p>
+		My name is <span data-bind="name"></span>, my son is called <span data-bind="child.name"></span> and my grand-son is <span data-bind="child.child.name"></span>
+	</p>
+
+	<p data-bind="with: child">
+		My name is <span data-bind="..name"></span>, my son is called <span data-bind="name"></span> and my grand-son is <span data-bind="child.name"></span>
+	</p>
+
+	<p data-bind="with: child.child">
+		My name is <span data-bind="...name"></span>, my son is called <span data-bind="..name"></span> and my grand-son is <span data-bind=".name"></span>
+	</p>
+</section>
+
+<section id="test10">
+	<h2>checked and selected binding</h2>
+	<input id="check10" type="checkbox" data-bind="checked: understood"/>
+	<label for="check10">Okay I got it</label>
+	<p>Is it hard so far ?</p>
+	<select data-bind="loop: { in: answers, at: i }">
+		<option data-bind="value:i, text: text, selected: default"></option>
+	</select>
+</section>
+
+<section id="test11">
+	<h2>events binding</h2>
+	<div id="mylist">
+		<h3>Dynamic list (currently
+			<span data-bind="itemCollection.length"></span>
+			items)</h3>
+		<ul data-bind="loop: itemCollection">
+			<li>
+				Item <span data-bind="num"></span>
+				- <a data-bind="click: remove">remove</a>
+			</li>
+		</ul>
+		<input type="button" value="Add another item"
+		       data-bind="click: addItem" />
+	</div>
+</section>
+
+<section id="test12">
+	<h2>advanced event binding and custom events</h2>
+	<svg width="400" height="400" data-bind="loop: rects, on: { mousedown: start, mousemove: update, mouseup: end, rectangle: customEventHandler }">
+		<rect data-bind="x:x,y:y,width:w,height:h" style="fill:blue;"></rect>
+	</svg>
+</section>
+
+<section id="test13">
+	<h2>complex bindings value paths</h2>
+	<span data-bind="/name"></span>
+	<span data-bind=".name"></span>
+	<span data-bind="name"></span>
+	<div data-bind="with: /child">
+		<span data-bind="name"></span>
+		<span data-bind=".name"></span>
+		<span data-bind="..child.name"></span>
+		<span data-bind="/child.name"></span>
+		<div data-bind="with: ..child.child">
+			<span data-bind="name"></span>
+			<span data-bind=".name"></span>
+			<span data-bind="..child.name"></span>
+			<span data-bind="...child.child.name"></span>
+			<span data-bind="/child.child.name"></span>
+		</div>
+	</div>
+</section>
+
+<section id="test14">
+	<h2>text and html bindings</h2>
+	<p class="text" data-bind="text: msg"></p>
+	<p class="html" data-bind="html: msg"></p>
+	<p class="undefined" data-bind="text: undefined">do not touch</p>
+	<p class="undefined" data-bind="html: undefined">do not touch</p>
+</section>
+
+<section id="test15">
+	<h2>template binding</h2>
+	<div id="flags">
+		<h1>Some flags by continent </h1>
+		<h2>Europe</h2>
+		<ul data-bind="loop: europe">
+			<li data-bind="template: flag"></li>
+		</ul>
+		<h2>Asia</h2>
+		<ul data-bind="loop: asia">
+			<li data-bind="template: flag"></li>
+		</ul>
+		<h2>Africa</h2>
+		<ul data-bind="loop: africa">
+			<li data-bind="template: flag"></li>
+		</ul>
+	</div>
+
+	<template id="flag">
+		<img data-bind="src: img, alt: country">
+		<h3 data-bind="country"></h3>
+		<dl>
+			<dt>Capital: </dt>
+			<dd data-bind="capital"></dd>
+		</dl>
+	</template>
+
+</section>
+
+<section id="test16">
+	<h2>extensions</h2>
+
+	<p data-bind="text: num | round, if: arr| moreThan 0"></p>
+	<span data-bind="text: date| floor | trim |year"></span>
+</section>
+
+<section id="test17">
+	<h2>automatic bindings</h2>
+
+	<div id="wrapper" data-bind>
+		<ul name="list" data-bind>
+			<li class="htmlcontent" data-bind></li>
+		</ul>
+		<input type="checkbox" name="truthy" data-bind />
+		<select name="list" data-bind>
+			<option class="selectLast" data-bind></option>
+		</select>
+		<figure id="falsy" data-bind></figure>
+		<img class="imgurl" data-bind/>
+		<input type="text" name="helloworld" data-bind/>
+		<p name="helloworld" data-bind><pre>damn</pre></p>
+	</div>
+</section>
+
+<section id="test18">
+	<h2>view saves with get</h2>
+
+	<form data-bind="submit: save">
+		<dl data-bind="loop: scores">
+			<dt><input type="text" data-bind="name"></dt>
+			<dd><input type="number" data-bind="score"></dd>
+		</dl>
+		<input type="submit" value="Enregistrer">
+	</form>
+	<p data-bind="winner">
+		The winner is <span data-bind="name"></span> with <span data-bind="score"></span> points.
+	</p>
+</section>
+
+
+<script type="text/javascript" src="test.js"></script>
+</body>
+</html>
