@@ -1,0 +1,211 @@
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-o-keyframes spin {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+@-ms-keyframes spin {
+  from {
+    -ms-transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+  }
+}
+@keyframes spin-inv {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+@-webkit-keyframes spin-inv {
+  from {
+    -webkit-transform: rotate(360deg);
+  }
+  to {
+    -webkit-transform: rotate(0deg);
+  }
+}
+@-moz-keyframes spin-inv {
+  from {
+    -moz-transform: rotate(360deg);
+  }
+  to {
+    -moz-transform: rotate(0deg);
+  }
+}
+@-o-keyframes spin-inv {
+  from {
+    -o-transform: rotate(360deg);
+  }
+  to {
+    -o-transform: rotate(0deg);
+  }
+}
+@-ms-keyframes spin-inv {
+  from {
+    -ms-transform: rotate(360deg);
+  }
+  to {
+    -ms-transform: rotate(0deg);
+  }
+}
+body {
+  position: relative;
+  -webkit-transition: left 0.3s ease;
+  -moz-transition: left 0.3s ease;
+  -ms-transition: left 0.3s ease;
+  -o-transition: left 0.3s ease;
+  transition: left 0.3s ease;
+  left: 0;
+}
+#menu-button {
+  position: fixed;
+  top: 0;
+  left: 0;
+  text-indent: 999em;
+  z-index: 200;
+  cursor: pointer;
+  -webkit-transition: left 0.3s ease, opacity 0.2s ease;
+  -moz-transition: left 0.3s ease, opacity 0.2s ease;
+  -ms-transition: left 0.3s ease, opacity 0.2s ease;
+  -o-transition: left 0.3s ease, opacity 0.2s ease;
+  transition: left 0.3s ease, opacity 0.2s ease;
+  opacity: 0.5;
+}
+#menu-button:hover {
+  opacity: 1;
+}
+#lang-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-indent: 999em;
+  z-index: 200;
+  cursor: pointer;
+  opacity: 0.5;
+}
+#lang-button:hover {
+  opacity: 1;
+}
+#menu {
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #f0f0f0;
+  box-shadow: 0 5px 15px #ccc;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow-y: auto;
+  top: 0;
+  left: -300px;
+  z-index: 100;
+  width: 300px;
+  -webkit-transition: left 0.3s ease, background-color 0.4s linear;
+  -moz-transition: left 0.3s ease, background-color 0.4s linear;
+  -ms-transition: left 0.3s ease, background-color 0.4s linear;
+  -o-transition: left 0.3s ease, background-color 0.4s linear;
+  transition: left 0.3s ease, background-color 0.4s linear;
+  text-align: left;
+}
+#menu a {
+  display: block;
+  text-decoration: none;
+  color: #000000;
+  padding: .25em 0 .25em 1em;
+  font-size: .85em;
+}
+#menu a:hover {
+  background: #f8f8f8;
+}
+#menu a:not(.title):before {
+  content: "»";
+  position: relative;
+  top: -1px;
+  margin-right: 0.5em;
+}
+#menu a.title {
+  font-size: 1.4em;
+  margin-bottom: 0.25em;
+}
+#menu a.active {
+  font-weight: bold;
+}
+#menu a.download-link {
+  display: block;
+  padding: .25em 0 .25em 1em;
+}
+#menu a.download-link h2 {
+  display: inline;
+  vertical-align: middle;
+  margin: 0;
+  font-size: 100%;
+  color: #000000;
+}
+#menu a.download-link:after {
+  content: url("../res/download-icon.png");
+  vertical-align: middle;
+  display: inline-block;
+  margin-left: 1em;
+}
+#menu .footer {
+  color: gray;
+  font-size: 0.8em;
+  text-align: center;
+}
+body.menu-opened {
+  left: 300px !important;
+}
+body.menu-opened #menu {
+  left: 0;
+}
+body.menu-opened #menu-button {
+  left: 264px !important;
+}
+@media (min-width: 1281px) {
+  body {
+    position: absolute;
+    left: 300px !important;
+    right: 0;
+  }
+  #menu {
+    left: 0;
+  }
+  #menu-button {
+    display: none;
+  }
+}
