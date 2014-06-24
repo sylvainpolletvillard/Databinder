@@ -208,8 +208,11 @@
 <section id="test16">
 	<h2>extensions</h2>
 
-	<p data-bind="text: num | round, if: arr| moreThan 0"></p>
+	<p data-bind="text: num | round, if: arr| moreThan 5"></p>
 	<span data-bind="text: date| floor | trim |year"></span>
+	<ul data-bind="loop: arr | filter odd">
+		<li data-bind="."></li>
+	</ul>
 </section>
 
 <section id="test17">

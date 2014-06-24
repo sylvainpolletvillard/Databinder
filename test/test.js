@@ -573,9 +573,10 @@
 
 	test("extensions", function(){
 		databind(test16).set({
-			arr: [1,2,3],
+			arr: [1,2,3,4,5,6,7,8,9],
 			num: 1234.567,
-			date: 2012.345
+			date: 2012.345,
+			odd: function(n){ return n%2 > 0; }
 		});
 		equal(test16.querySelector("p").innerHTML, "1235");
 		equal(test16.querySelector("span").innerHTML, "2012");

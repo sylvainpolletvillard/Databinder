@@ -357,7 +357,7 @@
 					}
 					this.elm.innerHTML=""; //remove all child nodes
 
-					list = innerScope.data[loop.list];
+					list = innerScope.data[loop.list]; //TODO: apply resolve for function eval and extensions
 					if(isFunction(list)){
 						loopFn = list;
 						list = innerScope.evalFunction(list);
@@ -496,20 +496,32 @@
 			return value;
 		},
 
-		resolve: function(value, element, expectsFunction){
+		resolve: function(declaration, element, expectsFunction){
 			var f, l, params, extension, extensionName;
-			var extensions = value.split("|");
+			var extensions = declaration.split("|");
 			var name = extensions.shift().trim();
 			var scope = this.lookup(name, element, false);
-			value = scope.data[name.match(/([^/\.\s]+)\s*$/)[1]];
-			if(!expectsFunction){
+			var value = (name === "." ? scope.data : scope.data[name.match(/([^\/\.\s]+)\s*$/)[1]]);
+			var resolveParam = function(param){
+				if(!isNaN(param)){
+					return +param; //inline Number
+				}
+				if(param[0] != '"' || param[0] != "'"){
+					return param.slice(1, -1); //inline String
+				}
+				return this.resolve(param, element, true);
+			};
+
+			if(!expectsFunction) {
 				value = this.evalFunction(value, element);
+			}
+			if(extensions.length > 0){
 				for (f = 0, l = extensions.length; f < l; f++) {
 					params = extensions[f].trim().split(/\s+/);
 					extensionName = params.shift();
 					extension = databind.extensions[extensionName];
 					if(extension !== undefined && isFunction(extension)) {
-						value = extension.call(value, params);
+						value = extension.apply(value, params.map(resolveParam));
 					} else {
 						throw DatabinderError("Unknown extension: " + extensionName);
 					}
