@@ -229,12 +229,11 @@
 
 	test("functions and generators", function(){
 		databind("#test7").set({
-			suite: [1,1],
+			suite: [],
 			suiteGenerator: function(scope){
-				var last = scope.suite.slice(-2);
-				var next = last[0]+last[1];
-				if(next < 100){ scope.suite.push(next); }
-				return scope.suite;
+				var n = scope.suite.length;
+				scope.suite[n] = n<2 ? 1 : scope.suite[n-2] + scope.suite[n-1]
+				return scope.suite[n] < 100 ? scope.suite[n] : null;
 			},
 			isPrime: function(){
 				for(var n=2; n<= ~~(this.number/2); n++){
