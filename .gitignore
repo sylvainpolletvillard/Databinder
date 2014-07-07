@@ -26,11 +26,20 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
-
+Icon
 # Thumbnails
 ._*
 
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+
+
+# IntelliJ IDEA
+# =========================
+.idea
+
+
+# Node modules
+# =========================
+node_modules
