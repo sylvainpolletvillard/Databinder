@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 						+ '    MIT License - © <%= grunt.template.today("yyyy") %> syllab.fr */\n'
 			},
 			build: {
-				src: '<%= pkg.name %>.js',
+				src: 'js/<%= pkg.name %>.js',
 				dest: 'build/<%= pkg.name %>.min.js'
 			},
 			jquery_adapter: {
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 			all: ['test/index.html']
 		},
 		jshint: {
-			all: ['databinder.js','databinder.extensions.js','jquery.adapter.js'],
+			all: ['js/databinder.js','js/databinder.extensions.js','js/jquery.adapter.js'],
 			options: {
 				sub: true
 			}

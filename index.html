@@ -164,30 +164,37 @@ databind("#introduction").set({
 
 <section id="download">
 	<h2>Download</h2>
-	<h3>Current version : v0.5</h3>
+	<h3>Current version : v0.7</h3>
 	<ul>
-		<li><a href="databinder.js">databinder.js</a> source file (14.1 KB)</li>
-		<li><a href="build/databinder.min.js">databinder.min.js</a> minified file (7.15 KB)</li>
-		<li><a href="build/databinder.jquery.min.js">databinder.jquery.min.js</a> minified file with jQuery adapter (optional) (7.31 KB)</li>
-		<li><a href="databinder.extensions.js">databinder.extensions.js</a> collection of extensions (optional) (1.70 KB)</li>
+		<li><a href="databinder.js">databinder.js</a> source file (15.3 KB)</li>
+		<li><a href="build/databinder.min.js">databinder.min.js</a> minified file (7.59 KB)</li>
+		<li><a href="build/databinder.jquery.min.js">databinder.jquery.min.js</a> minified file with jQuery adapter (optional) (8.28 KB)</li>
+		<li><a href="databinder.extensions.js">databinder.extensions.js</a> collection of extensions (optional) (1.75 KB)</li>
 	</ul>
-	<h3>Changelog</h3>
-	<dl>
-		<dt>v0.6</dt>
-		<dd>new functional-oriented API</dd>
-		<dd>added <code>get</code> method</dd>
-		<dt>v0.5</dt>
-		<dd>externalised bundled extensions</dd>
-		<dd>added Array and Boolean extensions</dd>
-		<dt>v0.4</dt>
-		<dd>added extensions</dd>
-		<dd>changed template functions arguments</dd>
-		<dt>v0.3</dt>
-		<dd>added templates & events</dd>
-		<dt>v0.2</dt>
-		<dd>new syntax for loops</dd>
-		<dd>automatic binding table revised</dd>
-	</dl>
+	<details>
+		<summary>Changelog</summary>
+		<dl>
+			<dt>v0.7</dt>
+			<dd>added support for litteral strings as parameters</dd>
+			<dt>v0.6</dt>
+			<dd>new functional-oriented API</dd>
+			<dd>added <code>get</code> method</dd>
+			<dt>v0.5</dt>
+			<dd>externalised bundled extensions</dd>
+			<dd>added Array and Boolean extensions</dd>
+			<dt>v0.4</dt>
+			<dd>added extensions</dd>
+			<dd>changed template functions arguments</dd>
+			<dt>v0.3</dt>
+			<dd>added templates & events</dd>
+			<dt>v0.2</dt>
+			<dd>new syntax for loops</dd>
+			<dd>automatic binding table revised</dd>
+		</dl>
+	</details>
+
+	<h3>GitHub repository</h3>
+	<p>You can report bugs and contribute to the project on <a href="https://github.com/sylvainpolletvillard/Databinder">GitHub Databinder repository</a>.</p>
 </section>
 
 <hr>
@@ -440,12 +447,11 @@ span.prime {
 			<span class="legend">JavaScript</span>
             <pre><code data-language="javascript">
 databind("body").set({
-	suite: [1,1],
+	suite: [],
 	suiteGenerator: function(scope){
-		var last = scope.suite.slice(-2);
-		var next = last[0]+last[1];
-		if(next < 100){ scope.suite.push(next); }
-		return scope.suite;
+      var n = scope.suite.length;
+      scope.suite[n] = n<2 ? 1 : scope.suite[n-2] + scope.suite[n-1];
+      return scope.suite[n] < 100 ? scope.suite[n] : null;
 	},
 	isPrime: function(){
 		for(var n=2; n<= ~~(this.number/2); n++){
@@ -475,12 +481,11 @@ databind("body").set({
 	</div>
 	<script>
 		databind("#fibonacci-suite").set({
-			suite: [1,1],
+			suite: [],
 			suiteGenerator: function(scope){
-				var last = scope.suite.slice(-2);
-				var next = last[0]+last[1];
-				if(next < 100){ scope.suite.push(next); }
-				return scope.suite;
+				var n = scope.suite.length;
+				scope.suite[n] = n<2 ? 1 : scope.suite[n-2] + scope.suite[n-1];
+				return scope.suite[n] < 100 ? scope.suite[n] : null;
 			},
 			isPrime: function(){
 				for(var n=2; n<= ~~(this.number/2); n++){
@@ -498,7 +503,7 @@ databind("body").set({
 		<li>the root scope (the one you pass through <mark>databind</mark>)</li>
 		<li>the current HTML element.</li>
 	</ol>
-	<p>Using functions is very powerful and can help you implement complex things like generators or recursion. If you do not figure how to write your template, a function will probably help you to come through.</p>
+	<p>When a <code>Function</code> is used within a <code>loop</code> binding, it acts as a generator which iterate on return values until this function returns <code>null</code>. Using functions is very powerful and can help you implement complex things like generators or recursion. If you do not figure how to write your template, a function will probably help you to come through.</p>
 </section>
 
 <hr>
@@ -1850,7 +1855,7 @@ databind("#treeview").set({
 			<span class="legend">HTML</span>
 			<pre><code data-language="html">
 &lt;h2&gt;Your account activity&lt;/h2&gt;
-&lt;time data-bind="reportDate | intl-date long"&gt;&lt;/time&gt;
+&lt;time data-bind="reportDate | intl-date 'long'"&gt;&lt;/time&gt;
 &lt;table&gt;
 	&lt;thead&gt;
 		&lt;th&gt;Date&lt;/th&gt;
@@ -1859,9 +1864,9 @@ databind("#treeview").set({
 	&lt;/thead&gt;
 	&lt;tbody data-bind="transactions"&gt;
 		&lt;tr&gt;
-			&lt;td data-bind="date | intl-date full"&gt;&lt;/td&gt;
+			&lt;td data-bind="date | intl-date 'full'"&gt;&lt;/td&gt;
 			&lt;td data-bind="description"&gt;&lt;/td&gt;
-			&lt;td data-bind="amount | intl-currency EUR"&gt;&lt;/td&gt;
+			&lt;td data-bind="amount | intl-currency 'EUR'"&gt;&lt;/td&gt;
 		&lt;/tr&gt;
 	&lt;/tbody&gt;
 &lt;/table&gt;
@@ -1901,7 +1906,7 @@ databind("#intl-demo").set({
 
 			<div id="intl-demo">
 				<h2>Your account activity</h2>
-				<time data-bind="reportDate | intl-date long"></time>
+				<time data-bind="reportDate | intl-date 'long'"></time>
 				<table>
 					<thead>
 					<th>Date</th>
@@ -1910,9 +1915,9 @@ databind("#intl-demo").set({
 					</thead>
 					<tbody data-bind="transactions">
 					<tr>
-						<td data-bind="date | intl-date full"></td>
+						<td data-bind="date | intl-date 'full'"></td>
 						<td data-bind="description"></td>
-						<td data-bind="amount | intl-currency EUR"></td>
+						<td data-bind="amount | intl-currency 'EUR'"></td>
 					</tr>
 					</tbody>
 				</table>
