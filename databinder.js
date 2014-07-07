@@ -10,7 +10,7 @@
 
 	var BINDING_ATTRIBUTE = "data-bind";
 	var BINDING_GLOBAL = "databind";
-	var BINDINGS_REGEX = /(?:^|,)\s*(?:(\w+):)?\s*([\w\.\/\|\s-]+|{.+})+/g;
+	var BINDINGS_REGEX = /(?:^|,)\s*(?:(\w+):)?\s*([\w\.\/\|\'\"\s-]+|{.+})+/g;
 
 	function getTypeOf(obj) {
 		return Object.prototype.toString.call(obj).match(/\s([a-zA-Z]+)/)[1];
@@ -143,9 +143,7 @@
 						innerScope = this.scope.lookup(binding.value, this.elm, true);
 						break;
 					case "loop":
-						var t = this.bindLoop(bindingSet || { in: binding.value });
-						innerScope = t.scope;
-						loop = t.loop;
+						innerScope = this.bindLoop(bindingSet || { in: binding.value });
 						break;
 					case "if":
 						if(this.bindIf(binding.value, true)) return;
@@ -183,8 +181,10 @@
 				}
 			}
 
-			if(innerScope !== null){
-				this.bindChildren(innerScope, loop);
+			if(this.loop !== undefined) {
+				this.parseLoop(innerScope);
+			} else if(innerScope !== null){
+				this.parseChildren(innerScope);
 			}
 		},
 
@@ -309,14 +309,12 @@
 			if (bindingSet["in"] === undefined) {
 				throw DatabinderError("No list specified for loop declaration: " + bindingSet);
 			}
-			return {
-				scope: this.scope.lookup(bindingSet["in"], this.elm, false),
-				loop: {
-					"list": bindingSet["in"],
-					"index": bindingSet["at"] || "loopIndex",
-					"item": bindingSet["as"] || "loopValue"
-				}
+			this.loop = {
+				list: bindingSet["in"],
+				index: bindingSet["at"] || "loopIndex",
+				item: bindingSet["as"] || "loopValue"
 			};
+			return this.scope.lookup(bindingSet["in"], this.elm, false);
 		},
 
 		bindTemplate: function(templateId){
@@ -327,63 +325,63 @@
 			this.elm.innerHTML = template.innerHTML;
 		},
 
-		bindChildren: function(innerScope, loop){
-			var i, c, children, list, newChild, loopFn;
-
-			function iterate(elm, idx){
-				var c;
-				var iterationData = getCopyRef(list[idx]);
-				var iterationScope = DataScope.init(iterationData, innerScope);
-				iterationScope.loopIteration = loop;
-				iterationScope.data[loop.index] = idx;
-				iterationScope.data[loop.item] = list[idx];
-				for(c = 0; c < children.length; c++){
-					newChild = children[c].cloneNode(true);
-					elm.appendChild(newChild);
-					if(newChild instanceof Element) {
-						databind(newChild).set(iterationScope);
-					}
+		parseChildren: function(innerScope){
+			var c, children;
+			if(DataScope.isPrototypeOf(innerScope) && this.elm.children) {
+				children = [];
+				for(c=0; c<this.elm.children.length; c++){
+					children.push(this.elm.children[c]);
 				}
-				if(loopFn){
-					list = innerScope.evalFunction(loopFn);
+				for(c=0; c<children.length; c++){
+					if(children[c] instanceof Element){
+						databind(children[c]).set(innerScope);
+					}
 				}
 			}
+		},
 
-			if(DataScope.isPrototypeOf(innerScope)){
+		parseLoop: function(innerScope){
+			var i, l, children, list;
+
+			if(DataScope.isPrototypeOf(innerScope)) {
 				children = [];
-				if(loop !== undefined){
-					for(c=0; c<this.elm.childNodes.length; c++){
-						children.push(this.elm.childNodes[c].cloneNode(true));
+				for (i=0, l=this.elm.childNodes.length; i<l; i++) {
+					children.push(this.elm.childNodes[i].cloneNode(true));
+				}
+				this.elm.innerHTML = ""; //remove all child nodes
+				list = innerScope.data[this.loop.list]; //TODO: apply resolve for function eval and extensions
+
+				if(Array.isArray(list)){
+					for(i=0; i<list.length; i++){
+						this.parseLoopIteration(i, list[i], children, innerScope);
 					}
-					this.elm.innerHTML=""; //remove all child nodes
-
-					list = innerScope.data[loop.list];
-					if(isFunction(list)){
-						loopFn = list;
-						list = innerScope.evalFunction(list);
+				} else if(isFunction(list)){
+					for(i=0; (l = innerScope.evalFunction(list)) !== null; i++){
+						this.parseLoopIteration(i, l, children, innerScope);
 					}
-
-					if(Array.isArray(list)){
-						for(i=0; i<list.length; i++){
-							iterate(this.elm, i);
-
-						}
-					} else if(list instanceof Object){
-						for(i in list){
-							if(list.hasOwnProperty(i)){
-								iterate(this.elm, i);
-							}
+				} else if(list instanceof Object) {
+					for(i in list){
+						if(list.hasOwnProperty(i)){
+							this.parseLoopIteration(i, list[i], children, innerScope);
 						}
 					}
-				} else if(this.elm.children) {
-					for(c=0; c<this.elm.children.length; c++){
-						children.push(this.elm.children[c]);
-					}
-					for(c=0; c<children.length; c++){
-						if(children[c] instanceof Element){
-							databind(children[c]).set(innerScope);
-						}
-					}
+				}
+			}
+		},
+
+		parseLoopIteration: function(key, value, children, innerScope){
+			var c, l, newChild;
+			var data = getCopyRef(value);
+			var scope = DataScope.init(data, innerScope);
+			scope.loopItem = this.loop.item;
+			scope.loopIndex = this.loop.index;
+			scope.data[this.loop.index] = key;
+			scope.data[this.loop.item] = data;
+			for(c=0, l=children.length; c<l; c++){
+				newChild = children[c].cloneNode(true);
+				this.elm.appendChild(newChild);
+				if(newChild instanceof Element){
+					databind(newChild).set(scope);
 				}
 			}
 		},
@@ -439,7 +437,8 @@
 
 		//Getting a scope centered on value by name
 		lookup: function(name, element, inner) {
-			var scope = this, value, names, i, l;
+			var value, names, i, l;
+			var scope = this;
 
 			if(name === "."){
 				return scope;
@@ -496,26 +495,44 @@
 			return value;
 		},
 
-		resolve: function(value, element, expectsFunction){
-			var f, l, params, extension, extensionName;
-			var extensions = value.split("|");
-			var name = extensions.shift().trim();
-			var scope = this.lookup(name, element, false);
-			value = scope.data[name.match(/([^/\.\s]+)\s*$/)[1]];
-			if(!expectsFunction){
+		resolve: function(declaration, element, expectsFunction){
+			var f, l, p, pl, params, resolvedParams, extension, extensionName;
+			var extensions = declaration.split("|");
+			var value = this.resolveParam(extensions.shift().trim(), element);
+			if(!expectsFunction) {
 				value = this.evalFunction(value, element);
+			}
+			if(extensions.length > 0){
 				for (f = 0, l = extensions.length; f < l; f++) {
 					params = extensions[f].trim().split(/\s+/);
 					extensionName = params.shift();
 					extension = databind.extensions[extensionName];
-					if(extension !== undefined && isFunction(extension)) {
-						value = extension.call(value, params);
+					if(extension !== undefined && isFunction(extension)){
+						resolvedParams = [];
+						for(p = 0, pl = params.length; p < pl; p++){
+							resolvedParams.push(this.resolveParam(params[p], element));
+						}
+						value = extension.apply(value, resolvedParams);
 					} else {
 						throw DatabinderError("Unknown extension: " + extensionName);
 					}
 				}
 			}
 			return value;
+		},
+
+		resolveParam: function(param, element){
+			if(!isNaN(param)){
+				return +param; //inline Number
+			}
+			if(param[0] === '"' || param[0] === "'"){
+				return param.slice(1, -1); //inline String
+			}
+			var scope = this.lookup(param, element, false);
+			if(param === "."){
+				return scope.data;
+			}
+			return scope.data[param.match(/([^\/\.\s]+)\s*$/)[1]];
 		}
 	});
 
