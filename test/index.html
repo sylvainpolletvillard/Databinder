@@ -208,11 +208,8 @@
 <section id="test16">
 	<h2>extensions</h2>
 
-	<p data-bind="text: num | round, if: arr| moreThan 5"></p>
+	<p data-bind="text: num | round, if: arr| moreThan 0"></p>
 	<span data-bind="text: date| floor | trim |year"></span>
-	<ul data-bind="loop: arr | filter odd">
-		<li data-bind="."></li>
-	</ul>
 </section>
 
 <section id="test17">
@@ -248,6 +245,16 @@
 	</p>
 </section>
 
+<section id="test19">
+	<h2>string and number parameters</h2>
+
+	<span data-bind="ifnot: 'test' | capitalize | equals 'Test'">should not be here</span>
+	<span data-bind="ifnot: '  ' | trim | equals ''">should not be here</span>
+	<span data-bind="ifnot: 5 | moreThan 3">should not be here</span>
+	<span data-bind="ifnot: 107 | between 095 1001">should not be here</span>
+
+	<p data-bind="text: 'test string parameter'"></p>
+</section>
 
 <script type="text/javascript" src="test.js"></script>
 </body>

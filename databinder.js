@@ -10,7 +10,7 @@
 
 	var BINDING_ATTRIBUTE = "data-bind";
 	var BINDING_GLOBAL = "databind";
-	var BINDINGS_REGEX = /(?:^|,)\s*(?:(\w+):)?\s*([\w\.\/\|\s-]+|{.+})+/g;
+	var BINDINGS_REGEX = /(?:^|,)\s*(?:(\w+):)?\s*([\w\.\/\|\'\"\s-]+|{.+})+/g;
 
 	function getTypeOf(obj) {
 		return Object.prototype.toString.call(obj).match(/\s([a-zA-Z]+)/)[1];
@@ -498,19 +498,7 @@
 		resolve: function(declaration, element, expectsFunction){
 			var f, l, params, extension, extensionName;
 			var extensions = declaration.split("|");
-			var name = extensions.shift().trim();
-			var scope = this.lookup(name, element, false);
-			var value = (name === "." ? scope.data : scope.data[name.match(/([^\/\.\s]+)\s*$/)[1]]);
-			var resolveParam = function(param){
-				if(!isNaN(param)){
-					return +param; //inline Number
-				}
-				if(param[0] != '"' || param[0] != "'"){
-					return param.slice(1, -1); //inline String
-				}
-				return this.resolve(param, element, true);
-			};
-
+			var value = this.resolveParam(extensions.shift().trim(), element);
 			if(!expectsFunction) {
 				value = this.evalFunction(value, element);
 			}
@@ -519,14 +507,31 @@
 					params = extensions[f].trim().split(/\s+/);
 					extensionName = params.shift();
 					extension = databind.extensions[extensionName];
-					if(extension !== undefined && isFunction(extension)) {
-						value = extension.apply(value, params.map(resolveParam));
+					if(extension !== undefined && isFunction(extension)){
+						var _scope = this;
+						value = extension.apply(value, params.map(function(param){
+							return _scope.resolveParam(param, element);
+						}));
 					} else {
 						throw DatabinderError("Unknown extension: " + extensionName);
 					}
 				}
 			}
 			return value;
+		},
+
+		resolveParam: function(param, element){
+			if(!isNaN(param)){
+				return +param; //inline Number
+			}
+			if(param[0] === '"' || param[0] === "'"){
+				return param.slice(1, -1); //inline String
+			}
+			var scope = this.lookup(param, element, false);
+			if(param === "."){
+				return scope.data;
+			}
+			return scope.data[param.match(/([^\/\.\s]+)\s*$/)[1]];
 		}
 	});
 

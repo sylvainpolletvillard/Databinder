@@ -232,7 +232,7 @@
 			suite: [],
 			suiteGenerator: function(scope){
 				var n = scope.suite.length;
-				scope.suite[n] = n<2 ? 1 : scope.suite[n-2] + scope.suite[n-1]
+				scope.suite[n] = n<2 ? 1 : scope.suite[n-2] + scope.suite[n-1];
 				return scope.suite[n] < 100 ? scope.suite[n] : null;
 			},
 			isPrime: function(){
@@ -519,7 +519,9 @@
 	});
 
 
-	databind.extensions.equals = function(x){ return this == x; };
+	databind.extensions.equals = function(x){
+		return this == x;
+	};
 	databind.extensions.none = function(fn){
 		return this === null || this === undefined || this.length === 0
 			|| (fn !== undefined	&& Array.isArray(this) && !this.some(fn));
@@ -543,8 +545,12 @@
 	databind.extensions.filter = function(f){
 		return Array.isArray(this) ? this.filter(f) : [];
 	};
-	databind.extensions.date = function(){ return new Date(this).toLocaleDateString(); };
-	databind.extensions.time = function(){ return new Date(this).toLocaleTimeString(); };
+	databind.extensions.date = function(){
+		return new Date(this).toLocaleDateString();
+	};
+	databind.extensions.time = function(){
+		return new Date(this).toLocaleTimeString()
+	};
 	databind.extensions.floor = function(n){
 		var f = Math.pow(10, n|0);
 		return Math.floor( f * (+this) ) / f;
@@ -572,10 +578,9 @@
 
 	test("extensions", function(){
 		databind(test16).set({
-			arr: [1,2,3,4,5,6,7,8,9],
+			arr: [1,2,3],
 			num: 1234.567,
-			date: 2012.345,
-			odd: function(n){ return n%2 > 0; }
+			date: 2012.345
 		});
 		equal(test16.querySelector("p").innerHTML, "1235");
 		equal(test16.querySelector("span").innerHTML, "2012");
@@ -654,7 +659,13 @@
 		save();
 		equal(test18.querySelectorAll("span")[0].textContent, "Joe");
 		equal(test18.querySelectorAll("span")[1].textContent, "6500");
+	});
 
+	var test19 = document.getElementById("test19");
+	test("string and number parameters", function() {
+		databind(test19).set();
+		equal(test19.querySelectorAll("span").length, 0);
+		equal(test19.querySelector("p").innerHTML, "test string parameter");
 	});
 
 })(this);
