@@ -496,7 +496,7 @@
 		},
 
 		resolve: function(declaration, element, expectsFunction){
-			var f, l, params, extension, extensionName;
+			var f, l, p, pl, params, resolvedParams, extension, extensionName;
 			var extensions = declaration.split("|");
 			var value = this.resolveParam(extensions.shift().trim(), element);
 			if(!expectsFunction) {
@@ -508,10 +508,11 @@
 					extensionName = params.shift();
 					extension = databind.extensions[extensionName];
 					if(extension !== undefined && isFunction(extension)){
-						var _scope = this;
-						value = extension.apply(value, params.map(function(param){
-							return _scope.resolveParam(param, element);
-						}));
+						resolvedParams = [];
+						for(p = 0, pl = params.length; p < pl; p++){
+							resolvedParams.push(this.resolveParam(params[p], element));
+						}
+						value = extension.apply(value, resolvedParams);
 					} else {
 						throw DatabinderError("Unknown extension: " + extensionName);
 					}
