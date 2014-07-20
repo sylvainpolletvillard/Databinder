@@ -349,7 +349,7 @@
 					children.push(this.elm.childNodes[i].cloneNode(true));
 				}
 				this.elm.innerHTML = ""; //remove all child nodes
-				list = innerScope.data[this.loop.list]; //TODO: apply resolve for function eval and extensions
+				list = innerScope.resolve(this.loop.list, this.elm, true);
 
 				if(Array.isArray(list)){
 					for(i=0; i<list.length; i++){
