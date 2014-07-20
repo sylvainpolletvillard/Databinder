@@ -1,17 +1,22 @@
 (function($, databind){
 	if(!$) return;
 
-	$.fn.databind = function (){
-		return this.each(function(data){
-			databind(this);
+	$.fn.databind = function(data){
+		return this.each(function(){
+			var databinding = databind(this);
 			if(data !== undefined) {
-				this.databinding.set(data);
+				databinding.set(data);
 			}
 		});
 	};
-	$.each(["get","set","reset"], function(action){
-		$.fn.databind[action] = function(){
-			return this.each(function(){ databind(this)[action].apply(this, arguments); });
+
+	$.each(["get","set","reset"], function(i, action){
+		$.fn["databind_"+action] = function(){
+			var args = arguments;
+			return this.each(function(){
+				var databinding = databind(this);
+				databinding[action].apply(databinding, args);
+			});
 		};
 	});
 
