@@ -1,4 +1,7 @@
 databind.extensions.equals = function(x){ return this == x; };
+databind.extensions.number = function(){
+	return (Array.isArray(this) ? this.length : +this);
+};
 databind.extensions.none = function(fn){
 	return this === null || this === undefined || this.length === 0 || (fn !== undefined	&& Array.isArray(this) && !this.some(fn));
 };
@@ -13,12 +16,15 @@ databind.extensions.every = function(f){
 	return Array.isArray(this) && this.every(typeof f == "function" ? f : function(){ return this[f]; });
 };
 databind.extensions.some = function(f){
-	return Array.isArray(this) && this.some(typeof f == "function" ? f : function(){ return this[f]; });
+	if(f === undefined){ return (Array.isArray(this) ? this.length : +this) > 0; }
+	if(typeof f === "string"){ return Array.isArray(this) && this.some(function(){ return this[f]; }); }
+	return Array.isArray(this) && this.some(f);
 };
 databind.extensions.sort = function(f){
 	return Array.isArray(this) ? this.sort(f) : [];
 };
 databind.extensions.filter = function(f){
+	if(typeof f === "string"){ return Array.isArray(this) && this.filter(function(){ return this[f]; }); }
 	return Array.isArray(this) ? this.filter(f) : [];
 };
 databind.extensions.date = function(){ return new Date(this).toLocaleDateString(); };
