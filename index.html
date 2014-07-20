@@ -75,7 +75,6 @@
 
 <section id="introduction" data-bind="project">
 	<h1 data-bind="name"></h1>
-	<p class="subtitle" data-bind></p>
 	<hr>
 	<p class="description" data-bind="html:description"></p>
 	<dl data-bind="guidelines">
@@ -85,7 +84,6 @@
 
     <pre><code data-language="html">&lt;section id="introduction" data-bind="project"&gt;
 	&lt;h1 data-bind="name"&gt;&lt;/h1&gt;
-	&lt;p class="subtitle" data-bind&gt;&lt;/p&gt;
 	&lt;hr&gt;
 	&lt;p class="description" data-bind&gt;&lt;/p&gt;
 	&lt;dl data-bind="guidelines"&gt;
@@ -100,17 +98,16 @@
 databind("#introduction").set({
 	project : {
 		name: "Databinder",
-		subtitle: "Simple templating for linking data and document",
-		description: "Databinder is a client-side DOM-based templating system...",
+		description: "Databinder is a client-side JavaScript DOM-based templating system...",
 		guidelines: [ {
-			title: "Preserve the link between model and view",
-			description: "Each data representation deserves its own HTML..."
+            title: "Intuitive, declarative, low logic templating",
+            description: "Automatic bindings based on the HTML element..."
 		},{
 			title: "Manual and targeted view updates",
 			description: "Two way data binding, as implemented by..."
 		},{
-			title: "Intuitive and descriptive templating",
-			description: "Automatic bindings based on the HTML element..."
+            title: "No String interpolation to preserve the link between model and view",
+            description: "Each data representation deserves its own HTML..."
 		} ]
 	}
 });
@@ -120,18 +117,17 @@ databind("#introduction").set({
 		databind("#introduction").set({
 			project : {
 				name: "Databinder",
-				subtitle: "Simple templating for linking data and document",
-				description: "Databinder is a client-side DOM-based templating system which let you write templates directly in the DOM while remaining valid HTML5. Inspired by <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> and <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, its goal is to facilitate the writing and maintenance of templates by following several principles:",
-				guidelines: [ {
-					title: "Preserve the link between model and view",
-					description: "Each data representation deserves its own HTML Element : whether to apply special CSS rules, to add <a href='http://www.w3.org/TR/microdata/'>microdata</a>, to extract it from another script or an external program, or just to remind the importance of choosing the correct tags for each data type."
-				},{
-					title: "Manual and targeted view updates",
-					description: "Two way data binding, as implemented by AngularJS or Ember, looks like panacea. But in practice,  <a target='_blank' href='http://bguiz.github.io/preso-digest-cycles/#2'>the overall complexity of this mechanism</a> leads to lots of difficulties that developers would have wished to avoid. With Databinder, you always have total control of what part of your view is updated and when."
-				},{
-					title: "Intuitive and descriptive templating",
-					description: "Automatic bindings based on the HTML element type, ID, or class ; but no bad guessing, only the [data-bind] elements are treated."
-				} ]
+				description: "Databinder is a client-side JavaScript DOM-based templating system which let you write templates directly in the DOM while remaining valid HTML5. Inspired by <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> and <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, its goal is to facilitate the writing and maintenance of templates by following several principles:",
+                guidelines: [ {
+                    title: "Intuitive, declarative, low logic templating",
+                    description: "Automatic bindings based on the HTML element type, ID, or class ; but no bad guessing, only the [data-bind] elements are treated."
+                },{
+                    title: "Manual and targeted view updates",
+                    description: "Two way data binding, as implemented by AngularJS or Ember, looks like panacea. But in practice,  <a target='_blank' href='http://bguiz.github.io/preso-digest-cycles/#2'>the overall complexity of this mechanism</a> leads to lots of difficulties that developers would have wished to avoid. With Databinder, you always have total control of what part of your view is updated and when."
+                },{
+                    title: "No String interpolation to preserve the link between model and view",
+                    description: "Each data representation deserves its own HTML Element : whether to apply special CSS rules, to add <a href='http://www.w3.org/TR/microdata/'>microdata</a>, to extract it from another script or an external program, or just to remind the importance of choosing the correct tags for each data type."
+                }]
 			}
 		});
 	</script>
@@ -147,7 +143,7 @@ databind("#introduction").set({
 		<p>The DOM is the hierarchical and semantic representation of the web page content. It makes sense to use it as a basis for a templating engine. String-based templating provide more flexibility, but in my opinion, this gain in flexibility is most often used for wrong reasons and increases the gap between the data model and HTML. More concerns are explained in this article :	<a target="_blank" href="http://flippinawesome.org/2014/03/24/string-templating-considered-harmful/">String Templating considered harmful</a></p>
 
 		<h3 id="why-another">Why another templating library ?</h3>
-		<p>I used a bunch of different templating libraries for professional and personal projets. I wrote <a href="http://sylvainpv.developpez.com/tutoriels/javascript/guide-templating-client/" target="_blank">this article (in French)</a> outlining the pros and cons of each one in my opinion. Since none satisfied me fully, I decided to write my own library. I wanted a DOM-based templating with a clear and intuitive syntax like Knockout, but lightweight and not part of a bigger solution (I am not a big fan of all-in-one frameworks). I found the result convincing enough to share it with you.</p>
+		<p>I used a bunch of different templating libraries for professional and personal projets. I wrote <a href="http://sylvainpv.developpez.com/tutoriels/javascript/guide-templating-client/" target="_blank">this article (in French)</a> outlining the pros and cons of each one in my opinion. Since none satisfied me fully, I decided to write my own library. I wanted a DOM-based low-logic templating with a clear declarative syntax like Knockout, but lightweight and not part of a bigger solution (I am not a big fan of all-in-one frameworks). I found the result convincing enough to share it with you.</p>
 
 		<h3 id="benchmark">Is it performant ?</h3>
 		<p>Databinder is only 14 KB (7.5KB minified, even less when gzipped). All the examples on this page have been passed through Databinder. Did you notice ? It should be fast enough so that you do not see anything. Actually, it took <span id="render-time"></span> milliseconds.</p>
