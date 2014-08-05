@@ -1,6 +1,11 @@
-databind.extensions.equals = function(x){ return this == x; };
-databind.extensions.none = function(fn){
-	return this === null || this === undefined || this.length === 0 || (fn !== undefined	&& Array.isArray(this) && !this.some(fn));
+databind.extensions.equals = function(x){
+	return this == x;
+};
+databind.extensions.not = function(p){
+	return Array.isArray(this) ? this.filter(function(o){ return !o[p]; }) : this != p;
+};
+databind.extensions.number = function(){
+	return (Array.isArray(this) ? this.length : +this);
 };
 databind.extensions.moreThan = function(n){
 	return (Array.isArray(this) ? this.length : +this) > n;
@@ -9,17 +14,23 @@ databind.extensions.between = function(start, end){
 	var n = (Array.isArray(this) ? this.length : +this);
 	return n >= start && n <= end;
 };
-databind.extensions.every = function(f){
-	return Array.isArray(this) && this.every(typeof f == "function" ? f : function(){ return this[f]; });
+databind.extensions.every = databind.extensions.all = function(f){
+	return Array.isArray(this) && this.every(typeof f == "function" ? f : function(o){ return o[f]; });
 };
 databind.extensions.some = function(f){
-	return Array.isArray(this) && this.some(typeof f == "function" ? f : function(){ return this[f]; });
+	if(f === undefined){ return (Array.isArray(this) ? this.length : +this) > 0; }
+	return Array.isArray(this) && this.some(typeof f == "function" ? f : function(o){ return o[f]; });
+};
+databind.extensions.none = function(fn){
+	return this === null || this === undefined || this.length === 0
+		|| Array.isArray(this) && !this.some(typeof f == "function" ? f : function(o){ return o[f]; });
 };
 databind.extensions.sort = function(f){
 	return Array.isArray(this) ? this.sort(f) : [];
 };
 databind.extensions.filter = function(f){
-	return Array.isArray(this) ? this.filter(f) : [];
+	if(typeof f === "string"){ return Array.isArray(this) && this.filter(function(o){ return o[f]; }); }
+	return Array.isArray(this) ? this.filter(f, this) : [];
 };
 databind.extensions.date = function(){ return new Date(this).toLocaleDateString(); };
 databind.extensions.time = function(){ return new Date(this).toLocaleTimeString(); };

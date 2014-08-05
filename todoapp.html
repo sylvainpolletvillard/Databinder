@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>ToDoApp</title>
+	<script src="databinder.js"></script>
+	<script src="databinder.extensions.js"></script>
+	<link rel="stylesheet" href="site/style/todoapp.css"/>
+</head>
+<body>
+
+<section id="todoapp">
+	<header id="header">
+		<h1>todos</h1>
+		<input id="new-todo" data-bind="value: currentInput, keydown: add" placeholder="What needs to be done?" autofocus>
+	</header>
+	<section id="main" data-bind="if: todos | some">
+		<input id="toggle-all" data-bind="checked: todos | all 'completed', change: toggleAll" type="checkbox">
+		<label for="toggle-all">Mark all as complete</label>
+		<ul id="todo-list" data-bind="loop: todos | filter currentFilter.test">
+			<li data-bind="class: { completed: completed, editing: editing }">
+				<div class="view">
+					<input class="toggle" data-bind="checked: completed, change: toggle" type="checkbox">
+					<label data-bind="text: title, dblclick: edit"></label>
+					<button class="destroy" data-bind="click: remove"></button>
+				</div>
+				<input class="edit" data-bind="if: editing, value: title, keydown: save, blur: save">
+			</li>
+		</ul>
+	</section>
+	<footer id="footer" data-bind="if: todos | some">
+			<span id="todo-count" data-bind="with: todos | not 'completed'">
+				<strong data-bind="text: length"></strong>
+				<span>item</span><span data-bind="if: length | not 1">s</span> left
+			</span>
+		<ul id="filters" data-bind="loop: filters">
+			<li><a data-bind="text: label, class: { selected: label | equals currentFilter.label }, click: setFilter"></a></li>
+		</ul>
+		<button id="clear-completed" data-bind="visible: todos | filter 'completed' | moreThan 0, click: removeAllCompleted">
+			Clear completed (<span data-bind="text: todos | filter 'completed' | number"></span>)
+		</button>
+	</footer>
+</section>
+<script>
+	var TodoList = {
+		init: function(selector){
+			this.elm = document.querySelector(selector),
+			this.todos = [];
+			this.currentFilter = this.filters.all;
+			this.currentInput = "";
+			this.databinding = databind(this.elm, this);
+		},
+		filters: {
+			all: { label: "All", test: function(i){ return true; } },
+			remaining: { label: "Active", test: function(i){ return !i.completed; } },
+			completed: { label: "Completed", test: function(i){ return i.completed; } }
+		},
+		add: function(e){
+			if(String.fromCharCode(e.keyCode) === "\r" && e.target.value != ""){
+				this.databinding.get();
+				this.todos.push({ title: this.currentInput });
+				this.currentInput = "";
+				this.databinding.reset();
+				this.elm.querySelector("#new-todo").focus();
+			}
+		},
+		edit: function(e, list){
+			this.editing = true;
+			list.databinding.reset();
+			list.elm.querySelector("input.edit").focus();
+		},
+		save: function(e, list){
+			if(e.type === "blur" || String.fromCharCode(e.keyCode) === "\r") {
+				this.editing = false;
+				list.databinding.get().reset();
+			}
+		},
+		toggle: function(e, list){
+			this.completed = e.target.checked;
+			list.databinding.reset();
+		},
+		toggleAll: function(e, list){
+			list.todos.forEach(function(todo){ todo.completed = e.target.checked; });
+			list.databinding.reset();
+		},
+		remove: function(e, list){
+			list.todos.splice(this.loopIndex, 1);
+			list.databinding.reset();
+		},
+		removeAllCompleted: function(){
+			this.todos = this.todos.filter(function(todo){ return !todo.completed; });
+			this.databinding.reset();
+		},
+		setFilter: function(e, list){
+			list.currentFilter = this;
+			list.databinding.reset();
+		}
+	};
+
+	TodoList.init("#todoapp");
+</script>
+</body>
+</html>
