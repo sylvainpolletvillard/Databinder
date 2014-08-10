@@ -1,6 +1,6 @@
 /*
  Databinder
- @version 0.6
+ @version 0.7
  @author Sylvain Pollet-Villard
  @license MIT
  @website http://syllab.fr/projets/web/databinder/
