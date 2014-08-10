@@ -303,26 +303,15 @@
 			}
 		});
 
-		var spans, pars;
+		var spans, pars, p;
 		pars = test9.getElementsByTagName("p");
-
-		spans = pars[0].getElementsByTagName("span");
-		equal(spans.length, 3);
-		equal(spans[0].innerHTML, "Karl");
-		equal(spans[1].innerHTML, "Karl Junior");
-		equal(spans[2].innerHTML, "Baby Karl");
-
-		spans = pars[1].getElementsByTagName("span");
-		equal(spans.length, 3);
-		equal(spans[0].innerHTML, "Karl");
-		equal(spans[1].innerHTML, "Karl Junior");
-		equal(spans[2].innerHTML, "Baby Karl");
-
-		spans = pars[2].getElementsByTagName("span");
-		equal(spans.length, 3);
-		equal(spans[0].innerHTML, "Karl");
-		equal(spans[1].innerHTML, "Karl Junior");
-		equal(spans[2].innerHTML, "Baby Karl");
+		for(p=0; p < pars.length; p++){
+			spans = pars[p].getElementsByTagName("span");
+			equal(spans.length, 3);
+			equal(spans[0].innerHTML, "Karl");
+			equal(spans[1].innerHTML, "Karl Junior");
+			equal(spans[2].innerHTML, "Baby Karl");
+		}
 	});
 
 	var test10 = document.getElementById("test10");
@@ -519,12 +508,12 @@
 	});
 
 
-	databind.extensions.equals = function(x){
-		return this == x;
+	databind.extensions.equals = function(x){ return this == x; };
+	databind.extensions.not = function(p){
+		return Array.isArray(this) ? this.filter(function(o){ return !o[p]; }) : this != p;
 	};
-	databind.extensions.none = function(fn){
-		return this === null || this === undefined || this.length === 0
-			|| (fn !== undefined	&& Array.isArray(this) && !this.some(fn));
+	databind.extensions.number = function(){
+		return (Array.isArray(this) ? this.length : +this);
 	};
 	databind.extensions.moreThan = function(n){
 		return (Array.isArray(this) ? this.length : +this) > n;
@@ -533,24 +522,26 @@
 		var n = (Array.isArray(this) ? this.length : +this);
 		return n >= start && n <= end;
 	};
-	databind.extensions.every = function(f){
-		return Array.isArray(this) && this.every(typeof f == "function" ? f : function(){ return this[f] });
+	databind.extensions.every = databind.extensions.all = function(f){
+		return Array.isArray(this) && this.every(typeof f == "function" ? f : function(o){ return o[f]; });
 	};
 	databind.extensions.some = function(f){
-		return Array.isArray(this) && this.some(typeof f == "function" ? f : function(){ return this[f] });
+		if(f === undefined){ return (Array.isArray(this) ? this.length : +this) > 0; }
+		return Array.isArray(this) && this.some(typeof f == "function" ? f : function(o){ return o[f]; });
+	};
+	databind.extensions.none = function(fn){
+		return this === null || this === undefined || this.length === 0
+			|| Array.isArray(this) && !this.some(typeof f == "function" ? f : function(o){ return o[f]; });
 	};
 	databind.extensions.sort = function(f){
 		return Array.isArray(this) ? this.sort(f) : [];
 	};
 	databind.extensions.filter = function(f){
-		return Array.isArray(this) ? this.filter(f) : [];
+		if(typeof f === "string"){ return Array.isArray(this) && this.filter(function(o){ return o[f]; }); }
+		return Array.isArray(this) ? this.filter(f, this) : [];
 	};
-	databind.extensions.date = function(){
-		return new Date(this).toLocaleDateString();
-	};
-	databind.extensions.time = function(){
-		return new Date(this).toLocaleTimeString()
-	};
+	databind.extensions.date = function(){ return new Date(this).toLocaleDateString(); };
+	databind.extensions.time = function(){ return new Date(this).toLocaleTimeString(); };
 	databind.extensions.floor = function(n){
 		var f = Math.pow(10, n|0);
 		return Math.floor( f * (+this) ) / f;
@@ -569,7 +560,6 @@
 	databind.extensions.capitalize = function(){
 		return String(this).charAt(0).toUpperCase() + String(this).slice(1);
 	};
-
 	databind.extensions.year = function(){
 		return new Date(this).getFullYear();
 	};

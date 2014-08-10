@@ -1,6 +1,6 @@
 /*
  Databinder
- @version 0.6
+ @version 0.7
  @author Sylvain Pollet-Villard
  @license MIT
  @website http://syllab.fr/projets/web/databinder/
@@ -43,7 +43,7 @@
 
 	function getCopyRef(obj){
 		var copy, type = getTypeOf(obj);
-		if (type in global) {
+		if (type in global && !(obj instanceof Object)) {
 			copy = new global[type](obj);
 		} else {
 			copy = obj;
@@ -74,14 +74,15 @@
 		},
 
 		get: function(){
-			for(var b, i=0, l=this.bindings.length; b = this.bindings[i], i<l; i++) {
+			var b, c, l, i;
+			for(i=0, l=this.bindings.length; b = this.bindings[i], i<l; i++) {
 				if((this.elm instanceof HTMLInputElement && b.attribute === "value") ||
 					(this.elm instanceof HTMLTextAreaElement && ["value","text","html"].indexOf(b.attribute) > 0)){
 					this.scope.lookup(b.value, this.elm).data[b.value] = this.elm.value;
 				}
 			}
 			if(this.elm.children) {
-				for(var c=0; c<this.elm.children.length; c++){
+				for(c=0, l=this.elm.children.length; c<l; c++){
 					var child = this.elm.children[c];
 					if(DataBoundElement.isPrototypeOf(child.databinding)) {
 						child.databinding.get();
@@ -140,7 +141,7 @@
 						innerScope = null;
 						break;
 					case "with":
-						innerScope = this.scope.lookup(binding.value, this.elm, true);
+						innerScope = DataScope.init(this.scope.resolve(binding.value, this.elm), this.scope);
 						break;
 					case "loop":
 						innerScope = this.bindLoop(bindingSet || { in: binding.value });
@@ -349,7 +350,7 @@
 					children.push(this.elm.childNodes[i].cloneNode(true));
 				}
 				this.elm.innerHTML = ""; //remove all child nodes
-				list = innerScope.data[this.loop.list]; //TODO: apply resolve for function eval and extensions
+				list = innerScope.resolve(this.loop.list, this.elm, true);
 
 				if(Array.isArray(list)){
 					for(i=0; i<list.length; i++){
@@ -536,7 +537,7 @@
 		}
 	});
 
-	var databind = function(selector){
+	var databind = function(selector, data){
 		var elm = selector instanceof Element ? selector : document.querySelector(selector);
 		if(elm === null){
 			throw DatabinderError("No element matched for selector "+selector);
@@ -550,6 +551,9 @@
 		dbe.elm = elm;
 		dbe.bindings = dbe.getBindings();
 		elm.databinding = dbe;
+		if(data !== undefined){
+			dbe.set(data);
+		}
 		return dbe;
 	};
 
@@ -561,17 +565,22 @@
 (function($, databind){
 	if(!$) return;
 
-	$.fn.databind = function (){
-		return this.each(function(data){
-			databind(this);
+	$.fn.databind = function(data){
+		return this.each(function(){
+			var databinding = databind(this);
 			if(data !== undefined) {
-				this.databinding.set(data);
+				databinding.set(data);
 			}
 		});
 	};
-	$.each(["get","set","reset"], function(action){
-		$.fn.databind[action] = function(){
-			return this.each(function(){ databind(this)[action].apply(this, arguments); });
+
+	$.each(["get","set","reset"], function(i, action){
+		$.fn["databind_"+action] = function(){
+			var args = arguments;
+			return this.each(function(){
+				var databinding = databind(this);
+				databinding[action].apply(databinding, args);
+			});
 		};
 	});
 

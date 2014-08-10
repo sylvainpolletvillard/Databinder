@@ -1194,18 +1194,23 @@ databind('ol').set({
 		<div class="panels three">
 			<div class="panel">
 				<span class="legend">HTML</span>
-<pre><code data-language="html">
-&lt;p&gt;
-	My name is &lt;span data-bind="name"&gt;&lt;/span&gt;, my son is called &lt;span data-bind="child.name"&gt;&lt;/span&gt; and my grand-son is &lt;span data-bind="child.child.name"&gt;&lt;/span&gt;
-&lt;/p&gt;
+<pre><code data-language="html"><p>
+	My name is <span data-bind="name"></span>, my son is called <span data-bind="child.name"></span> and my grand-son is <span data-bind="child.child.name"></span>
+</p>
 
-&lt;p data-bind="with: child"&gt;
-	My name is &lt;span data-bind="..name"&gt;&lt;/span&gt;, my son is called &lt;span data-bind="name"&gt;&lt;/span&gt; and my grand-son is &lt;span data-bind="child.name"&gt;&lt;/span&gt;
-&lt;/p&gt;
+<p data-bind="with: child">
+	My name is <span data-bind="..name"></span>, my son is called <span data-bind="name"></span> and my grand-son is <span data-bind="child.name"></span>
+</p>
 
-&lt;p data-bind="with: child.child"&gt;
-	My name is &lt;span data-bind="...name"&gt;&lt;/span&gt;, my son is called &lt;span data-bind="..name"&gt;&lt;/span&gt; and my grand-son is &lt;span data-bind=".name"&gt;&lt;/span&gt;
-&lt;/p&gt;</code></pre>
+<p data-bind="with: child.child">
+	My name is <span data-bind="..name"></span>, my son is called <span data-bind="..child.name"></span> and my grand-son is <span data-bind=".name"></span>
+</p>
+
+<div data-bind="with: child">
+	<p data-bind="with: .child">
+		My name is <span data-bind="...name"></span>, my son is called <span data-bind="..name"></span> and my grand-son is <span data-bind=".name"></span>
+	</p>
+</div></code></pre>
 			</div>
 			<div class="panel">
 				<span class="legend">JavaScript</span>
@@ -1231,8 +1236,14 @@ databind(document.body).set({
 				</p>
 
 				<p data-bind="with: child.child">
-					My name is <span data-bind="...name"></span>, my son is called <span data-bind="..name"></span> and my grand-son is <span data-bind=".name"></span>
+					My name is <span data-bind="..name"></span>, my son is called <span data-bind="..child.name"></span> and my grand-son is <span data-bind=".name"></span>
 				</p>
+
+				<div data-bind="with: child">
+					<p data-bind="with: .child">
+						My name is <span data-bind="...name"></span>, my son is called <span data-bind="..name"></span> and my grand-son is <span data-bind=".name"></span>
+					</p>
+				</div>
 			</div>
 		</div>
 		<script>

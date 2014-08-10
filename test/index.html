@@ -110,8 +110,14 @@
 	</p>
 
 	<p data-bind="with: child.child">
-		My name is <span data-bind="...name"></span>, my son is called <span data-bind="..name"></span> and my grand-son is <span data-bind=".name"></span>
+		My name is <span data-bind="..name"></span>, my son is called <span data-bind="..child.name"></span> and my grand-son is <span data-bind=".name"></span>
 	</p>
+
+	<div data-bind="with: child">
+		<p data-bind="with: .child">
+			My name is <span data-bind="...name"></span>, my son is called <span data-bind="..name"></span> and my grand-son is <span data-bind=".name"></span>
+		</p>
+	</div>
 </section>
 
 <section id="test10">
