@@ -53,13 +53,15 @@
 
 	function makeObservable(obj){
 
-		if(obj instanceof Object === false || isFunction(obj)){
+		var type = getTypeOf(obj), isArray = Array.isArray(obj);
+
+		if(type !== "Object" && !isArray){
 			return obj;
 		}
 
 		var observable;
 
-		if(Array.isArray(obj)){
+		if(isArray){
 			observable = obj.slice();
 			ARRAY_MUTATOR_METHODS.forEach(function(method){
 				Object.defineProperty(observable, method, { configurable: true, value: function(){
@@ -151,6 +153,7 @@
 			for(var b=0, l=this.bindings.length; binding = this.bindings[b], b<l; b++){
 				if(binding.value === undefined){
 					binding.value = this.guessValue();
+					console.log("GUESS VALUE IS "+binding.value+" FOR "+this.elm);
 				} else if(binding.value[0] === '{'){
 					bindingSet = {};
 					var pairs = binding.value.slice(1,-1).split(',');
@@ -164,6 +167,7 @@
 				}
 				if(binding.attribute === undefined){
 					binding.attribute = this.guessAttribute(binding.value);
+					console.log("GUESS ATTRIBUTE IS "+binding.attribute+" FOR "+binding.value);
 				}
 
 				switch(binding.attribute){
@@ -425,8 +429,8 @@
 		guessValue: function(){
 			var c, candidate, candidates = [];
 			candidates = candidates
-				.concat(this.elm.id)
-				.concat(this.elm.getAttribute("name") ||[])
+				.concat(this.elm.id || [])
+				.concat(this.elm.getAttribute("name") || [])
 				.concat(this.elm.className.match(/[^ ]+/g) || []);
 			for(c=0; c<candidates.length; c++){
 				if(candidates[c] && (candidate = this.scope.resolve(candidates[c], this.elm)) !== null){
@@ -438,7 +442,7 @@
 
 		guessAttribute: function(valueName){
 			var value = this.scope.resolve(valueName, this.elm);
-			var type = getTypeOf(value instanceof Object ? Object.getPrototypeOf(value) : value); //value.prototype for observers wrappers
+			var type = getTypeOf(value);
 			switch(true){
 				case type==="Object": return "with";
 				case type==="Array": return "loop";

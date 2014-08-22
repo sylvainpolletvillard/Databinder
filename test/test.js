@@ -597,7 +597,7 @@
 				],
 				selectLast: function(scope, elm){
 					elm.innerHTML = this.loopIndex;
-					return this.loopValue === scope.wrapper.list[2];
+					return this.loopIndex === scope.wrapper.list.length - 1;
 				},
 				truthy: true,
 				falsy: false,
