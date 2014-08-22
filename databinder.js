@@ -11,6 +11,7 @@
 	var BINDING_ATTRIBUTE = "data-bind";
 	var BINDING_GLOBAL = "databind";
 	var BINDINGS_REGEX = /(?:^|,)\s*(?:(\w+):)?\s*([\w\.\/\|\'\"\s-]+|{.+})+/g;
+	var ARRAY_MUTATOR_METHODS = ["pop","push","reverse","shift","sort","splice","unshift"];
 
 	function getTypeOf(obj) {
 		return Object.prototype.toString.call(obj).match(/\s([a-zA-Z]+)/)[1];
@@ -41,21 +42,55 @@
 		}
 	}
 
-	function getCopyRef(obj){
-		var copy, type = getTypeOf(obj);
-		if (type in global && !(obj instanceof Object)) {
-			copy = new global[type](obj);
+	function wrapPrimitives(obj){
+		switch(getTypeOf(obj)){
+			case "String": return new String(obj);
+			case "Number": return new Number(obj);
+			case "Boolean": return new Boolean(obj);
+			default: return obj;
+		}
+	}
+
+	function makeObservable(obj){
+
+		if(obj instanceof Object === false || isFunction(obj)){
+			return obj;
+		}
+
+		var observable;
+
+		if(Array.isArray(obj)){
+			observable = obj.slice();
+			ARRAY_MUTATOR_METHODS.forEach(function(method){
+				Object.defineProperty(observable, method, { configurable: true, value: function(){
+					console.log("---> OBSERVE: "+method);
+					return obj[method].apply(obj, arguments);
+				}});
+			});
 		} else {
-			copy = obj;
+			observable = Object.create(obj);
 		}
-		if (copy instanceof Object) {
-			for (var attr in obj) {
-				if(obj.hasOwnProperty(attr)){
-					copy[attr] = obj[attr];
+
+		Object.keys(obj).forEach(function(key){
+			Object.defineProperty(observable, key, {
+
+				get: function() {
+					console.log("---> OBSERVE: get "+key);
+					if(obj[key] instanceof Object){
+						return makeObservable(obj[key]);
+					}
+					return obj[key];
+				},
+
+				set: function(val) {
+					console.log("---> OBSERVE: set "+key+" to "+val);
+					obj[key]=val;
 				}
-			}
-		}
-		return copy;
+
+			});
+		});
+
+		return observable;
 	}
 
 	var DataBoundElement = Object.create({
@@ -372,7 +407,7 @@
 
 		parseLoopIteration: function(key, value, children, innerScope){
 			var c, l, newChild;
-			var data = getCopyRef(value);
+			var data = wrapPrimitives(value);
 			var scope = DataScope.init(data, innerScope);
 			scope.loopItem = this.loop.item;
 			scope.loopIndex = this.loop.index;
@@ -389,10 +424,10 @@
 
 		guessValue: function(){
 			var c, candidate, candidates = [];
-			var id = this.elm.id;
-			var name = this.elm.getAttribute("name");
-			var classes = this.elm.className.split(" ");
-			candidates = candidates.concat(id).concat(name).concat(classes);
+			candidates = candidates
+				.concat(this.elm.id)
+				.concat(this.elm.getAttribute("name") ||[])
+				.concat(this.elm.className.match(/[^ ]+/g) || []);
 			for(c=0; c<candidates.length; c++){
 				if(candidates[c] && (candidate = this.scope.resolve(candidates[c], this.elm)) !== null){
 					return candidates[c];
@@ -403,7 +438,7 @@
 
 		guessAttribute: function(valueName){
 			var value = this.scope.resolve(valueName, this.elm);
-			var type = getTypeOf(value);
+			var type = getTypeOf(value instanceof Object ? Object.getPrototypeOf(value) : value); //value.prototype for observers wrappers
 			switch(true){
 				case type==="Object": return "with";
 				case type==="Array": return "loop";
@@ -431,7 +466,7 @@
 				return data;
 			}
 			var ds = Object.create(DataScope);
-			ds.data = data || {};
+			ds.data = makeObservable(data) || {};
 			ds.parent = parent;
 			return ds;
 		},

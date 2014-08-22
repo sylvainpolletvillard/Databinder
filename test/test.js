@@ -232,7 +232,7 @@
 			suite: [],
 			suiteGenerator: function(scope){
 				var n = scope.suite.length;
-				scope.suite[n] = n<2 ? 1 : scope.suite[n-2] + scope.suite[n-1];
+				scope.suite.push(n<2 ? 1 : scope.suite[n-2] + scope.suite[n-1]);
 				return scope.suite[n] < 100 ? scope.suite[n] : null;
 			},
 			isPrime: function(){
@@ -303,26 +303,15 @@
 			}
 		});
 
-		var spans, pars;
+		var spans, pars, p;
 		pars = test9.getElementsByTagName("p");
-
-		spans = pars[0].getElementsByTagName("span");
-		equal(spans.length, 3);
-		equal(spans[0].innerHTML, "Karl");
-		equal(spans[1].innerHTML, "Karl Junior");
-		equal(spans[2].innerHTML, "Baby Karl");
-
-		spans = pars[1].getElementsByTagName("span");
-		equal(spans.length, 3);
-		equal(spans[0].innerHTML, "Karl");
-		equal(spans[1].innerHTML, "Karl Junior");
-		equal(spans[2].innerHTML, "Baby Karl");
-
-		spans = pars[2].getElementsByTagName("span");
-		equal(spans.length, 3);
-		equal(spans[0].innerHTML, "Karl");
-		equal(spans[1].innerHTML, "Karl Junior");
-		equal(spans[2].innerHTML, "Baby Karl");
+		for(p=0; p < pars.length; p++){
+			spans = pars[p].getElementsByTagName("span");
+			equal(spans.length, 3);
+			equal(spans[0].innerHTML, "Karl");
+			equal(spans[1].innerHTML, "Karl Junior");
+			equal(spans[2].innerHTML, "Baby Karl");
+		}
 	});
 
 	var test10 = document.getElementById("test10");
@@ -373,7 +362,12 @@
 			},
 			remove: function(event, list){
 				event.preventDefault();
-				list.itemCollection.splice(list.itemCollection.indexOf(this.loopValue), 1);
+				for(var i=list.itemCollection.length; i--;){
+					if(list.itemCollection[i].num === this.loopValue.num){
+						list.itemCollection.splice(i, 1);
+						break;
+					}
+				}
 				list.databinding.reset();
 			}
 		};
