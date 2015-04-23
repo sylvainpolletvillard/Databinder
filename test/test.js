@@ -228,12 +228,12 @@
 	var test7 = document.getElementById("test7");
 
 	test("functions and generators", function(){
+		var suite = [];
 		databind("#test7").set({
-			suite: [],
-			suiteGenerator: function(scope){
-				var n = scope.suite.length;
-				scope.suite.push(n<2 ? 1 : scope.suite[n-2] + scope.suite[n-1]);
-				return scope.suite[n] < 100 ? scope.suite[n] : null;
+			suiteGenerator: function(){
+				var n = suite.length;
+				suite.push(n<2 ? 1 : suite[n-2] + suite[n-1]);
+				return suite[n] < 100 ? suite[n] : null;
 			},
 			isPrime: function(){
 				for(var n=2; n<= ~~(this.number/2); n++){
@@ -358,7 +358,7 @@
 				this.itemCollection.push({
 					num: ++this.itemCounter
 				});
-				this.databinding.reset();
+
 			},
 			remove: function(event, list){
 				event.preventDefault();
@@ -368,7 +368,6 @@
 						break;
 					}
 				}
-				list.databinding.reset();
 			}
 		};
 
@@ -376,6 +375,7 @@
 		myList.addItem();
 		myList.addItem();
 		myList.addItem();
+		myList.databinding.reset();
 
 		equal(test11.querySelectorAll("li").length, 3);
 
@@ -418,7 +418,6 @@
 					h: 1
 				};
 				this.rects.push(this.currentRect);
-				databind(elm).reset();
 			},
 			end: function(e){
 				this.currentRect = null;
@@ -430,7 +429,6 @@
 				if(scope.currentRect != null){
 					scope.currentRect.w = Math.max(1, e.offsetX - scope.currentRect.x);
 					scope.currentRect.h = Math.max(1, e.offsetY - scope.currentRect.y);
-					databind(elm).reset();
 				}
 			},
 			customEventHandler: function() {

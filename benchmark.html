@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>Databinder - Performance tests</title>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.2/handlebars.min.js"></script>
+	<script src="lib/pure.js"></script>
+	<script src="http://documentcloud.github.com/underscore/underscore.js"></script>
+	<script src="js/databinder.js"></script>
+</head>
+<body>
+<div id="race">
+	<table>
+		<tr>
+			<th>Library</th>
+			<th>Ops/second</th>
+		</tr>
+		<tr>
+			<td>Databinder</td>
+			<td data-bind="databinder_ops"></td>
+		</tr>
+		<tr>
+			<td>PureJs</td>
+			<td data-bind="purejs_ops"></td>
+		</tr>
+		<tr>
+			<td>Handlebars</td>
+			<td data-bind="handlebars_ops"></td>
+		</tr>
+		<tr>
+			<td>Underscore</td>
+			<td data-bind="underscore_ops"></td>
+		</tr>
+	</table>
+</div>
+
+
+<div id="test">
+	<div id="handlebars-template"></div>
+	<div id="underscore-template"></div>
+	<div id="purejs-template">
+		<h1 class='header'></h1>
+		<h2 class='header2'></h2>
+		<h3 class='header3'></h3>
+		<h4 class='header4'></h4>
+		<h5 class='header5'></h5>
+		<h6 class='header6'></h6>
+		<ul class='list'>
+			<li class='item'></li>
+		</ul>
+	</div>
+	<div id="purejs-output"></div>
+	<div id="databinder-template">
+		<h1 class='header' data-bind='text: header'></h1>
+		<h2 class='header2' data-bind='text: header2'></h2>
+		<h3 class='header3' data-bind='text: header3'></h3>
+		<h4 class='header4' data-bind='text: header4'></h4>
+		<h5 class='header5' data-bind='text: header5'></h5>
+		<h6 class='header6' data-bind='text: header6'></h6>
+		<ul class='list' data-bind='loop: list'>
+			<li class='item' data-bind='text: loopValue'></li>
+		</ul>
+	</div>
+
+	<script>
+
+		window.sharedVariables = {
+			header: "Header",
+			header2: "Header2",
+			header3: "Header3",
+			header4: "Header4",
+			header5: "Header5",
+			header6: "Header6",
+			list: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+		};
+
+		var handlebars_template = "<h1 class='header'>{{{header}}}</h1><h2 class='header2'>{{{header2}}}</h2><h3 class='header3'>{{{header3}}}</h3><h4 class='header4'>{{{header4}}}</h4><h5 class='header5'>{{{header5}}}</h5><h6 class='header6'>{{{header6}}}</h6><ul class='list'>{{#each list}}<li class='item'>{{{this}}}</li>{{/each}}</ul>";
+
+		var underscore_template = "<h1 class='header'><%= header %></h1><h2 class='header2'><%= header2 %></h2><h3 class='header3'><%= header3 %></h3><h4 class='header4'><%= header4 %></h4><h5 class='header5'><%= header5 %></h5><h6 class='header6'><%= header6 %></h6><ul class='list'><% for (var i = 0, l = list.length; i < l; i++) { %><li class='item'><%= list[i] %></li><% } %></ul>";
+
+		var databinder_output = document.getElementById("databinder-template");
+		var purejs_template = document.getElementById("purejs-template");
+		var purejs_output = document.getElementById("purejs-output");
+		var underscore_output = document.getElementById("underscore-template");
+		var handlebars_output = document.getElementById("handlebars-template");
+
+		var purejs_directive = {
+			h1: 'header',
+			h2: 'header2',
+			h3: 'header3',
+			h4: 'header4',
+			h5: 'header5',
+			h6: 'header6',
+			li: {
+				'itm<-list': {
+					'.': 'itm'
+				}
+			}
+		};
+	</script>
+
+	<script>
+
+		function databinder(){
+			databind(databinder_output, sharedVariables);
+		}
+
+		function purejs(){
+			purejs_output.innerHTML = $p(purejs_template).compile(purejs_directive)(sharedVariables);
+		}
+
+		function underscore(){
+			underscore_output.innerHTML = _.template(underscore_template)(sharedVariables);
+		}
+
+		function handlebars(){
+			handlebars_output.innerHTML = Handlebars.compile(handlebars_template)(sharedVariables);
+		}
+
+		function countOpsPerSecond(fn){
+			var ops= 0, start = Date.now();
+			while(Date.now() < start + 1000){
+				fn();
+				ops++;
+			}
+			return ops;
+		}
+
+		databind('#race', {
+			databinder_ops: countOpsPerSecond(databinder),
+			purejs_ops: countOpsPerSecond(purejs),
+			handlebars_ops: countOpsPerSecond(handlebars),
+			underscore_ops: countOpsPerSecond(underscore)
+		});
+
+	</script>
+</div>
+
+</body>
+</html>

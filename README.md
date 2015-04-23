@@ -11,7 +11,7 @@ Please refer to [Databinder project website] [1]
 
 ##Fork, build, test
 
-Automactic minifying/concatenating/testing process is done by [Grunt]
+Automatic minifying/concatenating/testing process is done by [Grunt]
 ```
 npm install
 grunt
