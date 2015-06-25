@@ -303,26 +303,15 @@
 			}
 		});
 
-		var spans, pars;
+		var spans, pars, p;
 		pars = test9.getElementsByTagName("p");
-
-		spans = pars[0].getElementsByTagName("span");
-		equal(spans.length, 3);
-		equal(spans[0].innerHTML, "Karl");
-		equal(spans[1].innerHTML, "Karl Junior");
-		equal(spans[2].innerHTML, "Baby Karl");
-
-		spans = pars[1].getElementsByTagName("span");
-		equal(spans.length, 3);
-		equal(spans[0].innerHTML, "Karl");
-		equal(spans[1].innerHTML, "Karl Junior");
-		equal(spans[2].innerHTML, "Baby Karl");
-
-		spans = pars[2].getElementsByTagName("span");
-		equal(spans.length, 3);
-		equal(spans[0].innerHTML, "Karl");
-		equal(spans[1].innerHTML, "Karl Junior");
-		equal(spans[2].innerHTML, "Baby Karl");
+		for(p=0; p < pars.length; p++){
+			spans = pars[p].getElementsByTagName("span");
+			equal(spans.length, 3);
+			equal(spans[0].innerHTML, "Karl");
+			equal(spans[1].innerHTML, "Karl Junior");
+			equal(spans[2].innerHTML, "Baby Karl");
+		}
 	});
 
 	var test10 = document.getElementById("test10");
