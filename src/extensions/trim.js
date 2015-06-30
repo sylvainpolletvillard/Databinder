@@ -1,0 +1,1 @@
+databind.extensions.trim = String.prototype.trim;

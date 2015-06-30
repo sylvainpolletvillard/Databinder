@@ -1,0 +1,1 @@
+databind.extensions.uppercase = String.prototype.toUpperCase;

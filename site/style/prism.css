@@ -12,14 +12,14 @@ pre[class*="language-"] {
 	font-family: Consolas, Monaco, 'Andale Mono', monospace;
 	direction: ltr;
 	text-align: left;
-	white-space: pre;
+	white-space: pre-wrap;
 	word-spacing: normal;
 	word-break: normal;
 	line-height: 1.5;
 
-	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	tab-size: 4;
+	-moz-tab-size: 3;
+	-o-tab-size: 3;
+	tab-size: 3;
 
 	-webkit-hyphens: none;
 	-moz-hyphens: none;
@@ -55,7 +55,7 @@ pre[class*="language-"] {
 
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
-	background: #f5f2f0;
+	background: #F8F8FF;
 }
 
 /* Inline code */

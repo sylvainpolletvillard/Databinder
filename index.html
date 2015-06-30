@@ -13,7 +13,7 @@
 	<script src="site/lib/jquery-2.1.0.min.js"></script>
 	<script src="site/lib/prism.js"></script>
 	<script src="site/lib/moment.min.js"></script>
-	<script src="databinder.js"></script>
+	<script src="src/databinder.js"></script>
 	<script src="databinder.extensions.js"></script>
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -85,65 +85,19 @@
 </script>
 
 <section id="introduction">
-	<header data-bind="project">
+	<header>
 		<h1>Databinder</h1>
 		<hr>
-		<p class="description">Databinder is a client-side JavaScript DOM-based templating system which let you write templates directly in the DOM while remaining valid HTML5. Inspired by <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> and <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, its goal is to facilitate the writing and maintenance of templates by following several principles:</p>
-		<dl data-bind="guidelines">
-			<dt data-bind="title">
-			<dd data-bind="html:description">
+		<p>Databinder is a client-side JavaScript DOM-based templating system which let you write templates directly in the DOM while remaining valid HTML5. Inspired by <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> and <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, its goal is to facilitate the writing and maintenance of templates by following several principles:</p>
+		<dl class="guidelines">
+			<dt>Intuitive, declarative, low logic templating</dt>
+			<dd>Automatic bindings based on the HTML element type, ID, or class ; but no bad guessing, only the [data-bind] elements are treated.</dd>
+			<dt>Manual and targeted view updates</dt>
+			<dd>Two way data binding, as implemented by AngularJS or Ember, looks like panacea. But in practice,  <a target='_blank' href='http://bguiz.github.io/preso-digest-cycles/#2'>the overall complexity of this mechanism</a> leads to lots of difficulties that developers would have wished to avoid. With Databinder, you always have total control of what part of your view is updated and when.</dd>
+			<dt>No String interpolation to preserve the link between model and view</dt>
+			<dd>Each data representation deserves its own HTML Element : whether to apply special CSS rules, to add <a href='http://www.w3.org/TR/microdata/'>microdata</a>, to extract it from another script or an external program, or just to remind the importance of choosing the correct tags for each data type.</dd>
 		</dl>
 	</header>
-
-    <pre><code data-language="html">&lt;header data-bind="project"&gt;
-	&lt;h1 data-bind="name"&gt;&lt;/h1&gt;
-	&lt;hr&gt;
-	&lt;p class="description" data-bind&gt;&lt;/p&gt;
-	&lt;dl data-bind="guidelines"&gt;
-		&lt;dt data-bind="title"&gt;
-		&lt;dd data-bind="description"&gt;
-	&lt;/dl&gt;
-&lt;/header&gt;
-
-&lt;script src="databinder.js"&gt;&lt;/script&gt;
-
-&lt;script&gt;
-databind("header").set({
-	project : {
-		name: "Databinder",
-		description: "Databinder is a client-side JavaScript DOM-based templating system...",
-		guidelines: [ {
-         title: "Intuitive, declarative, low logic templating",
-         description: "Automatic bindings based on the HTML element..."
-		},{
-			title: "Manual and targeted view updates",
-			description: "Two way data binding, as implemented by..."
-		},{
-         title: "No String interpolation to preserve the link between model and view",
-         description: "Each data representation deserves its own HTML..."
-		} ]
-	}
-});
-&lt;/script&gt; </code></pre>
-
-	<script>
-		databind("#introduction").set({
-			project : {
-				name: "Databinder",
-				description: "",
-                guidelines: [ {
-                    title: "Intuitive, declarative, low logic templating",
-                    description: "Automatic bindings based on the HTML element type, ID, or class ; but no bad guessing, only the [data-bind] elements are treated."
-                },{
-                    title: "Manual and targeted view updates",
-                    description: "Two way data binding, as implemented by AngularJS or Ember, looks like panacea. But in practice,  <a target='_blank' href='http://bguiz.github.io/preso-digest-cycles/#2'>the overall complexity of this mechanism</a> leads to lots of difficulties that developers would have wished to avoid. With Databinder, you always have total control of what part of your view is updated and when."
-                },{
-                    title: "No String interpolation to preserve the link between model and view",
-                    description: "Each data representation deserves its own HTML Element : whether to apply special CSS rules, to add <a href='http://www.w3.org/TR/microdata/'>microdata</a>, to extract it from another script or an external program, or just to remind the importance of choosing the correct tags for each data type."
-                }]
-			}
-		});
-	</script>
 
 		<h3 id="why-templating">Why should I need templating ?</h3>
 		<p>Quick answer: dynamically generated content. Generating pages with custom data inside can be done with string interpolation, but when dealing with more complex data structures (loops, conditional formatting, advanced data transformations), it requires a more powerful solution. Template engines have enough functionnalites to adress most of these issues. Templates are easy to read, easy to maintain, and can be modified to some extent by other people than developers.</p>
@@ -166,7 +120,7 @@ databind("header").set({
 		<p>Databinder is <a href="./test/">unit tested</a> and supported on Internet Explorer 9 and above, and latest versions of Chrome, Firefox and some mobile browsers like Android Stock Browser, Chrome Mobile, Firefox Mobile, Opera Mobile... Actually, it should work on any decent web browser published since IE9.</p>
 
 		<h3 id="plug-ins">Can I use it with my favorite framework / library ?</h3>
-		<p>Databinder does not need any dependencies. However, you can easily plug it with other libraries. For example, a jQuery adapter is available to download so you can call Databinder that way : <code data-language="javascript">$("#myElement").databind("set", data);</code></p>
+		<p>Databinder does not need any dependencies. However, you can easily plug it with other libraries. For example, a jQuery adapter is available to download so you can call Databinder that way : <code class="language-javascript">$("#myElement").databind("set", data);</code></p>
 </section>
 
 <hr>
@@ -175,10 +129,9 @@ databind("header").set({
 	<h2>Download</h2>
 	<h3>Current version : v0.7</h3>
 	<ul>
-		<li><a href="databinder.js">databinder.js</a> source file (15 KB)</li>
-		<li><a href="build/databinder.min.js">databinder.min.js</a> minified file (8 KB)</li>
-		<li><a href="build/databinder.jquery.min.js">databinder.jquery.min.js</a> minified file with jQuery adapter (optional) (8.3 KB)</li>
-		<li><a href="databinder.extensions.js">databinder.extensions.js</a> collection of extensions (optional) (1.7 KB)</li>
+		<li><a href="src/databinder.js">databinder.js</a> source file (15 KB)</li>
+		<li><a href="dist/databinder.min.js">databinder.min.js</a> minified file (8 KB)</li>
+		<li><a href="dist/databinder.jquery.min.js">databinder.jquery.min.js</a> minified file with jQuery adapter (optional) (8.3 KB)</li>
 	</ul>
 	<details>
 		<summary>Changelog</summary>
@@ -211,13 +164,13 @@ databind("header").set({
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-            <pre><code data-language="html">
+            <pre><code class="language-markup">
 &lt;a data-bind="text: label, href: url, title: tooltip"&gt;&lt;/a&gt;
             </code></pre>
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-            <pre><code data-language="javascript">
+            <pre><code class="language-javascript">
 var thatLinkElement = document.querySelector("a");
 databind(thatLinkElement).set({
 	label: "My website",
@@ -227,7 +180,7 @@ databind(thatLinkElement).set({
 		</div>
 		<div class="panel">
 			<span class="legend">Result</span>
-            <pre><code data-language="html">
+            <pre><code class="language-markup">
 &lt;a href="http://syllab.fr" title="syllab.fr"&gtMy website&lt;/a&gt;</code></pre>
             <a id="thatLinkElement" data-bind="text: label, href: url, title: tooltip"></a>
 		</div>
@@ -259,7 +212,7 @@ databind(thatLinkElement).set({
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;h3&gt;Tic Tac Toe&lt;/h3&gt;
 &lt;table&gt;
 	&lt;tbody data-bind="loop: { in: grid, as: row }"&gt;
@@ -271,7 +224,7 @@ databind(thatLinkElement).set({
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-            <pre><code data-language="javascript">
+            <pre><code class="language-javascript">
 databind("table").set({
 	grid: [ ["X", " ", "O" ],
 	        ["O", "X", " " ],
@@ -308,7 +261,7 @@ databind("table").set({
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;div id="palette"&gt;
 	&lt;ul data-bind="loop: { in: palette, at: name, as: hex }"&gt;
 		&lt;li data-bind="text: name, style: { color: hex }"&gt;&lt;/li&gt;
@@ -323,7 +276,7 @@ databind("table").set({
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-            <pre><code data-language="javascript">
+            <pre><code class="language-javascript">
 databind("#palette").set({
 	palette: {
 		"Light Blue": "#ADD8E6",
@@ -378,7 +331,7 @@ databind("#palette").set({
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-            <pre><code data-language="html">
+            <pre><code class="language-markup">
 &lt;div id="feedback"&gt;
 	&lt;span data-bind="if: showSecret"&gt;I should not be here...&lt;/span&gt;
 	&lt;input id="check" type="checkbox" data-bind="checked: understood"/&gt;
@@ -391,7 +344,7 @@ databind("#palette").set({
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-            <pre><code data-language="javascript">
+            <pre><code class="language-javascript">
 databind("#feedback").set({
 	understood: true,
 	showSecret: false,
@@ -436,7 +389,7 @@ databind("#feedback").set({
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-            <pre><code data-language="html">
+            <pre><code class="language-markup">
 &lt;h3&gt;Prime Numbers In Fibonacci Suite&lt;/h3&gt;
 &lt;p data-bind="loop: { in: suiteGenerator, as: number }"&gt;
 	&lt;span data-bind="text: number, class: { prime: isPrime }"&gt;
@@ -452,7 +405,7 @@ span.prime {
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-            <pre><code data-language="javascript">
+            <pre><code class="language-javascript">
 var suite = [];
 databind("body").set({
 	suiteGenerator: function(){
@@ -518,7 +471,7 @@ databind("body").set({
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-            <pre><code data-language="html">
+            <pre><code class="language-markup">
 &lt;p class="to-update"&gt;You have been
 	&lt;span data-bind="text: timePassed"&gt;&lt;/span&gt; seconds on this page.
 &lt;/p&gt;
@@ -528,7 +481,7 @@ databind("body").set({
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-            <pre><code data-language="javascript">
+            <pre><code class="language-javascript">
 var dataReference = { timePassed: 0 };
 databind("body").set(dataReference);
 setInterval(function(){
@@ -567,7 +520,7 @@ setInterval(function(){
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-            <pre><code data-language="html">
+            <pre><code class="language-markup">
 &lt;div id="mylist"&gt;
 	&lt;h3&gt;Dynamic list (currently
 		&lt;span data-bind="itemCollection.length"&gt;&lt;/span&gt;
@@ -585,7 +538,7 @@ setInterval(function(){
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-            <pre><code data-language="javascript">
+            <pre><code class="language-javascript">
 var List = function(selector){
 	this.databinding = databind(selector);
 	this.itemCounter = 0;
@@ -671,7 +624,7 @@ myList.addItem();</code></pre>
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-            <pre><code data-language="html">
+            <pre><code class="language-markup">
 &lt;div id="scoreboard"&gt;
 &lt;h2&gt;Feuille des scores&lt;/h2&gt;
 &lt;form data-bind="submit: save"&gt;
@@ -688,7 +641,7 @@ myList.addItem();</code></pre>
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-            <pre><code data-language="javascript">
+            <pre><code class="language-javascript">
 databind("#scoreboard".set({
 	scores: [
 		{ name: "Joe", score: 6500 },
@@ -753,7 +706,7 @@ databind("#scoreboard".set({
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-            <pre><code data-language="html">
+            <pre><code class="language-markup">
 &lt;section id="flags"&gt;
 	&lt;h1&gt;Some flags by continent &lt;/h1&gt;
 	&lt;h2&gt;Europe&lt;/h2&gt;
@@ -782,7 +735,7 @@ databind("#scoreboard".set({
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-            <pre><code data-language="javascript">
+            <pre><code class="language-javascript">
 databind('#flags').set({
 	africa: [
 { country:"Senegal", capital:"Dakar", img:"sn.png" },
@@ -869,7 +822,7 @@ databind('#flags').set({
 		<div class="panels three">
 			<div class="panel">
 				<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;input data-bind="class: properties" /&gt;
 
 &lt;button data-bind="class: classNames"&gt;Click me&lt;/button&gt;
@@ -881,7 +834,7 @@ databind('#flags').set({
 			</div>
 			<div class="panel">
 				<span class="legend">JavaScript</span>
-<pre><code data-language="javascript">
+<pre><code class="language-javascript">
 databind('input').set({
 	properties: {
 		blue: false,
@@ -902,7 +855,7 @@ databind('p.stuff').set({
 			</div>
 			<div class="panel">
 				<span class="legend">Result</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;input class="red" /&gt;
 
 &lt;button class="some classes as string"&gt;Click me&lt;/button&gt;
@@ -926,7 +879,7 @@ databind('p.stuff').set({
 		<div class="panels three">
 			<div class="panel">
 				<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;ol data-bind="loop: items"&gt;
 	&lt;li data-bind="text: loopValue, hidden: autocensor"&gt;&lt;/li&gt;
 &lt;/ol&gt;
@@ -934,7 +887,7 @@ databind('p.stuff').set({
 			</div>
 			<div class="panel">
 				<span class="legend">JavaScript</span>
-<pre><code data-language="javascript">
+<pre><code class="language-javascript">
 databind('ol').set({
 	items: ["Some", "items", "seem", "to", "have", "disappeared"],
 	autocensor: function(){
@@ -969,13 +922,13 @@ databind('ol').set({
 		<div class="panels three">
 			<div class="panel">
 				<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;p data-bind="html: message"&gt;stuff lost after templating&lt;/p&gt;
 </code></pre>
 			</div>
 			<div class="panel">
 				<span class="legend">JavaScript</span>
-<pre><code data-language="javascript">
+<pre><code class="language-javascript">
 databind('p').set({
 	message: "I needed &lt;strong style='color:blue;'&gt;unescaped HTML content&lt;/strong&gt; here."
 });</code></pre>
@@ -1002,7 +955,7 @@ databind('p').set({
 		<div class="panels three">
 			<div class="panel">
 				<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;div&gt;
 	&lt;p data-bind="if: results|none"&gt;No results found&lt;p&gt;
 	&lt;ul data-bind="if: results|some, loop: results"&gt;
@@ -1012,7 +965,7 @@ databind('p').set({
 				</div>
 				<div class="panel">
 					<span class="legend">JavaScript</span>
-<pre><code data-language="javascript">
+<pre><code class="language-javascript">
 databind('div').set({
 	results: []
 });</code></pre>
@@ -1025,7 +978,7 @@ databind('div').set({
 							<li data-bind="loopValue"></li>
 						</ul>
 					</div>
-<pre><code data-language="html">&lt;div&gt;
+<pre><code class="language-markup">&lt;div&gt;
 	&lt;p&gt;No results found&lt;p&gt;
 &lt;/div&gt;
 </code></pre>
@@ -1062,7 +1015,7 @@ databind('div').set({
 		<div class="panels three">
 			<div class="panel">
 				<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;input style="background-color: lime;" data-bind="style: otherRules" /&gt;
 
 &lt;button data-bind="style: ruleSet"&gt;Click me&lt;/button&gt;
@@ -1072,7 +1025,7 @@ databind('div').set({
 			</div>
 			<div class="panel">
 				<span class="legend">JavaScript</span>
-<pre><code data-language="javascript">
+<pre><code class="language-javascript">
 databind('input').set({
 	otherRules: {
 		borderWidth: "10px",
@@ -1119,13 +1072,13 @@ databind('p').set({
 		<div class="panels three">
 			<div class="panel">
 				<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;p data-bind="text: message"&gt;stuff lost after templating&lt;/p&gt;
 </code></pre>
 			</div>
 			<div class="panel">
 				<span class="legend">JavaScript</span>
-<pre><code data-language="javascript">
+<pre><code class="language-javascript">
 databind('p').set({
 	message: "Don't worry about &lt;iframe&gt;XSS&lt;/iframe&gt;"
 });</code></pre>
@@ -1159,7 +1112,7 @@ databind('p').set({
 		<div class="panels three">
 			<div class="panel">
 				<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;ol data-bind="loop: items"&gt;
 	&lt;li data-bind="text: loopValue, visible: autocensor"&gt;&lt;/li&gt;
 &lt;/ol&gt;
@@ -1167,7 +1120,7 @@ databind('p').set({
 			</div>
 			<div class="panel">
 				<span class="legend">JavaScript</span>
-<pre><code data-language="javascript">
+<pre><code class="language-javascript">
 databind('ol').set({
 	items: ["Some", "items", "seem", "to", "have", "disappeared"],
 	autocensor: function(){
@@ -1202,7 +1155,7 @@ databind('ol').set({
 		<div class="panels three">
 			<div class="panel">
 				<span class="legend">HTML</span>
-<pre><code data-language="html"><p>
+<pre><code class="language-markup"><p>
 	My name is <span data-bind="name"></span>, my son is called <span data-bind="child.name"></span> and my grand-son is <span data-bind="child.child.name"></span>
 </p>
 
@@ -1222,7 +1175,7 @@ databind('ol').set({
 			</div>
 			<div class="panel">
 				<span class="legend">JavaScript</span>
-<pre><code data-language="javascript">
+<pre><code class="language-javascript">
 databind(document.body).set({
 	name: "Karl",
 	child : {
@@ -1279,9 +1232,7 @@ databind(document.body).set({
 <section id="omitting-attribute">
 	<h2>Omitting attribute : Default Attribute Binding</h2>
 
-	<p>
-		When the attribute is omitted in a binding declaration, a default one is bound depending on the element and the matched data type.
-	</p>
+	<p>When the attribute is omitted in a binding declaration, a default one is bound depending on the element and the matched data type. Note that the attribute cannot be omitted if the value matched is a function.</p>
 
 	<table>
 		<tr>
@@ -1413,15 +1364,11 @@ databind(document.body).set({
 
 <section id="omitting-attribute-value">
 	<h2>Omitting both attribute and value : automatic binding</h2>
-	<p>
-		When the <mark>data-bind</mark> attribute is specified without any value, Databinder will try to guess what value you are referring to by checking
-		the <mark>id</mark>, <mark>name</mark> and <mark>class</mark> attributes of the element in this order. Then,
-		the default attribute is bound depending on the type of the value matched.
-	</p>
+	<p>When the <mark>data-bind</mark> attribute is specified without any value, Databinder will try to guess what value you are referring to by checking	the <mark>id</mark>, <mark>name</mark> and <mark>class</mark> attributes of the element in this order.</p>
 	<div class="panels two">
 		<div class="panel">
 			<span class="legend">HTML & JavaScript</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;ul id="people" data-bind&gt;
 	&lt;li class="item name" data-bind&gt;
 &lt;/ul&gt;
@@ -1459,22 +1406,22 @@ databind(document.body).set({
 
 	<p>Extensions are helper functions called on values matched after the data binding. They are useful for adding basic logic instructions, better formatting and sorting/selecting options to your templates. You can apply a extension to a value by writing <code>|extensionName</code> behind the name of the value in the binding.</p>
 	<p>Extensions can be chained, so you can write :</p>
-	<pre><code data-language="js">data-bind="text: sentence | trim | capitalize"</code></pre>
+	<pre><code class="language-javascript">data-bind="text: sentence | trim | capitalize"</code></pre>
 	<p>Also, they can take number and words as parameters, separated by whitespaces after the extension name :
-	<pre><code data-language="js">data-bind="if: sum | between 5 10"
+	<pre><code class="language-javascript">data-bind="if: sum | between 5 10"
 data-bind="loop: messages | filter byDate"</code></pre>
 	</p>
 
 	<p>You can add your own extensions very easily. For example, let's say you want to use the super date formatting library <a href="http://momentjs.com/">Moment.js</a>. Declare your extension this way:</p>
 
-<pre><code data-language="js">databind.extensions.calendar = function(){
+<pre><code class="language-javascript">databind.extensions.calendar = function(){
 	return moment(+this).calendar();
 };</code></pre>
 
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-<pre><code data-language="html">
+<pre><code class="language-markup">
 &lt;div class="post"&gt;
 &lt;span class="name" data-bind&gt;&lt;/span&gt;
 &lt;span class="date" data-bind="date|calendar"&gt;&lt;/span&gt;
@@ -1483,7 +1430,7 @@ data-bind="loop: messages | filter byDate"</code></pre>
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-<pre><code data-language="javascript">
+<pre><code class="language-javascript">
 databind(".post").set({
 	name: "Author",
 	date: Date.now(),
@@ -1525,14 +1472,14 @@ databind(".post").set({
 			<h3>equals</h3>
 			<span class="expecting">Number or String</span>
 			<span class="description">return <code>true</code> if <code>value == param</code></span>
-<pre><code data-language="javascript">databind.extensions.equals = function(x){ return this == x; };</code></pre>
+<pre><code class="language-javascript">databind.extensions.equals = function(x){ return this == x; };</code></pre>
 		</li>
 
 		<li>
 			<h3>moreThan</h3>
 			<span class="expecting">Number</span>
 			<span class="description">return <code>true</code> if <code>value > Number</code> (or <code>value.length</code> for Arrays)</span>
-<pre><code data-language="javascript">databind.extensions.moreThan = function(n){
+<pre><code class="language-javascript">databind.extensions.moreThan = function(n){
 	return (Array.isArray(this) ? this.length : +this) > n;
 };</code></pre>
 		</li>
@@ -1541,7 +1488,7 @@ databind(".post").set({
 			<h3>between</h3>
 			<span class="expecting">Number start - Number end</span>
 			<span class="description">return <code>true</code> if <code>value >= start && value <= end</code> (or <code>value.length</code> for Arrays)</span>
-<pre><code data-language="javascript">databind.extensions.between = function(start, end){
+<pre><code class="language-javascript">databind.extensions.between = function(start, end){
 	var n = (Array.isArray(this) ? this.length : +this);
 	return n >= start && n <= end;
 };</code></pre>
@@ -1551,7 +1498,7 @@ databind(".post").set({
 			<h3>every</h3>
 			<span class="expecting">String p or Function f</span>
 			<span class="description">return <code>true</code> if every array elements have a truthy property <code>p</code> or returned <code>true</code> through function <code>f</code></span>
-<pre><code data-language="javascript">databind.extensions.every = function(f){
+<pre><code class="language-javascript">databind.extensions.every = function(f){
 	return Array.isArray(this) && this.every(typeof f == "function" ? f : function(){ return this[f] });
 };</code></pre>
 		</li>
@@ -1560,7 +1507,7 @@ databind(".post").set({
 			<h3>some</h3>
 			<span class="expecting">String p or Function f</span>
 			<span class="description">return <code>true</code> if some of the array elements have a truthy property <code>p</code> or returned <code>true</code> through function <code>f</code></span>
-<pre><code data-language="javascript">databind.extensions.some = function(f){
+<pre><code class="language-javascript">databind.extensions.some = function(f){
 	return Array.isArray(this) && this.some(typeof f == "function" ? f : function(){ return this[f] });
 };</code></pre>
 		</li>
@@ -1569,7 +1516,7 @@ databind(".post").set({
 			<h3>none</h3>
 			<span class="expecting">(Function)</span>
 			<span class="description">return <code>true</code> if <code>null</code>, <code>undefined</code>, empty array or if none of the array elements passed to the parameter function returned <code>true</code></span>
-<pre><code data-language="javascript">databind.extensions.none = function(fn){
+<pre><code class="language-javascript">databind.extensions.none = function(fn){
 	return this === null || this === undefined || this.length === 0
 	|| (fn !== undefined	&& Array.isArray(this) && !this.some(fn));
 };</code></pre>
@@ -1579,7 +1526,7 @@ databind(".post").set({
 			<h3>sort</h3>
 			<span class="expecting">(Function f)</span>
 			<span class="description">return <code>array.sort(f);</code></span>
-<pre><code data-language="javascript">databind.extensions.sort = function(f){
+<pre><code class="language-javascript">databind.extensions.sort = function(f){
 	return Array.isArray(this) ? this.sort(f) : [];
 };</code></pre>
 		</li>
@@ -1588,7 +1535,7 @@ databind(".post").set({
 			<h3>filter</h3>
 			<span class="expecting">Function f</span>
 			<span class="description">return <code>array.filter(f);</code></span>
-			<pre><code data-language="javascript">databind.extensions.filter = function(f){
+			<pre><code class="language-javascript">databind.extensions.filter = function(f){
 	return Array.isArray(this) ? this.filter(f) : [];
 };</code></pre>
 		</li>
@@ -1596,19 +1543,19 @@ databind(".post").set({
 		<li>
 			<h3>date</h3>
 			<span class="description">return Date at local date format</span>
-			<pre><code data-language="javascript">databind.extensions.date = function(){ return new Date(this).toLocaleDateString(); };</code></pre>
+			<pre><code class="language-javascript">databind.extensions.date = function(){ return new Date(this).toLocaleDateString(); };</code></pre>
 		  </li>
 		<li>
 			<h3>time</h3>
 			<span class="description">return Date at local time format</span>
-			<pre><code data-language="javascript">databind.extensions.time = function(){ return new Date(this).toLocaleTimeString(); };</code></pre>
+			<pre><code class="language-javascript">databind.extensions.time = function(){ return new Date(this).toLocaleTimeString(); };</code></pre>
 		</li>
 
 		<li>
 			<h3>round</h3>
 			<span class="expecting">(Number nbDecimals)</span>
 			<span class="description">return <code>Math.round(value)</code> with an optional number of decimals to keep.</span>
-			<pre><code data-language="javascript">databind.extensions.round = function(n){
+			<pre><code class="language-javascript">databind.extensions.round = function(n){
 	var f = Math.pow(10, n|0);
 	return Math.round( f * (+this) ) / f;
 };</code></pre>
@@ -1617,25 +1564,25 @@ databind(".post").set({
 		<li>
 			<h3>trim</h3>
 			<span class="description">return a trimmed String</span>
-			<pre><code data-language="javascript">databind.extensions.trim = String.prototype.trim;</code></pre>
+			<pre><code class="language-javascript">databind.extensions.trim = String.prototype.trim;</code></pre>
 		</li>
 
 		<li>
 			<h3>lowercase</h3>
 			<span class="description">return a lower-cased String</span>
-			<pre><code data-language="javascript">databind.extensions.lowercase = String.prototype.toLowerCase;</code></pre>
+			<pre><code class="language-javascript">databind.extensions.lowercase = String.prototype.toLowerCase;</code></pre>
 		</li>
 
 		<li>
 			<h3>uppercase</h3>
 			<span class="description">return an upper-cased String</span>
-			<pre><code data-language="javascript">databind.extensions.uppercase = String.prototype.toUpperCase;</code></pre>
+			<pre><code class="language-javascript">databind.extensions.uppercase = String.prototype.toUpperCase;</code></pre>
 		</li>
 
 		<li>
 			<h3>capitalize</h3>
 			<span class="description">return a capitalized String</span>
-			<pre><code data-language="javascript">databind.extensions.capitalize = function(){
+			<pre><code class="language-javascript">databind.extensions.capitalize = function(){
 	return String(this).charAt(0).toUpperCase() + String(this).slice(1);
 };</code></pre>
 		</li>
@@ -1655,7 +1602,7 @@ databind(".post").set({
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-	         <pre><code data-language="html">
+	         <pre><code class="language-markup">
 &lt;div id="clock"&gt;
 
 &lt;div class="needle hour" data-bind="style: hour"&gt;&lt;/div&gt;
@@ -1669,7 +1616,7 @@ databind(".post").set({
 	</div>
 	<div class="panel">
 		<span class="legend">JavaScript</span>
-         <pre><code data-language="javascript">
+         <pre><code class="language-javascript">
 var clock = {
 	elm: "#clock",
 	date: new Date(),
@@ -1735,7 +1682,7 @@ clock.init();</code></pre>
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-	         <pre><code data-language="html">
+	         <pre><code class="language-markup">
 &lt;div id="treeview"&gt;
 	&lt;div class="root folder" data-bind="template: tree-item"&gt;
 	   Loading tree view...
@@ -1756,7 +1703,7 @@ clock.init();</code></pre>
 	</div>
 	<div class="panel">
 		<span class="legend">JavaScript</span>
-         <pre><code data-language="javascript">
+         <pre><code class="language-javascript">
 databind("#treeview").set({
 	name: "Documents",
 	isOpened: true,
@@ -1839,7 +1786,7 @@ databind("#treeview").set({
 <section id="internationalization">
 	<h3>Internationalization helpers</h3>
 	<p>Internationalization involves many issues that are adressed by many existing solutions on the server or client side. Some of these issues relate directly to templating, like currency or date formatting. You can declare a few extensions to help you connect templates to internationalization APIs.</p>
-	 <pre><code data-language="javascript">(function(Intl){
+	 <pre><code class="language-javascript">(function(Intl){
 
 	databind.lang = navigator.language;
 
@@ -1869,7 +1816,7 @@ databind("#treeview").set({
 	<div class="panels three">
 		<div class="panel">
 			<span class="legend">HTML</span>
-			<pre><code data-language="html">
+			<pre><code class="language-markup">
 &lt;h2&gt;Your account activity&lt;/h2&gt;
 &lt;time data-bind="reportDate | intl-date 'long'"&gt;&lt;/time&gt;
 &lt;table&gt;
@@ -1893,7 +1840,7 @@ databind("#treeview").set({
 		</div>
 		<div class="panel">
 			<span class="legend">JavaScript</span>
-         <pre><code data-language="javascript">
+         <pre><code class="language-javascript">
 databind("#intl-demo").set({
 	reportDate: new Date("2014-05-27T08:00:00"),
 	transactions: [

@@ -3,8 +3,7 @@
 <head lang="en">
 	<meta charset="UTF-8">
 	<title>ToDoApp</title>
-	<script src="databinder.js"></script>
-	<script src="databinder.extensions.js"></script>
+	<script src="dist/databinder.js"></script>
 	<link rel="stylesheet" href="site/style/todoapp.css"/>
 </head>
 <body>
@@ -57,7 +56,7 @@
 		},
 		add: function(e){
 			if(String.fromCharCode(e.keyCode) === "\r" && e.target.value != ""){
-				this.databinding.get();
+				//this.databinding.get(); //TODO
 				this.todos.push({ title: this.currentInput, completed: false, editing: false });
 				this.currentInput = "";
 				this.elm.querySelector("#new-todo").focus();

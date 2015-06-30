@@ -11,10 +11,10 @@
 	<link rel="stylesheet" href="site/style/main.css"/>
 
 	<script src="site/lib/jquery-2.1.0.min.js"></script>
-	<!--<script src="site/lib/prism.js"></script>
+	<script src="site/lib/prism.js"></script>
 	<script src="site/lib/moment.min.js"></script>
-	<script src="databinder.js"></script>
-	<script src="databinder.extensions.js"></script>-->
+	<script src="src/databinder.js"></script>
+	<script src="databinder.extensions.js"></script>
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -78,63 +78,19 @@
 </script>
 
 <section id="introduction" data-bind="project">
-	<h1 data-bind="name"></h1>
-	<hr>
-	<p class="description" data-bind="html:description"></p>
-	<dl data-bind="guidelines">
-		<dt data-bind="title">
-		<dd data-bind="html:description">
-	</dl>
-
-    <pre><code data-language="html">&lt;section id="introduction" data-bind="project"&gt;
-	&lt;h1 data-bind="name"&gt;&lt;/h1&gt;
-	&lt;hr&gt;
-	&lt;p class="description" data-bind&gt;&lt;/p&gt;
-	&lt;dl data-bind="guidelines"&gt;
-		&lt;dt data-bind="title"&gt;
-		&lt;dd data-bind="description"&gt;
-	&lt;/dl&gt;
-&lt;/section&gt;
-
-&lt;script src="databinder.js"&gt;&lt;/script&gt;
-
-&lt;script&gt;
-databind("#introduction").set({
-	project : {
-		name: "Databinder",
-		description: "Databinder est une bibliothèque JavaScript de templating côté client...",
-		guidelines: [ {
-            title: "Des templates intuitifs, déclaratifs et à faible logique",
-            description: "Des liasons automatiques sont faites..."
-		},{
-			title: "Rafraîchissement manuel et ciblé des vues ",
-			description: "La liaison de données à double-sens telle qu'implémentée par..."
-		},{
-            title: "Pas d'interpolation de texte pour préserver le lien entre modèles et vues",
-            description: "Chaque représentation de donnée mérite son propre élément..."
-		} ]
-	}
-});
-&lt;/script&gt; </code></pre>
-
-	<script>
-		databind("#introduction").set({
-			project : {
-				name: "Databinder",
-				description: "Databinder est une bibliothèque JavaScript de templating côté client basée sur le DOM (Document Object Model) qui vous permet de coder directement vos templates dans le code HTML de vos pages tout en restant du HTML5 valide. Inspiré par <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> et <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, son but est de faciliter l'écriture et la maintenance des templates en suivant plusieurs principes fondamentaux:",
-				guidelines: [ {
-                    title: "Des templates intuitifs, déclaratifs et à faible logique",
-                    description: "Des liaisons automatiques sont faites en se basant sur le type d'élément HTML, son ID, ses classes ou son attribut name ; pas de risque de liaisons par erreur, seuls les éléments avec l'attribut [data-bind] sont traités."
-				},{
-					title: "Rafraîchissement manuel et ciblé des vues ",
-					description: "La liaison de données à double-sens telle qu'implémentée par AngularJS ou Ember semble être la solution idéale. Mais en pratique, <a target='_blank' href='http://bguiz.github.io/preso-digest-cycles/#2'>la complexité générale de ce mécanisme</a> mène à de nombreuses difficultés que les développeurs auraient souhaité éviter. <code>Object.observe</code> rendra bientôt les choses plus faciles mais en attendant, avec Databinder, vous avez toujours le contrôle total de quelle partie de vos vues est actualisée et quand."
-				},{
-                    title: "Pas d'interpolation de texte pour préserver le lien entre modèles et vues",
-                    description: "Chaque représentation de donnée mérite son propre élément HTML: que ce soit pour y appliquer des règles de style CSS particulières, pour ajouter des <a href='http://www.w3.org/TR/microdata/'>microdonnées</a>, pour extraire facilement cette donnée par un autre script ou un programme externe, ou juste pour rappeler l'importance de choisir la bonne balise pour chaque type de donnée."
-				} ]
-			}
-		});
-	</script>
+	<header>
+		<h1>Databinder</h1>
+		<hr>
+		<p>Databinder est une bibliothèque JavaScript de templating côté client basée sur le DOM (Document Object Model) qui vous permet de coder directement vos templates dans le code HTML de vos pages tout en restant du HTML5 valide. Inspiré par <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> et <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, son but est de faciliter l'écriture et la maintenance des templates en suivant plusieurs principes fondamentaux:</p>
+		<dl class="guidelines">
+			<dt>Des templates intuitifs, déclaratifs et à faible logique</dt>
+			<dd>Des liaisons automatiques sont faites en se basant sur le type d'élément HTML, son ID, ses classes ou son attribut name ; pas de risque de liaisons par erreur, seuls les éléments avec l'attribut [data-bind] sont traités.</dd>
+			<dt>Rafraîchissement manuel et ciblé des vues</dt>
+			<dd>La liaison de données à double-sens telle qu'implémentée par AngularJS ou Ember semble être la solution idéale. Mais en pratique, <a target='_blank' href='http://bguiz.github.io/preso-digest-cycles/#2'>la complexité générale de ce mécanisme</a> mène à de nombreuses difficultés que les développeurs auraient souhaité éviter. <code>Object.observe</code> rendra bientôt les choses plus faciles mais en attendant, avec Databinder, vous avez toujours le contrôle total de quelle partie de vos vues est actualisée et quand.</dd>
+			<dt>Pas d'interpolation de texte pour préserver le lien entre modèles et vues</dt>
+			<dd>Chaque représentation de donnée mérite son propre élément HTML: que ce soit pour y appliquer des règles de style CSS particulières, pour ajouter des <a href='http://www.w3.org/TR/microdata/'>microdonnées</a>, pour extraire facilement cette donnée par un autre script ou un programme externe, ou juste pour rappeler l'importance de choisir la bonne balise pour chaque type de donnée.</dd>
+		</dl>
+	</header>
 
 		<h3 id="why-templating">Pourquoi aurais-je besoin de templates ?</h3>
 		<p>Réponse rapide : pour le contenu généré dynamiquement. Générer des pages web avec des données variables à l'intérieur peut se faire simplement avec de la concaténation de texte ; mais lorsque l'on travaille avec des structures de données plus complexes (boucles, formattage conditionnel, transformation de données avancé), il faut une solution plus puissante. Les moteurs de templating ont assez de fonctionnalités pour adresser la majorité de ces problèmes. Les templates sont faciles à lire, faciles à maintenir, et peuvent dans une certaine mesure être modifiés par des tiers non développeurs.</p>
@@ -166,14 +122,19 @@ databind("#introduction").set({
 	<h2>Télécharger</h2>
 	<h3>Version actuelle : v0.7</h3>
 	<ul>
-		<li><a href="databinder.js">databinder.js</a> fichier source (15 KB)</li>
-		<li><a href="build/databinder.min.js">databinder.min.js</a> source minifiée (8 KB)</li>
-		<li><a href="build/databinder.jquery.min.js">databinder.jquery.min.js</a> source minifiée avec adaptateur jQuery (optionnel) (8.3 KB)</li>
-		<li><a href="databinder.extensions.js">databinder.extensions.js</a> collection d'extensions (optionnel) (1.7 KB)</li>
+		<li><a href="dist/databinder.js">databinder.js</a> source compilée (15 KB)</li>
+		<li><a href="dist/databinder.min.js">databinder.min.js</a> source minifiée (8 KB)</li>
+		<li><a href="dist/databinder.jquery.min.js">databinder.jquery.min.js</a> source minifiée avec adaptateur jQuery (optionnel) (8.3 KB)</li>
 	</ul>
 	<details>
 		<summary>Changelog</summary>
 		<dl>
+			<dt>v0.9</dt>
+			<dd>ajout de data-input et data-output</dd>
+			<dd>custom builds</dd>
+			<dt>v0.8</dt>
+			<dd>modularisation des bindings</dd>
+			<dd>ajout du pattern observer pour des updates automatiques</dd>
 			<dt>v0.7</dt>
 			<dd>gestion des chaînes littérales comme paramètres</dd>
 			<dt>v0.6</dt>
@@ -1267,9 +1228,7 @@ databind(document.body).set({
 <section id="omitting-attribute">
 	<h2>Omission de l'attribut de liaison: Liaison par défaut</h2>
 
-	<p>
-		Quand l'attribut n'est pas spécifié dans une déclaration de liaison, une liaison par défaut est choisie selon l'élément et le type de la valeur correspondante.
-	</p>
+	<p>Quand l'attribut n'est pas spécifié dans une déclaration de liaison, une liaison par défaut est choisie selon l'élément et le type de la valeur correspondante. Notez que cela ne fonctionne pas si la valeur correspondante est une fonction.</p>
 
 	<table>
 		<tr>

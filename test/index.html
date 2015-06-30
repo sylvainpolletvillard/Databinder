@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Databinder tests</title>
-	<script type="text/javascript" src="../databinder.js"></script>
+	<script type="text/javascript" src="../dist/databinder.js"></script>
 	<script type="text/javascript" src="lib/qunit-1.14.0.js"></script>
 	<link rel="stylesheet" href="style/qunit-1.14.0.css"/>
 	<link rel="stylesheet" href="style/reset.css"/>
@@ -254,10 +254,10 @@
 <section id="test19">
 	<h2>string and number parameters</h2>
 
-	<span data-bind="ifnot: 'test' | capitalize | equals 'Test'">should not be here</span>
-	<span data-bind="ifnot: '  ' | trim | equals ''">should not be here</span>
-	<span data-bind="ifnot: 5 | moreThan 3">should not be here</span>
-	<span data-bind="ifnot: 107 | between 095 1001">should not be here</span>
+	<span data-bind="if: 'test' | capitalize | equals 'Test'">should be here</span>
+	<span data-bind="if: '  ' | trim | equals ''">should be here</span>
+	<span data-bind="if: 5 | moreThan 3">should be here</span>
+	<span data-bind="if: 107 | between 095 1001">should be here</span>
 
 	<p data-bind="text: 'test string parameter'"></p>
 </section>
