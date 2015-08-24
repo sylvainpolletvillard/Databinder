@@ -13,8 +13,7 @@
 	<script src="site/lib/jquery-2.1.0.min.js"></script>
 	<script src="site/lib/prism.js"></script>
 	<script src="site/lib/moment.min.js"></script>
-	<script src="src/databinder.js"></script>
-	<script src="databinder.extensions.js"></script>
+	<script src="dist/databinder.js"></script>
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -130,7 +129,8 @@
 		<summary>Changelog</summary>
 		<dl>
 			<dt>v0.9</dt>
-			<dd>ajout de data-input et data-output</dd>
+			<dd>adaptation des bindings pour gérer un binding double-sens</dd>
+			<dd>listeners sur les events input et change</dd>
 			<dd>custom builds</dd>
 			<dt>v0.8</dt>
 			<dd>modularisation des bindings</dd>
@@ -707,15 +707,15 @@ databind("#scoreboard").set({
 	&lt;h1&gt;Drapeaux par continent &lt;/h1&gt;
 	&lt;h2&gt;Europe&lt;/h2&gt;
 	&lt;ul data-bind="europe"&gt;
-	    &lt;li data-bind="template: flag"&gt;&lt;/li&gt;
+	    &lt;li data-bind="template: 'flag'"&gt;&lt;/li&gt;
 	&lt;/ul&gt;
    &lt;h2&gt;Asie&lt;/h2&gt;
    &lt;ul data-bind="asia"&gt;
-      &lt;li data-bind="template: flag"&gt;&lt;/li&gt;
+      &lt;li data-bind="template: 'flag'"&gt;&lt;/li&gt;
    &lt;/ul&gt;
    &lt;h2&gt;Afrique&lt;/h2&gt;
    &lt;ul data-bind="africa"&gt;
-      &lt;li data-bind="template: flag"&gt;&lt;/li&gt;
+      &lt;li data-bind="template: 'flag'"&gt;&lt;/li&gt;
    &lt;/ul&gt;
 &lt;/section&gt;
 
@@ -757,15 +757,15 @@ databind('#flags').set({
 				<h1>Drapeaux par continent </h1>
 				<h2>Europe</h2>
 				<ul data-bind="europe">
-					<li data-bind="template: flag"></li>
+					<li data-bind="template: 'flag'"></li>
 				</ul>
 				<h2>Asie</h2>
 				<ul data-bind="asia">
-					<li data-bind="template: flag"></li>
+					<li data-bind="template: 'flag'"></li>
 				</ul>
 				<h2>Afrique</h2>
 				<ul data-bind="africa">
-					<li data-bind="template: flag"></li>
+					<li data-bind="template: 'flag'"></li>
 				</ul>
 			</section>
 
@@ -1715,7 +1715,7 @@ clock.init();</code></pre>
 			<span class="legend">HTML</span>
 	         <pre><code data-language="html">
 &lt;div id="treeview"&gt;
-	&lt;div class="root folder" data-bind="template: tree-item"&gt;
+	&lt;div class="root folder" data-bind="template: 'tree-item'"&gt;
 	   Loading tree view...
 	&lt;/div&gt;
 &lt;/div&gt;
@@ -1724,7 +1724,7 @@ clock.init();</code></pre>
 	&lt;span class="icon" data-bind="click: open, class: { opened: isOpened }"&gt;&lt;/span&gt;
 	&lt;span data-bind="text: name"&gt;&lt;/span&gt;
 	&lt;ul data-bind="if: isOpened, loop: items"&gt;
-	   &lt;li class="folder" data-bind="if: isFolder, template: tree-item"&gt;&lt;/li&gt;
+	   &lt;li class="folder" data-bind="if: isFolder, template: 'tree-item'"&gt;&lt;/li&gt;
 	   &lt;li class="file" data-bind="ifnot: isFolder"&gt;
 	      &lt;span data-bind="name"&gt;&lt;/span&gt;
 	   &lt;/li&gt;
@@ -1764,7 +1764,7 @@ databind("#treeview").set({
 		<span class="legend">Résultat</span>
 
 		<div id="treeview">
-			<div class="root folder" data-bind="template: tree-item">
+			<div class="root folder" data-bind="template: 'tree-item'">
 				Loading tree view...
 			</div>
 		</div>
@@ -1773,7 +1773,7 @@ databind("#treeview").set({
 			<span class="icon" data-bind="click: open, class: { opened: isOpened }"></span>
 			<span data-bind="text: name"></span>
 			<ul data-bind="if: isOpened, loop: items">
-				<li class="folder" data-bind="if: isFolder, template: tree-item"></li>
+				<li class="folder" data-bind="if: isFolder, template: 'tree-item'"></li>
 				<li class="file" data-bind="ifnot: isFolder">
 					<span data-bind="name"></span>
 				</li>
