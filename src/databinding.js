@@ -1,4 +1,4 @@
-var BINDINGS_REGEX = /(?:^|,)\s*(?:(\w+):)?\s*([\w\.\/\|'"\s-]+|{.+})+/g;
+var BINDINGS_REGEX = /(?:^|,)\s*(?:(\w+)\s*:)?\s*([\w\.\/\|'"\s-]+|{.+})+/g;
 var _currentBinding;
 
 function DataBinding(element) {
@@ -27,8 +27,10 @@ DataBinding.prototype = {
 	},
 
 	get: function(){
-		if((this.element instanceof HTMLInputElement	|| this.element instanceof HTMLTextAreaElement)	&& "value" in this.bindings){
-			this.scope.lookup(this.bindings.value).data[this.bindings.value] = this.element.value;
+		for(var attribute in this.bindings){
+			if(this.bindings.hasOwnProperty(attribute) && this.bindings[attribute].inputable){
+				this.scope.setValueFromBinding(this.bindings[attribute]);
+			}
 		}
 
 		if(this.element.children) {
@@ -43,7 +45,8 @@ DataBinding.prototype = {
 	},
 
 	getBindings: function(){
-		var bindings = {}, value, attribute, bindingAttr;
+		var bindings = {}, attribute, value, bindingAttr;
+
 		if(this.element.hasAttribute(DB_ATTRIBUTE)){
 			bindingAttr = this.element.getAttribute(DB_ATTRIBUTE);
 			if(bindingAttr) {
@@ -60,7 +63,7 @@ DataBinding.prototype = {
 			} else {
 				value = this.guessValue();
 				attribute = this.guessAttribute(value);
-				if(attribute != null){
+				if(attribute !== null){
 					bindings[attribute] = new Binding(this.element, attribute, value);
 				}
 			}
@@ -74,7 +77,7 @@ DataBinding.prototype = {
 		for(var attribute in this.bindings){
 			if(this.bindings.hasOwnProperty(attribute)){
 				_currentBinding = this.bindings[attribute];
-				if(_currentBinding.set(this.element, this.scope) === false){
+				if(_currentBinding.set(this.scope) === false){
 					return; //prevent next bindings to apply
 				}
 			}

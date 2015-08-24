@@ -18,9 +18,14 @@ function Binding(element, attribute, declaration){
 	this.element = element;
 	this.attribute = attribute;
 	this.declaration = (declaration[0] === '{' ? this.getBindingSet(declaration) : declaration);
+	this.inputable = (declaration.indexOf('|') === -1 && isFunction(this.get));
+
+	if(this.inputable && (["INPUT","TEXTAREA","SELECT"].indexOf(this.element.tagName) !== -1)){
+		this.element.addEventListener("change", this.element.databinding.get.bind(this.element.databinding));
+	}
 
 	if(isFunction(this.init)){
-		this.init(element);
+		this.init();
 	}
 }
 
@@ -39,6 +44,7 @@ Binding.prototype = {
 	},
 
 	react: function(){
-		this.set(this.element, this.element.databinding.scope);
+		_currentBinding = this;
+		this.set(this.element.databinding.scope);
 	}
 };

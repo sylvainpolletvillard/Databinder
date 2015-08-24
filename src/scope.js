@@ -76,7 +76,7 @@ Scope.prototype = {
 	resolve: function(declaration, noFunctionEval){
 		var f, l, p, pl, params, resolvedParams, extension, extensionName;
 		var extensions = declaration.split("|");
-		var value = this.resolveParam(extensions.shift().trim());
+		var value = this.resolveParam(extensions.shift().trim()).value;
 		if(!noFunctionEval) {
 			value = this.evalFunction(value);
 		}
@@ -88,7 +88,7 @@ Scope.prototype = {
 				if(extension !== undefined && isFunction(extension)){
 					resolvedParams = [];
 					for(p = 0, pl = params.length; p < pl; p++){
-						resolvedParams.push(this.resolveParam(params[p]));
+						resolvedParams.push(this.resolveParam(params[p]).value);
 					}
 					value = extension.apply(value, resolvedParams);
 				} else {
@@ -101,18 +101,25 @@ Scope.prototype = {
 
 	resolveParam: function(param){
 		var key, scope;
-		if(!isNaN(param)){
-			return +param; //inline Number
+		if(!isNaN(+param)){
+			return { value: +param }; //inline Number
 		}
 		if(param[0] === '"' || param[0] === "'"){
-			return param.slice(1, -1); //inline String
+			return { value: param.slice(1, -1) }; //inline String
 		}
 		scope = this.lookup(param, false);
 		if(param === "."){
-			return scope.data;
+			return { value: scope.data, parent: scope, prop: "data" };
 		}
 		key = param.match(/([^\/\.\s]+)\s*$/)[1];
-		return scope.data[key];
+		return { value: scope.data[key], parent: scope.data, prop: key };
+	},
+
+	setValueFromBinding: function(binding){
+		var res = this.resolveParam(binding.declaration.split("|")[0].trim());
+		if(res.parent && res.prop){
+			res.parent[res.prop] = binding.get();
+		}
 	},
 
 	makeObservable: function(obj, dataSignature) {
@@ -195,7 +202,7 @@ Scope.prototype = {
 		 while(upperScope){
 		 if (signature in upperScope.observers) {
 		 upperScope.observers[signature].forEach(function (binding) {
-		 binding.react(OBSERVATION.SET, signature, val);
+		 binding.react(observation, signature);
 		 });
 		 }
 		 upperScope = upperScope.parent;
