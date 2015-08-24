@@ -55,7 +55,7 @@ function DatabinderError(message) {
 DatabinderError.prototype = new Error();
 DatabinderError.prototype.constructor = DatabinderError;
 
-var BINDINGS_REGEX = /(?:^|,)\s*(?:(\w+):)?\s*([\w\.\/\|'"\s-]+|{.+})+/g;
+var BINDINGS_REGEX = /(?:^|,)\s*(?:(\w+)\s*:)?\s*([\w\.\/\|'"\s-]+|{.+})+/g;
 var _currentBinding;
 
 function DataBinding(element) {
@@ -84,8 +84,10 @@ DataBinding.prototype = {
 	},
 
 	get: function(){
-		if((this.element instanceof HTMLInputElement	|| this.element instanceof HTMLTextAreaElement)	&& "value" in this.bindings){
-			this.scope.lookup(this.bindings.value).data[this.bindings.value] = this.element.value;
+		for(var attribute in this.bindings){
+			if(this.bindings.hasOwnProperty(attribute) && this.bindings[attribute].inputable){
+				this.scope.setValueFromBinding(this.bindings[attribute]);
+			}
 		}
 
 		if(this.element.children) {
@@ -100,7 +102,8 @@ DataBinding.prototype = {
 	},
 
 	getBindings: function(){
-		var bindings = {}, value, attribute, bindingAttr;
+		var bindings = {}, attribute, value, bindingAttr;
+
 		if(this.element.hasAttribute(DB_ATTRIBUTE)){
 			bindingAttr = this.element.getAttribute(DB_ATTRIBUTE);
 			if(bindingAttr) {
@@ -117,7 +120,7 @@ DataBinding.prototype = {
 			} else {
 				value = this.guessValue();
 				attribute = this.guessAttribute(value);
-				if(attribute != null){
+				if(attribute !== null){
 					bindings[attribute] = new Binding(this.element, attribute, value);
 				}
 			}
@@ -131,7 +134,7 @@ DataBinding.prototype = {
 		for(var attribute in this.bindings){
 			if(this.bindings.hasOwnProperty(attribute)){
 				_currentBinding = this.bindings[attribute];
-				if(_currentBinding.set(this.element, this.scope) === false){
+				if(_currentBinding.set(this.scope) === false){
 					return; //prevent next bindings to apply
 				}
 			}
@@ -279,7 +282,7 @@ Scope.prototype = {
 	resolve: function(declaration, noFunctionEval){
 		var f, l, p, pl, params, resolvedParams, extension, extensionName;
 		var extensions = declaration.split("|");
-		var value = this.resolveParam(extensions.shift().trim());
+		var value = this.resolveParam(extensions.shift().trim()).value;
 		if(!noFunctionEval) {
 			value = this.evalFunction(value);
 		}
@@ -291,7 +294,7 @@ Scope.prototype = {
 				if(extension !== undefined && isFunction(extension)){
 					resolvedParams = [];
 					for(p = 0, pl = params.length; p < pl; p++){
-						resolvedParams.push(this.resolveParam(params[p]));
+						resolvedParams.push(this.resolveParam(params[p]).value);
 					}
 					value = extension.apply(value, resolvedParams);
 				} else {
@@ -304,18 +307,25 @@ Scope.prototype = {
 
 	resolveParam: function(param){
 		var key, scope;
-		if(!isNaN(param)){
-			return +param; //inline Number
+		if(!isNaN(+param)){
+			return { value: +param }; //inline Number
 		}
 		if(param[0] === '"' || param[0] === "'"){
-			return param.slice(1, -1); //inline String
+			return { value: param.slice(1, -1) }; //inline String
 		}
 		scope = this.lookup(param, false);
 		if(param === "."){
-			return scope.data;
+			return { value: scope.data, parent: scope, prop: "data" };
 		}
 		key = param.match(/([^\/\.\s]+)\s*$/)[1];
-		return scope.data[key];
+		return { value: scope.data[key], parent: scope.data, prop: key };
+	},
+
+	setValueFromBinding: function(binding){
+		var res = this.resolveParam(binding.declaration.split("|")[0].trim());
+		if(res.parent && res.prop){
+			res.parent[res.prop] = binding.get();
+		}
 	},
 
 	makeObservable: function(obj, dataSignature) {
@@ -398,7 +408,7 @@ Scope.prototype = {
 		 while(upperScope){
 		 if (signature in upperScope.observers) {
 		 upperScope.observers[signature].forEach(function (binding) {
-		 binding.react(OBSERVATION.SET, signature, val);
+		 binding.react(observation, signature);
 		 });
 		 }
 		 upperScope = upperScope.parent;
@@ -433,9 +443,14 @@ function Binding(element, attribute, declaration){
 	this.element = element;
 	this.attribute = attribute;
 	this.declaration = (declaration[0] === '{' ? this.getBindingSet(declaration) : declaration);
+	this.inputable = (declaration.indexOf('|') === -1 && isFunction(this.get));
+
+	if(this.inputable && (["INPUT","TEXTAREA","SELECT"].indexOf(this.element.tagName) !== -1)){
+		this.element.addEventListener("change", this.element.databinding.get.bind(this.element.databinding));
+	}
 
 	if(isFunction(this.init)){
-		this.init(element);
+		this.init();
 	}
 }
 
@@ -454,7 +469,8 @@ Binding.prototype = {
 	},
 
 	react: function(){
-		this.set(this.element, this.element.databinding.scope);
+		_currentBinding = this;
+		this.set(this.element.databinding.scope);
 	}
 };
 
@@ -474,88 +490,93 @@ databind.bindings = {};
 databind.extensions = {};
 
 databind.bindings.class = {
-	get: function(element){
-		return classListSupported ? element.classList : element.className.split(/\s+/);
+	get: function(){
+		return classListSupported ? this.element.classList : this.element.className.split(/\s+/);
 	},
-	set: function(element, scope){
+	set: function(scope){
 		var className;
 		if(this.declaration instanceof Object){
 			for(className in this.declaration){
 				if(this.declaration.hasOwnProperty(className)){
-					toggleClass(element, className, scope.resolve(this.declaration[className]));
+					toggleClass(this.element, className, scope.resolve(this.declaration[className]));
 				}
 			}
 		} else {
 			var classList = scope.resolve(this.declaration);
 			if(Array.isArray(classList)){
-				element.className = classList.join(' ');
+				this.element.className = classList.join(' ');
 			} else if(classList instanceof Object){
 				for(className in classList){
 					if(classList.hasOwnProperty(className)){
-						toggleClass(element, className, classList[className]);
+						toggleClass(this.element, className, classList[className]);
 					}
 				}
 			} else {
-				element.className = classList;
+				this.element.className = classList;
 			}
 		}
 	}
 };
 
 databind.defaultBinding = {
-	get: function(element){
-		return element.getAttribute(this.attribute);
+	get: function(){
+		if(this.attribute in this.element){
+			return this.element[this.attribute];
+		}
+		return this.element.getAttribute(this.attribute);
 	},
-	set: function(element, scope){
+	set: function(scope){
 		var value = scope.resolve(this.declaration);
 		if (value === null) {
-			element.removeAttribute(this.attribute);
-		} else if(value === true || value === false){
-			element[this.attribute] = value;
+			this.element.removeAttribute(this.attribute);
+		} else if(this.attribute in this.element){
+			this.element[this.attribute] = value;
 		} else if(value !== undefined){
-			element.setAttribute(this.attribute, value);
+			this.element.setAttribute(this.attribute, value);
 		}
 	}
 };
 
 databind.bindings.hidden = {
-	get: function(element){
-		return element.hidden;
+	get: function(){
+		return this.element.hidden;
 	},
-	set: function(element, scope){
-		return databind.bindings.visible.set.call(this, element, scope, true);
+	set: function(scope){
+		return databind.bindings.visible.set.call(this, scope, true);
 	}
 };
 
 databind.bindings.html = {
-	init: function(element){
-		element.databinding.innerScope = null;
+	init: function(){
+		this.element.databinding.innerScope = null;
 	},
-	get: function(element){
-		return element.innerHTML;
+	get: function(){
+		return this.element.innerHTML;
 	},
-	set: function(element, scope){
+	set: function(scope){
 		var value = scope.resolve(this.declaration);
 		if(value instanceof Element){
-			element.innerHTML = "";
-			element.appendChild(value);
+			this.element.innerHTML = "";
+			this.element.appendChild(value);
 		} else if(value !== undefined) {
-			element.innerHTML = value;
+			this.element.innerHTML = value;
 		}
 	}
 };
 
 databind.bindings.if = {
-	init: function(element){
-		this.parentNode = element.parentNode;
+	init: function(){
+		this.parentNode = this.element.parentNode;
 	},
-	get: function(element){
-		return (this.parentNode.childNodes.indexOf(element) >= 0);
+	get: function(){
+		return (this.parentNode.childNodes.indexOf(this.element) >= 0);
 	},
-	set: function(element, scope, invert){
+	set: function(scope, invert){
 		var value = scope.resolve(this.declaration);
 		if(Boolean(value) === Boolean(invert)){
-			this.parentNode.removeChild(this.element);
+			if(this.parentNode){
+				this.parentNode.removeChild(this.element);
+			}
 			return false; //prevent other bindings to apply
 			//TODO: element.databinding.ignoreNextBindings()
 		}
@@ -569,19 +590,19 @@ databind.bindings.ifnot = {
 	get: function(){
 		return !databind.bindings.if.get.apply(this, arguments);
 	},
-	set: function(element, scope){
-		return databind.bindings.if.set.call(this, element, scope, true);
+	set: function(scope){
+		return databind.bindings.if.set.call(this, scope, true);
 	}
 };
 
 databind.bindings.loop = {
-	init: function(element){
-		element.databinding.innerScope = null; //override parseChildren
+	init: function(){
+		this.element.databinding.innerScope = null; //override parseChildren
 	},
-	get: function(element){
-		return element.childNodes;
+	get: function(){
+		return this.element.childNodes;
 	},
-	set: function (element, scope) {
+	set: function (scope) {
 		var params = isObject(this.declaration) ? this.declaration : { in : this.declaration };
 		if (params["in"] === undefined) {
 			throw new DatabinderError("No list specified for loop declaration: " + params);
@@ -591,10 +612,10 @@ databind.bindings.loop = {
 		this.item = params["as"] || "loopValue";
 		this.childNodes = [];
 		this.innerScope = scope.lookup(this.list, false);
-		for (var i = 0, l = element.childNodes.length; i < l; i++) {
-			this.childNodes.push(element.childNodes[i].cloneNode(true));
+		for (var i = 0, l = this.element.childNodes.length; i < l; i++) {
+			this.childNodes.push(this.element.childNodes[i].cloneNode(true));
 		}
-		element.innerHTML = ""; //remove all child nodes
+		this.element.innerHTML = ""; //remove all child nodes
 		this.parseChildren();
 	},
 	parseChildren: function(){
@@ -681,7 +702,7 @@ databind.bindings.on = {
 	init: function(){
 		this.eventListeners = {};
 	},
-	set: function (element, scope) {
+	set: function (scope) {
 		if(!isObject(this.declaration)) {
 			throw new DatabinderError('"on" binding expects a binding set, instead got ' + this.declaration);
 		}
@@ -692,7 +713,7 @@ databind.bindings.on = {
 			root = root.parent;
 		}
 
-		function makeHandler(fn){
+		function makeHandler(fn, element){
 			return function(event){
 				fn.call(scope.data, event, root.data, element);
 			};
@@ -702,12 +723,12 @@ databind.bindings.on = {
 			if(this.declaration.hasOwnProperty(eventType)){
 				fn = scope.resolve(this.declaration[eventType], true);
 				if(isFunction(fn)){
-					var handler = makeHandler(fn);
+					var handler = makeHandler(fn, this.element);
 					if(eventType in this.eventListeners){
-						element.removeEventListener(eventType, this.eventListeners[eventType]);
+						this.element.removeEventListener(eventType, this.eventListeners[eventType]);
 					}
 					this.eventListeners[eventType] = handler;
-					element.addEventListener(eventType, handler);
+					this.element.addEventListener(eventType, handler);
 				}
 			}
 		}
@@ -715,17 +736,17 @@ databind.bindings.on = {
 };
 
 databind.bindings.style = {
-	get: function(element){
-		return element.style;
+	get: function(){
+		return this.element.style;
 	},
-	set: function(element, scope){
+	set: function(scope){
 		var p, value;
 		if(this.declaration instanceof Object){
 			for(p in this.declaration){
 				if(this.declaration.hasOwnProperty(p)) {
 					value = scope.resolve(this.declaration[p]);
 					if (value !== undefined) {
-						element.style[p] = value;
+						this.element.style[p] = value;
 					}
 				}
 			}
@@ -734,57 +755,58 @@ databind.bindings.style = {
 			if(value instanceof Object){
 				for(p in value){
 					if(value.hasOwnProperty(p) && value[p] !== undefined){
-						element.style[p] = value[p];
+						this.element.style[p] = value[p];
 					}
 				}
 			} else {
-				element.setAttribute("style", value);
+				this.element.setAttribute("style", value);
 			}
 		}
 	}
 };
 
 databind.bindings.template = {
-	set: function(element){
-		var template = document.getElementById(this.declaration);
+	set: function(scope){
+		var templateId = scope.resolve(this.declaration);
+		var template = document.getElementById(templateId);
 		if(template === null){
-			throw new DatabinderError("Template not found: "+this.declaration);
+			throw new DatabinderError("Template not found: "+templateId);
 		}
-		element.innerHTML = template.innerHTML;
+		this.element.innerHTML = template.innerHTML;
 	}
 };
 
 databind.bindings.text = {
-	init: function(element){
-		element.databinding.innerScope = null;
+	init: function(){
+		this.element.databinding.innerScope = null;
 	},
-	get: function(element){
-		return element.textContent;
+	get: function(){
+		return this.element.textContent;
 	},
-	set: function(element,scope){
+	set: function(scope){
 		var value = scope.resolve(this.declaration);
 		if(value !== undefined){
-			element.textContent = value;
+			this.element.textContent = value;
 		}
 	}
 };
 
 databind.bindings.visible = {
-	get: function(element){
-		return !element.hidden;
+	get: function(){
+		return !this.element.hidden;
 	},
-	set: function(element, scope, invert){
+	set: function(scope, invert){
 		var value = scope.resolve(this.declaration);
 		var hidden = (Boolean(value) === Boolean(invert));
-		element.hidden = hidden;
-		element.style.display = hidden ? "none" : "";
+		this.element.hidden = hidden;
+		this.element.style.display = hidden ? "none" : "";
 	}
 };
 
 databind.bindings.with = {
-	set: function(element, scope){
+	set: function(scope){
 		var value = scope.resolve(this.declaration);
-		element.databinding.innerScope = new Scope(value, scope);
+		this.element.databinding.innerScope = new Scope(value, scope);
 	}
 };
 
