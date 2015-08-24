@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="style/qunit-1.14.0.css"/>
 	<link rel="stylesheet" href="style/reset.css"/>
 	<link rel="stylesheet" href="style/test.css"/>
+	<meta charset="UTF-8"/>
 </head>
 <body>
 <div id="qunit"></div>
@@ -188,15 +189,15 @@
 		<h1>Some flags by continent </h1>
 		<h2>Europe</h2>
 		<ul data-bind="loop: europe">
-			<li data-bind="template: flag"></li>
+			<li data-bind="template: 'flag'"></li>
 		</ul>
 		<h2>Asia</h2>
 		<ul data-bind="loop: asia">
-			<li data-bind="template: flag"></li>
+			<li data-bind="template: 'flag'"></li>
 		</ul>
 		<h2>Africa</h2>
 		<ul data-bind="loop: africa">
-			<li data-bind="template: flag"></li>
+			<li data-bind="template: 'flag'"></li>
 		</ul>
 	</div>
 
@@ -237,7 +238,7 @@
 </section>
 
 <section id="test18">
-	<h2>view saves with get</h2>
+	<h2>view input binding and auto updates</h2>
 
 	<form data-bind="submit: save">
 		<dl data-bind="loop: scores">
@@ -246,7 +247,7 @@
 		</dl>
 		<input type="submit" value="Enregistrer">
 	</form>
-	<p data-bind="winner">
+	<p data-bind="with: winner">
 		The winner is <span data-bind="name"></span> with <span data-bind="score"></span> points.
 	</p>
 </section>
