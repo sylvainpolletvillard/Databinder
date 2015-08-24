@@ -1,27 +1,27 @@
 databind.bindings.class = {
-	get: function(element){
-		return classListSupported ? element.classList : element.className.split(/\s+/);
+	get: function(){
+		return classListSupported ? this.element.classList : this.element.className.split(/\s+/);
 	},
-	set: function(element, scope){
+	set: function(scope){
 		var className;
 		if(this.declaration instanceof Object){
 			for(className in this.declaration){
 				if(this.declaration.hasOwnProperty(className)){
-					toggleClass(element, className, scope.resolve(this.declaration[className]));
+					toggleClass(this.element, className, scope.resolve(this.declaration[className]));
 				}
 			}
 		} else {
 			var classList = scope.resolve(this.declaration);
 			if(Array.isArray(classList)){
-				element.className = classList.join(' ');
+				this.element.className = classList.join(' ');
 			} else if(classList instanceof Object){
 				for(className in classList){
 					if(classList.hasOwnProperty(className)){
-						toggleClass(element, className, classList[className]);
+						toggleClass(this.element, className, classList[className]);
 					}
 				}
 			} else {
-				element.className = classList;
+				this.element.className = classList;
 			}
 		}
 	}

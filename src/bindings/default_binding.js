@@ -1,15 +1,18 @@
 databind.defaultBinding = {
-	get: function(element){
-		return element.getAttribute(this.attribute);
+	get: function(){
+		if(this.attribute in this.element){
+			return this.element[this.attribute];
+		}
+		return this.element.getAttribute(this.attribute);
 	},
-	set: function(element, scope){
+	set: function(scope){
 		var value = scope.resolve(this.declaration);
 		if (value === null) {
-			element.removeAttribute(this.attribute);
-		} else if(value === true || value === false){
-			element[this.attribute] = value;
+			this.element.removeAttribute(this.attribute);
+		} else if(this.attribute in this.element){
+			this.element[this.attribute] = value;
 		} else if(value !== undefined){
-			element.setAttribute(this.attribute, value);
+			this.element.setAttribute(this.attribute, value);
 		}
 	}
 };

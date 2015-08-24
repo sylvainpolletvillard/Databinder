@@ -1,11 +1,11 @@
 databind.bindings.loop = {
-	init: function(element){
-		element.databinding.innerScope = null; //override parseChildren
+	init: function(){
+		this.element.databinding.innerScope = null; //override parseChildren
 	},
-	get: function(element){
-		return element.childNodes;
+	get: function(){
+		return this.element.childNodes;
 	},
-	set: function (element, scope) {
+	set: function (scope) {
 		var params = isObject(this.declaration) ? this.declaration : { in : this.declaration };
 		if (params["in"] === undefined) {
 			throw new DatabinderError("No list specified for loop declaration: " + params);
@@ -15,10 +15,10 @@ databind.bindings.loop = {
 		this.item = params["as"] || "loopValue";
 		this.childNodes = [];
 		this.innerScope = scope.lookup(this.list, false);
-		for (var i = 0, l = element.childNodes.length; i < l; i++) {
-			this.childNodes.push(element.childNodes[i].cloneNode(true));
+		for (var i = 0, l = this.element.childNodes.length; i < l; i++) {
+			this.childNodes.push(this.element.childNodes[i].cloneNode(true));
 		}
-		element.innerHTML = ""; //remove all child nodes
+		this.element.innerHTML = ""; //remove all child nodes
 		this.parseChildren();
 	},
 	parseChildren: function(){

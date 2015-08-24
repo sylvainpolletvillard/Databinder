@@ -1,17 +1,17 @@
 databind.bindings.html = {
-	init: function(element){
-		element.databinding.innerScope = null;
+	init: function(){
+		this.element.databinding.innerScope = null;
 	},
-	get: function(element){
-		return element.innerHTML;
+	get: function(){
+		return this.element.innerHTML;
 	},
-	set: function(element, scope){
+	set: function(scope){
 		var value = scope.resolve(this.declaration);
 		if(value instanceof Element){
-			element.innerHTML = "";
-			element.appendChild(value);
+			this.element.innerHTML = "";
+			this.element.appendChild(value);
 		} else if(value !== undefined) {
-			element.innerHTML = value;
+			this.element.innerHTML = value;
 		}
 	}
 };

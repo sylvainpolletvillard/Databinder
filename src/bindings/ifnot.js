@@ -5,7 +5,7 @@ databind.bindings.ifnot = {
 	get: function(){
 		return !databind.bindings.if.get.apply(this, arguments);
 	},
-	set: function(element, scope){
-		return databind.bindings.if.set.call(this, element, scope, true);
+	set: function(scope){
+		return databind.bindings.if.set.call(this, scope, true);
 	}
 };

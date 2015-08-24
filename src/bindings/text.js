@@ -1,14 +1,14 @@
 databind.bindings.text = {
-	init: function(element){
-		element.databinding.innerScope = null;
+	init: function(){
+		this.element.databinding.innerScope = null;
 	},
-	get: function(element){
-		return element.textContent;
+	get: function(){
+		return this.element.textContent;
 	},
-	set: function(element,scope){
+	set: function(scope){
 		var value = scope.resolve(this.declaration);
 		if(value !== undefined){
-			element.textContent = value;
+			this.element.textContent = value;
 		}
 	}
 };

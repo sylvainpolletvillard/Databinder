@@ -1,9 +1,10 @@
 databind.bindings.template = {
-	set: function(element){
-		var template = document.getElementById(this.declaration);
+	set: function(scope){
+		var templateId = scope.resolve(this.declaration);
+		var template = document.getElementById(templateId);
 		if(template === null){
-			throw new DatabinderError("Template not found: "+this.declaration);
+			throw new DatabinderError("Template not found: "+templateId);
 		}
-		element.innerHTML = template.innerHTML;
+		this.element.innerHTML = template.innerHTML;
 	}
 };

@@ -1,6 +1,6 @@
 databind.bindings.with = {
-	set: function(element, scope){
+	set: function(scope){
 		var value = scope.resolve(this.declaration);
-		element.databinding.innerScope = new Scope(value, scope);
+		this.element.databinding.innerScope = new Scope(value, scope);
 	}
 };

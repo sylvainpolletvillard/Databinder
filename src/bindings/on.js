@@ -2,7 +2,7 @@ databind.bindings.on = {
 	init: function(){
 		this.eventListeners = {};
 	},
-	set: function (element, scope) {
+	set: function (scope) {
 		if(!isObject(this.declaration)) {
 			throw new DatabinderError('"on" binding expects a binding set, instead got ' + this.declaration);
 		}
@@ -13,7 +13,7 @@ databind.bindings.on = {
 			root = root.parent;
 		}
 
-		function makeHandler(fn){
+		function makeHandler(fn, element){
 			return function(event){
 				fn.call(scope.data, event, root.data, element);
 			};
@@ -23,12 +23,12 @@ databind.bindings.on = {
 			if(this.declaration.hasOwnProperty(eventType)){
 				fn = scope.resolve(this.declaration[eventType], true);
 				if(isFunction(fn)){
-					var handler = makeHandler(fn);
+					var handler = makeHandler(fn, this.element);
 					if(eventType in this.eventListeners){
-						element.removeEventListener(eventType, this.eventListeners[eventType]);
+						this.element.removeEventListener(eventType, this.eventListeners[eventType]);
 					}
 					this.eventListeners[eventType] = handler;
-					element.addEventListener(eventType, handler);
+					this.element.addEventListener(eventType, handler);
 				}
 			}
 		}

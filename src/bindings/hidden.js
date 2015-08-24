@@ -1,8 +1,8 @@
 databind.bindings.hidden = {
-	get: function(element){
-		return element.hidden;
+	get: function(){
+		return this.element.hidden;
 	},
-	set: function(element, scope){
-		return databind.bindings.visible.set.call(this, element, scope, true);
+	set: function(scope){
+		return databind.bindings.visible.set.call(this, scope, true);
 	}
 };
