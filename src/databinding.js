@@ -27,20 +27,17 @@ DataBinding.prototype = {
 	},
 
 	get: function(){
-		for(var attribute in this.bindings){
-			if(this.bindings.hasOwnProperty(attribute) && this.bindings[attribute].inputable){
-				this.scope.setValueFromBinding(this.bindings[attribute]);
-			}
-		}
-
-		if(this.element.children) {
-			for(var c=0, l=this.element.children.length; c<l; c++){
-				var child = this.element.children[c];
-				if(child.databinding instanceof DataBinding){
-					child.databinding.get();
+		var elements = [this.element].concat(this.element.querySelectorAll("["+DB_ATTRIBUTE+"]"));
+		elements.forEach(function(element){
+			var db = element.databinding;
+			if(db instanceof DataBinding) {
+				for (var attr in db.bindings) {
+					if (db.bindings.hasOwnProperty(attr) && db.bindings[attr].inputable) {
+						this.scope.setValueFromBinding(db.bindings[attr]);
+					}
 				}
 			}
-		}
+		});
 		return this;
 	},
 
@@ -50,6 +47,7 @@ DataBinding.prototype = {
 		if(this.element.hasAttribute(DB_ATTRIBUTE)){
 			bindingAttr = this.element.getAttribute(DB_ATTRIBUTE);
 			if(bindingAttr) {
+				BINDINGS_REGEX.lastIndex = 0;
 				var match = BINDINGS_REGEX.exec(bindingAttr);
 				if (match === null) {
 					throw new DatabinderError("Invalid argument for data-binding: " + bindingAttr);
@@ -99,7 +97,7 @@ DataBinding.prototype = {
 			}
 			for(c=0; c<children.length; c++){
 				if(children[c] instanceof Element){
-					databind(children[c]).set(innerScope);
+					databind(children[c], innerScope);
 				}
 			}
 		}
@@ -137,7 +135,8 @@ DataBinding.prototype = {
 				return "if";
 			case type===String:
 			case type===Number:
-				if(this.element.constructor===HTMLInputElement) return "value";
+				if(this.element.constructor===HTMLInputElement
+				|| this.element.constructor===HTMLTextAreaElement) return "value";
 				if("src" in this.element) return "src";
 				return "text";
 			default:

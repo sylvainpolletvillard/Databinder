@@ -118,7 +118,8 @@ Scope.prototype = {
 	setValueFromBinding: function(binding){
 		var res = this.resolveParam(binding.declaration.split("|")[0].trim());
 		if(res.parent && res.prop){
-			res.parent[res.prop] = binding.get();
+			var data = binding.get();
+			res.parent[res.prop] = (res.value === null || res.value === undefined) ? data : Object.getPrototypeOf(res.value).constructor(data);
 		}
 	},
 
@@ -197,22 +198,15 @@ Scope.prototype = {
 	},
 
 	callObservers: function(observation, signature){
-
-		/*var upperScope = scope;
-		 while(upperScope){
-		 if (signature in upperScope.observers) {
-		 upperScope.observers[signature].forEach(function (binding) {
-		 binding.react(observation, signature);
-		 });
-		 }
-		 upperScope = upperScope.parent;
-		 }*/
-
-		if (signature in this.observers) {
-			var o, ol, observers = this.observers[signature];
-			for(o=0,ol=observers.length; o<ol; o++){
-				observers[o].react.apply(observers[o], arguments);
+		var o, ol, observers, scope = this;
+		while(scope){
+			if (signature in scope.observers) {
+				observers = scope.observers[signature];
+				for (o = 0, ol = observers.length; o < ol; o++) {
+					observers[o].react.apply(observers[o], arguments);
+				}
 			}
+			scope = scope.parent; //bubbling up
 		}
 	}
 };

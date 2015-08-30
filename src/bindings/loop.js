@@ -63,7 +63,7 @@ databind.bindings.loop = {
 				this.element.appendChild(newChild);
 			}
 			if(newChild instanceof Element){
-				databind(newChild).set(scope);
+				databind(newChild,scope);
 			}
 		}
 	},
@@ -90,7 +90,8 @@ databind.bindings.loop = {
 		for(i = start; i < start + nbToRemove && i in this.iterations; i++) {
 			for (j = 0, n = this.iterations[i].nodes.length; j < n; j++) {
 				this.element.removeChild(this.iterations[i].nodes[j]);
-				//TODO: some node references are lost, try to remove several items
+				//TODO: some node references are lost, try to remove several items --> need to update loopIndex of following loop iterations
+
 			}
 		}
 		list = this.innerScope.resolve(this.list, true);

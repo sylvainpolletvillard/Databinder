@@ -4,10 +4,8 @@ function databind(selector, data){
 		throw new DatabinderError("No element matched for selector "+selector);
 	}
 	var databinding = element.databinding || new DataBinding(element);
-	if (data !== undefined) {
-		databinding.set(data);
-	}
-	return databinding;
+	databinding.set(data || {});
+	return databinding.data;
 }
 
 databind.bindings = {};
