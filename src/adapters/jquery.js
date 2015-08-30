@@ -1,12 +1,8 @@
 (function($, databind){
 	if(!$) return;
-
-	$.fn.databind = function(action){
+	$.fn.databind = function(data){
 		return this.each(function(){
-			var databinding = databind(this);
-			if(action in databinding) {
-				databinding[action].apply(databinding, [].slice.call(arguments, 1));
-			}
+			databind(this, data);
 		});
 	};
 })(jQuery, databind);
