@@ -228,7 +228,7 @@
 		</ul>
 		<input type="checkbox" name="truthy" data-bind />
 		<select name="list" data-bind>
-			<option class="selectLast" data-bind></option>
+			<option class="selectLast" data-bind>last option should be selected</option>
 		</select>
 		<figure id="falsy" data-bind></figure>
 		<img class="imgurl" data-bind/>
@@ -240,13 +240,10 @@
 <section id="test18">
 	<h2>view input binding and auto updates</h2>
 
-	<form data-bind="submit: save">
-		<dl data-bind="loop: scores">
-			<dt><input type="text" data-bind="name"></dt>
-			<dd><input type="number" data-bind="score"></dd>
-		</dl>
-		<input type="submit" value="Enregistrer">
-	</form>
+	<dl data-bind="loop: scores">
+		<dt><input type="text" data-bind="name"></dt>
+		<dd><input type="number" data-bind="score"></dd>
+	</dl>
 	<p data-bind="with: winner">
 		The winner is <span data-bind="name"></span> with <span data-bind="score"></span> points.
 	</p>

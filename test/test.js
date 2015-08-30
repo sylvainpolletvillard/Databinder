@@ -25,6 +25,15 @@
 			element.dispatchEvent(evt);
 		}
 	}
+	function fireInput(element) {
+		if ("fireEvent" in element)
+			element.fireEvent("oninput");
+		else {
+			var evt = document.createEvent("HTMLEvents");
+			evt.initEvent("input", false, true);
+			element.dispatchEvent(evt);
+		}
+	}
 
 	function detectGlobals(endFn){
 
@@ -74,7 +83,7 @@
 	});
 
 	var test1 = find("#test1");
-	databind(test1).set({
+	databind(test1,{
 		label:   "My website",
 		url:     "http://syllab.fr/",
 		tooltip: "syllab.fr",
@@ -97,21 +106,21 @@
 
 	test("binding loop array", function(){
 
-		databind(test2).set({
+		databind(test2,{
 			emptylist: ["", undefined]
 		});
 
 		equal(test2.getElementsByTagName("ul").length, 1);
 		equal(test2.getElementsByTagName("li").length, 2);
 
-		databind(test2).set({
+		databind(test2,{
 			emptylist: []
 		});
 
 		equal(test2.getElementsByTagName("ul").length, 0);
 		equal(test2.getElementsByTagName("li").length, 0);
 
-		databind("table.tictactoe").set({
+		databind("table.tictactoe",{
 			grid: [ ["X", " ", "O" ],
 					["O", "X", " " ],
 					[" ", " ", "X" ] ]
@@ -129,7 +138,7 @@
 	});
 
 	var test3 = find("#palette");
-	databind("#palette").set({
+	databind("#palette",{
 		palette: {
 			"Light Blue": "#ADD8E6",
 			"Chocolate": "#D2691E",
@@ -157,19 +166,19 @@
 	});
 
 	var test4 = find("#test4");
-	databind('#test4 input').set({
+	databind('#test4 input',{
 		properties: {
 			blue: false,
 			red: true
 		}
 	});
-	databind('#test4 button').set({
+	databind('#test4 button',{
 		classNames: "some classes as string"
 	});
-	databind('#test4 section').set({
+	databind('#test4 section',{
 		otherClasses: ["some", "other", "classes"]
 	});
-	databind('#test4 p.stuff').set({
+	databind('#test4 p.stuff',{
 		message: "This is important stuff dude !",
 		isImportant: true,
 		isBusiness: false
@@ -190,7 +199,7 @@
 	var test5 = find("#test5");
 
 	test("if binding", function(){
-		databind(test5).set({
+		databind(test5,{
 			bool: false,
 			arr: [1,2,3,4,5],
 			showOrHide: function(){
@@ -205,7 +214,7 @@
 		equal(test5.findAll("li").length, 3);
 		equal(test5.children.length, 2);
 
-		databind(test5).set({
+		databind(test5,{
 			bool: true,
 			arr: [1,2,3,4,5,6,7,8,9,10],
 			showOrHide: function(){
@@ -222,7 +231,7 @@
 	});
 
 	var test6 = find("#test6");
-	databind(test6).set({
+	databind(test6,{
 		items: ["Some", "items", "seem", "to", "have", "disappeared"],
 		autocensor: function(){
 			return this.loopIndex % 2 === 0;
@@ -255,7 +264,7 @@
 
 	test("functions and generators", function(){
 		var suite = [];
-		databind("#test7").set({
+		databind("#test7",{
 			suiteGenerator: function(){
 				var n = suite.length;
 				suite.push(n<2 ? 1 : suite[n-2] + suite[n-1]);
@@ -284,16 +293,16 @@
 	var test8 = find("#test8");
 
 	test("style binding", function(){
-		databind(test8.find('input')).set({
+		databind(test8.find('input'),{
 			otherRules: {
 				borderWidth: "10px",
 				borderColor: "red"
 			}
 		});
-		databind(test8.find('button')).set({
+		databind(test8.find('button'),{
 			ruleSet: "text-transform: uppercase; font-weight: bold;"
 		});
-		databind(test8.find('p')).set({
+		databind(test8.find('p'),{
 			message: "Big red stuff !",
 			color: "rgb(255,0,0)",
 			size: "3em"
@@ -319,7 +328,7 @@
 	var test9 = find("#test9");
 	test("with binding", function(){
 
-		databind('#test9').set({
+		databind('#test9',{
 			name: "Karl",
 			child : {
 				name: "Karl Junior",
@@ -343,7 +352,7 @@
 	var test10 = find("#test10");
 	test("checked and selected bindings", function(){
 
-		databind(test10).set({
+		databind(test10,{
 			understood: true,
 			answers: [
 				{ text: "Easy as pie", default: false },
@@ -364,10 +373,11 @@
 	var test11 = find("#test11");
 	test("events binding", function(){
 
-		var List = function(selector){
-			this.itemCounter = 0;
-			this.itemCollection = [];
-			this.databinding = databind(selector).set(this);
+		var List = function(selector) {
+			var list = Object.create(List.prototype);
+			list.itemCollection = [];
+			list.itemCounter = 0;
+			return databind(selector, list);
 		};
 
 		List.prototype = {
@@ -379,7 +389,7 @@
 			},
 			remove: function(event, list){
 				event.preventDefault();
-				for(var i=list.itemCollection.length; i--;){
+				for(var i = list.itemCollection.length; i--;){
 					if(list.itemCollection[i].num === this.loopValue.num){
 						list.itemCollection.splice(i, 1);
 						break;
@@ -388,11 +398,10 @@
 			}
 		};
 
-		var myList = new List("#mylist");
+		var myList = List("#mylist");
 		myList.addItem();
 		myList.addItem();
 		myList.addItem();
-		myList.databinding.reset();
 
 		equal(test11.findAll("li").length, 3);
 
@@ -424,7 +433,7 @@
 
 	test("advanced event binding and custom events", function(){
 		var rectanglesCounter = 0;
-		databind(test12).set({
+		databind(test12,{
 			rects: [],
 			currentRect: null,
 			start: function(e, scope, elm) {
@@ -463,7 +472,7 @@
 	var test13 = find("#test13");
 	test("complex bindings value paths", function(){
 
-		databind(test13).set({
+		databind(test13,{
 			name: "a",
 			child : {
 				name: "b",
@@ -483,7 +492,7 @@
 
 	var test14 = find("#test14");
 	test("text and html bindings", function(){
-		databind(test14).set({
+		databind(test14,{
 			msg: "try to <strong>inject</strong> <iframe></iframe> html <span>stuff</span>"
 		});
 		equal(test14.find(".text").children.length, 0);
@@ -499,7 +508,7 @@
 
 	var test15 = find("#test15");
 	test("template binding", function(){
-		databind(test15).set({
+		databind(test15,{
 			africa: [
 				{ country:"Senegal", capital:"Dakar", img:"../site/res/flags/sn.png" },
 				{ country:"Namibia", capital:"Windhoek", img:"../site/res/flags/na.png" },
@@ -586,7 +595,7 @@
 	var test16 = find("#test16");
 
 	test("extensions", function(){
-		databind(test16).set({
+		databind(test16,{
 			arr: [1,2,3],
 			num: 1234.567,
 			date: 2012.345
@@ -603,7 +612,7 @@
 		span1.innerHTML="1";
 		span2.innerHTML="2";
 		span3.innerHTML="3";
-		databind(test17).set({
+		databind(test17,{
 			wrapper: {
 				list: [
 					{ htmlcontent: span1, selectLast: false },
@@ -632,10 +641,6 @@
 	var test18 = find("#test18");
 	test("view input binding and auto updates", function() {
 
-		function save(){
-			databind(test18.find("p")).reset();
-		}
-
 		var data = {
 			scores: [
 				{ name: "Joe", score: 6500 },
@@ -646,32 +651,26 @@
 				return this.scores.reduce(function (a, b) {
 					return a.score > b.score ? a : b;
 				});
-			},
-			save: function (event) {
-				event.preventDefault();
-				save();
 			}
 		};
-		databind(test18).set(data);
+		databind(test18,data);
 
 		equal(test18.findAll("span")[0].textContent, "Jack");
 		equal(test18.findAll("span")[1].textContent, "8200");
 		test18.findAll("input")[2].value = "Jeff";
-		fireChange(test18.findAll("input")[2]);
+		fireInput(test18.findAll("input")[2]);
 		equal(data.scores[1].name, "Jeff");
-		save();
 		equal(test18.findAll("span")[0].textContent, "Jeff");
 		test18.findAll("input")[3].value = 5000;
-		fireChange(test18.findAll("input")[3]);
+		fireInput(test18.findAll("input")[3]);
 		equal(data.scores[1].score, 5000);
-		save();
 		equal(test18.findAll("span")[0].textContent, "Joe");
 		equal(test18.findAll("span")[1].textContent, "6500");
 	});
 
 	var test19 = find("#test19");
 	test("string and number parameters", function() {
-		databind(test19).set();
+		databind(test19);
 		equal(test19.findAll("span").length, 4);
 		equal(test19.find("p").innerHTML, "test string parameter");
 	});
