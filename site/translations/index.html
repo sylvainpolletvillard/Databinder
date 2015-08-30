@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Translate website</title>
+	<script src="../../dist/databinder.min.js"></script>
+	<script src="../lib/fetch.js"></script>
+	<style>
+		* { box-sizing: border-box; }
+		textarea{
+			width: 48%;
+			height: auto;
+			margin: 0.5%;
+		}
+	</style>
+</head>
+<body>
+
+<label for="langToTranslate">Traduction dans la langue: </label>
+<select name="langToTranslate" id="langToTranslate" data-bind="loop: {in: availableLangs, as: lang}">
+	<option data-bind="value: lang, text: lang"></option>
+</select>
+
+<h2>Liste des traductions à réaliser:</h2>
+<section data-bind="translations">
+	<textarea data-bind="from"></textarea>
+	<textarea data-bind="to"></textarea>
+	<hr>
+</section>
+
+<button data-bind="click: addTranslation">Ajouter une autre traduction</button>
+<button data-bind="click: saveTranslationFile">Enregistrer le fichier de traduction</button>
+<a id="downloadAnchorElem" style="display:none"></a>
+
+<script>
+
+	var initialLang = "en";
+	var availableLangs = ["fr"];
+
+	var data = databind(document.body, {
+		translations: [],
+		initialLang: initialLang,
+		availableLangs: availableLangs,
+		currentLang: availableLangs[0],
+		addTranslation: function(){
+			this.translations.push({ from: "", to: "" })
+		},
+		saveTranslationFile: function(){
+			var json={};
+			this.translations.forEach(function(tr){
+				json[tr.from] = tr.to;
+			});
+
+			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json,null, "\n\t"));
+			var dlAnchorElem = document.getElementById('downloadAnchorElem');
+			dlAnchorElem.setAttribute("href", dataStr);
+			dlAnchorElem.setAttribute("download", this.currentLang+".json");
+			dlAnchorElem.click();
+
+		}
+	});
+
+	function loadLang(lang){
+		data.currentLang;
+		fetch(lang+".json")
+		.then(function(response){
+			return response.json()
+		}).then(function(translations){
+			data.translations = Object.keys(translations).map(function(tr){
+				return { from: tr, to: translations[tr] }
+			});
+		})
+	}
+
+	loadLang(data.currentLang);
+</script>
+
+
+</body>
+</html>

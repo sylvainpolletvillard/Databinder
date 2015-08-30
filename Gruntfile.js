@@ -64,7 +64,8 @@ module.exports = function(grunt) {
 		jshint: {
 			all: ['src/**/*.js'],
 			options: {
-				sub: true
+				sub: true,
+				laxbreak: true
 			}
 		},
 
@@ -75,6 +76,18 @@ module.exports = function(grunt) {
 				options: {
 					spawn: false
 				}
+			}
+		},
+
+		replace: {
+			translate_fr: {
+				src: ['index.html'],             // source files array (supports minimatch)
+				dest: 'index_fr.html',             // destination directory or file
+				replacements: (function(translations){
+					return Object.keys(translations).map(function(from){
+						return { from: from, to: translations[from] };
+					})
+				})(grunt.file.readJSON("site/translations/fr.json"))
 			}
 		}
 
@@ -105,11 +118,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-prompt');
+	grunt.loadNpmTasks('grunt-text-replace');
 
 
 	grunt.registerTask('dist', ['jshint','concat:dist','concat:dist_umd','uglify']);
 	grunt.registerTask('test', ['qunit']);
 	grunt.registerTask('default', ['dist','test']);
+	grunt.registerTask('docs', ['replace:translate_fr']);
 
 	grunt.registerTask('custom_build', require('./custom_build')(grunt, merge));
 

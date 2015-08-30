@@ -1,0 +1,98 @@
+{
+
+	"lang='en'": "lang='fr'",
+
+	"Databinder is a client-side JavaScript DOM-based templating system which let you write templates directly in the DOM while remaining valid HTML5.": "Databinder est une bibliothèque JavaScript de templating côté client basée sur le DOM (Document Object Model) qui vous permet de coder directement vos templates dans le code HTML de vos pages tout en restant du HTML5 valide.",
+
+	"Inspired by <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> and <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, its goal is to facilitate the writing and maintenance of templates by following several principles:": "Inspiré par <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> et <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, son but est de faciliter l'écriture et la maintenance des templates en suivant plusieurs principes fondamentaux:",
+
+	"Intuitive, declarative, low logic templating": "Des templates intuitifs, déclaratifs et à faible logique",
+
+	"Bindings deducted by the HTML element type, ID, or class ; but no bad guessing, only the [data-bind] elements are treated.": "Des liaisons automatiques sont faites en se basant sur le type d'élément HTML, son ID, ses classes ou son attribut name ; pas de risque de liaisons par erreur, seuls les éléments avec l'attribut [data-bind] sont traités.",
+
+	"Automatic view updates": "Rafraîchissement automatique des vues",
+
+	"Whenever a property of your models changes (either programmatically or in response to user input), the corresponding elements in your views are automatically updated thanks to the bundled 2-way data-binding system. Of course, you can still update your views manually if you prefer.": "Dès qu'une propriété de vos modèles change (que ce soit programmatiquement ou à la suite d'une saisie utilisateur), les zones correspondantes dans vos vues sont automatiquement mises à jour grâce au système de liaison double-sens intégré.",
+
+	"No String interpolation to preserve the link between model and view": "Pas d'interpolation de texte pour préserver le lien entre modèles et vues",
+
+	"Each data representation deserves its own HTML Element : whether to apply special CSS rules, to add <a href='http://www.w3.org/TR/microdata/'>microdata</a>, to extract it from another script or an external program, or just to remind the importance of choosing the correct tags for each data type.": "Chaque représentation de donnée mérite son propre élément HTML: que ce soit pour y appliquer des règles de style CSS particulières, pour ajouter des <a href='http://www.w3.org/TR/microdata/'>microdonnées</a>, pour extraire facilement cette donnée par un autre script ou un programme externe, ou juste pour rappeler l'importance de choisir la bonne balise pour chaque type de donnée.",
+
+	"Why should I need templating ?": "Pourquoi aurais-je besoin de templates ?",
+
+	"Quick answer: dynamically generated content. Generating pages with custom data inside can be done with string interpolation, but when dealing with more complex data structures (loops, conditional formatting, advanced data transformations), it requires a more powerful solution. Template engines have enough functionnalites to adress most of these issues. Templates are easy to read, easy to maintain, and can be modified to some extent by other people than developers.": "Réponse rapide : pour le contenu généré dynamiquement. Générer des pages web avec des données variables à l'intérieur peut se faire simplement avec de la concaténation de texte ; mais lorsque l'on travaille avec des structures de données plus complexes (boucles, formattage conditionnel, transformation de données avancé), il faut une solution plus puissante. Les moteurs de templating ont assez de fonctionnalités pour adresser la majorité de ces problèmes. Les templates sont faciles à lire, faciles à maintenir, et peuvent dans une certaine mesure être modifiés par des tiers non développeurs.",
+
+	"Why do it client-side ?": "Pourquoi côté client ?",
+
+	"Since 1995 and Web 2.0 stuff, many web developers are doing templating on the server side thanks to technologies like PHP or JSP. Then AJAX came, and Single Page Applications gained popularity. By caching HTML templates and only exchanging serialized data with the server thanks to AJAX requests, client-side rendering tends to lighten HTTP requests and reduce page load time. It also helps websites to feel more dynamic. The next step was to update the website views without actually requesting the server, for actions that do not need it, for offline usages or for latency compensation. All these innovations have for first consequence to move more and more application logic to the client-side. The developers then had to adapt and find new tools to handle DOM manipulation and interact with the page in JavaScript more efficiently.": "Depuis 1995 et les débuts du Web 2.0, de nombreux développeurs web font du templating côté serveur grâce à des technologies comme PHP ou JSP. Puis AJAX est arrivé, et les web-apps monopage ont commencé à gagner en popularité. En mettant en cache les templates HTML et en échangeant uniquement des données sérialisées avec le serveur, le rendu côté client tend globalement à réduire le poids des requêtes HTTP ainsi que le temps de chargement de vos pages. Cela aide également à donner un air plus dynamique à vos pages web. La prochaine étape était logiquement d'actualiser les pages Web sans requêter le serveur, pour les actions qui peuvent s'en passer, pour un usage déconnecté ou encore pour de la compensation de latence. Toutes ces innovations ont comme première conséquence de déplacer de plus en plus de logique applicative côté client. Les développeurs doivent alors s'adapter et trouver de meilleurs outils pour manipuler le DOM et interagir avec la page en JavaScript plus efficacement.",
+
+	"You probably all know jQuery, the most popular JavaScript library that is well known for its omnipotent selector function. What it lacks is a way to generate large parts of HTML with associated data. That's why John Resig, the creator of the jQuery library, published <a target='_blank' href='http://ejohn.org/blog/javascript-micro-templating/'>its own micro-templating engine</a>. Client-side templating is widely used today and an essential part of many modern web application frameworks.": "Vous connaissez probablement tous jQuery, la bibliothèque JavaScript la plus populaire et reconnue pour sa fonction sélecteur omnipotente. Ce qui lui manque est un moyen de générer de larges pans de HTML contenant des données. C'est pourquoi John Resig, le créateur de jQuery, a publié <a target='_blank' href='http://ejohn.org/blog/javascript-micro-templating/'>son propre moteur de micro-templating</a>. Aujourd'hui, les templates côté client sont largement utilisés et sont une partie essentielle de nombreux frameworks web modernes.",
+
+	"Why use a DOM-based templating and not a String-based much more common ?": "Pourquoi basé sur le DOM et non sur de la concaténation de texte comme la plupart ?",
+
+	"The DOM is the hierarchical and semantic representation of the web page content. It makes sense to use it as a basis for a templating engine. String-based templating provide more flexibility, but in my opinion, this gain in flexibility is most often used for wrong reasons and increases the gap between the data model and HTML. More concerns are explained in this article :": "Le DOM est la représentation hiérarchique et sémantique du contenu d'une page web. Cela a du sens de s'en servir comme base pour un moteur de templating. Les templates basés sur les <code>String</code> et l'interpolation de texte offrent davantage de flexibilité, mais selon moi, ce gain de flexibilité est la plupart du temps utilisé pour de mauvaises raisons et tend à augmenter l'écart entre le modèle de données et la vue HTML. D'autres préoccupations sont abordées dans cet article (en anglais) :",
+
+	"Why another templating library ?": "Pourquoi encore une autre bibliothèque ?",
+
+	"I used a bunch of different templating libraries for professional and personal projets. I wrote <a href='http://sylvainpv.developpez.com/tutoriels/javascript/guide-templating-client/' target='_blank'>this article (in French)</a> outlining the pros and cons of each one in my opinion. Since none satisfied me fully, I decided to write my own library. I wanted a DOM-based low-logic templating with a clear declarative syntax like Knockout, but lightweight and not part of a bigger solution (I am not a big fan of all-in-one frameworks). I found the result convincing enough to share it with you.": "J'ai utilisé un tas de bibliothèques de templating client pour des projets professionnels et personnels. J'ai écrit <a href='http://sylvainpv.developpez.com/tutoriels/javascript/guide-templating-client/' target='_blank'>cet article</a> qui met en évidence les avantages et inconvénients de chacunes de ces bibliothèques selon moi. Puisqu'aucune ne me satisfaisait pleinement, j'ai décidé d'écrire ma propre bibliothèque. Je voulais un templating à faible logique mais extensible, basé sur le DOM mais avec une syntaxe claire et déclarative, puissant mais qui reste léger et ne fasse pas partie d'une plus grosse solution (je ne suis pas un grand fan des frameworks tout-en-un). J'ai trouvé le résultat suffisamment convaincant pour publier cette bibliothèque et la partager avec vous aujourd'hui.",
+
+	"Is it performant ?": "Est-ce que c'est performant ?",
+
+	"Databinder is only 14 KB (7.5KB minified, even less when gzipped). All the examples on this page have been passed through Databinder. Did you notice ? It should be fast enough so that you do not see anything. Actually, it took <span id='render-time'></span> milliseconds.": "Databinder pèse seulement 14 Ko (7.5KB en minifié, encore moins si compressé avec gzip). Tous les exemples de cette page ont été interprétés par Databinder. Avez-vous remarqué quelque-chose ? Cela devrait être suffisamment rapide pour que vous n'y voyez que du feu. A vrai dire, cela a pris exactement <span id='render-time'></span> millisecondes.",
+
+	"Due to its DOM-based nature, Databinder is less performant than other String-based templating libraries at first render time, but more efficient on view updates afterwards. Why ? Because only the changing parts of the view are updated. The browser does not need to parse the HTML, set up event listeners or render the elements that have not changed. So what starts as a drawback becomes an advantage.": "A cause de sa conception basée sur le DOM, Databinder est moins performant sur le temps de rendu initial par rapport à d'autres bibliothèques de templating basée sur les String. En revanche, il est plus efficace que sur les mises à jour de vue par la suite. Pourquoi ? Parce que seules les parties changeantes de la vue sont modifiées. Le navigateur n'a pas à réinterpréter le HTML, réinstancier les écouteurs d'évènements ou redessiner les éléments qui n'ont pas changé. Donc ce qui est initialement un inconvénient se transforme en avantage par la suite.",
+
+	"What browsers are supported ?": "Quels navigateurs sont supportés ?",
+
+	"Databinder is <a href='./test/'>unit tested</a> and supported on Internet Explorer 9 and above, and latest versions of Chrome, Firefox and some mobile browsers like Android Stock Browser, Chrome Mobile, Firefox Mobile, Opera Mobile... Actually, it should work on any decent web browser published since IE9.": "Databinder est <a href='./test/'>testé unitairement</a> sur Internet Explorer 9 et au delà, ainsi que sur les dernières versions de Chrome, Firefox et certains navigateurs mobiles comme Android Stock Browser, Chrome Mobile, Firefox Mobile, Opera Mobile... En fait, ça devrait fonctionner sur n'importe quel navigateur décent sorti depuis IE9.",
+
+	"Can I use it with my favorite framework / library ?": "Est-ce que je peux l'utiliser avec ma bibliothèque / mon framework favori ?",
+
+	"Databinder does not need any dependencies. However, you can easily plug it with other libraries. For example, a jQuery adapter is available to download so you can call Databinder that way :": "Databinder n'a aucune dépendance et peut fonctionner seul. Cependant, vous pouvez facilement le connecter à d'autres bibliothèques. Par exemple, un adaptateur jQuery est disponible en téléchargement afin que vous puissez utiliser Databinder avec jQuery de cette manière",
+
+	"<h2>Download</h2>": "<h2>Télécharger</h2>",
+
+	"Current version:": "Version actuelle:",
+
+	"source file": "source compilée",
+
+	"minified file": "source minifiée",
+
+	"minified file with jQuery adapter (optional)": "source minifiée avec adaptateur jQuery (optionnel)",
+
+	"KB": "Ko",
+
+	"bindings adapted to handle two-way data-binding": "adaptation des bindings pour gérer un binding double-sens",
+
+	"listeners on input and change events": "listeners sur les events input et change",
+
+	"custom builds": "builds personnalisés",
+
+	"modularized bindings": "modularisation des bindings",
+
+	"added pattern observer for automatic updates": "ajout du pattern observer pour des updates automatiques",
+
+	"added support for litteral strings as parameters": "gestion des chaînes littérales comme paramètres",
+
+	"new functional-oriented API": "nouvelle API orientée fonctionnelle",
+
+	"added <code>get</code> method": "ajout de la méthode <code>get</code>",
+
+	"externalised bundled extensions": "externalisation des extensions auparavant incluses",
+
+	"added Array and Boolean extensions": "ajout d'extensions sur tableaux et booléens",
+
+	"added extensions": "ajout d'extensions",
+
+	"changed template functions arguments": "changement des arguments d'appel des fonctions dans les templates",
+
+	"added templates & events bindings": "ajout de la liaison template et des liaisons évènements",
+
+	"new syntax for loops": "nouvelle syntaxe pour les boucles",
+
+	"automatic binding table revised": "amélioration de la table de liaison automatique",
+
+	"GitHub repository": "Dépôt GitHub",
+
+	"You can report bugs and contribute to the project on <a href=\"https://github.com/sylvainpolletvillard/Databinder\">Databinder Github's repository</a>.": "Vous pouvez signaler des bogues et contribuer au projet sur <a href=\"https://github.com/sylvainpolletvillard/Databinder\">le dépôt Github de Databinder</a>."
+}
