@@ -16,6 +16,15 @@ function wrapPrimitives(obj){
 	}
 }
 
+if (Element && !Element.prototype.matches) {
+	var p = Element.prototype;
+	p.matches = p.matchesSelector || p.mozMatchesSelector || p.msMatchesSelector ||	p.oMatchesSelector || p.webkitMatchesSelector || function (selector) {
+		var element = this, matches = (element.document || element.ownerDocument).querySelectorAll(selector), i=0;
+		while (matches[i] && matches[i] !== element) { i++; }
+		return !!matches[i];
+	};
+}
+
 /* classList shim for IE9 */
 var classListSupported = ("classList" in document.createElement("p"));
 

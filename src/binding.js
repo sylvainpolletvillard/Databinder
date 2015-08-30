@@ -18,10 +18,18 @@ function Binding(element, attribute, declaration){
 	this.element = element;
 	this.attribute = attribute;
 	this.declaration = (declaration[0] === '{' ? this.getBindingSet(declaration) : declaration);
-	this.inputable = (declaration.indexOf('|') === -1 && isFunction(this.get));
+	this.inputable = (declaration.indexOf('|') === -1 && isFunction(this.get) && element.matches("input,textarea,select,[contenteditable]"));
 
-	if(this.inputable && (["INPUT","TEXTAREA","SELECT"].indexOf(this.element.tagName) !== -1)){
-		this.element.addEventListener("change", this.element.databinding.get.bind(this.element.databinding));
+	if(this.inputable) {
+		if(element.matches("input,textarea") && attribute === "value") {
+			element.addEventListener("input", this.handleInput.bind(this));
+		}
+		if(element.tagName === "SELECT" && attribute === "value") {
+			element.addEventListener("change", this.handleInput.bind(this));
+		}
+		if(element.isContentEditable && (attribute === "text" || attribute === "html")) {
+			element.addEventListener("input", this.handleInput.bind(this));
+		}
 	}
 
 	if(isFunction(this.init)){
@@ -45,6 +53,14 @@ Binding.prototype = {
 
 	react: function(){
 		_currentBinding = this;
-		this.set(this.element.databinding.scope);
+		var db = this.element.databinding;
+		this.set(db.scope);
+		if(db.innerScope !== null){
+			db.parseChildren(db.innerScope);
+		}
+	},
+
+	handleInput: function(){
+		this.element.databinding.scope.setValueFromBinding(this);
 	}
 };
