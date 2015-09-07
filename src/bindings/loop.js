@@ -50,9 +50,11 @@ databind.bindings.loop = {
 	},
 	iterate: function(i){
 		var c, l, newChild, iteration = this.iterations[i];
-		var iterationData = wrapPrimitives(iteration.value);
-		iterationData[this.index] = iteration.key;
-		iterationData[this.item] = iteration.value;
+		var iterationData = Object.create(ContextualizedData);
+		iterationData.data = iteration.value;
+		iterationData.context = {};
+		iterationData.context[this.index] = iteration.key;
+		iterationData.context[this.item] = iteration.value;
 		iteration.scope = new Scope(iterationData, this.innerScope);
 		iteration.nodes = [];
 		for(c=0, l=this.childNodes.length; c<l; c++){
