@@ -50,9 +50,10 @@ databind.bindings.loop = {
 	},
 	iterate: function(i){
 		var c, l, newChild, iteration = this.iterations[i];
-		var scope = new Scope(iteration.value, this.innerScope);
-		scope.data[this.index] = iteration.key;
-		scope.data[this.item] = iteration.value;
+		var iterationData = wrapPrimitives(iteration.value);
+		iterationData[this.index] = iteration.key;
+		iterationData[this.item] = iteration.value;
+		iteration.scope = new Scope(iterationData, this.innerScope);
 		iteration.nodes = [];
 		for(c=0, l=this.childNodes.length; c<l; c++){
 			newChild = this.childNodes[c].cloneNode(true);
@@ -63,7 +64,7 @@ databind.bindings.loop = {
 				this.element.appendChild(newChild);
 			}
 			if(newChild instanceof Element){
-				databind(newChild,scope);
+				databind(newChild, iteration.scope);
 			}
 		}
 	},
@@ -90,14 +91,19 @@ databind.bindings.loop = {
 		for(i = start; i < start + nbToRemove && i in this.iterations; i++) {
 			for (j = 0, n = this.iterations[i].nodes.length; j < n; j++) {
 				this.element.removeChild(this.iterations[i].nodes[j]);
-				//TODO: some node references are lost, try to remove several items --> need to update loopIndex of following loop iterations
-
 			}
 		}
 		list = this.innerScope.resolve(this.list, true);
+		var iterationsToAdd = Array.apply(null, Array(nbToAdd)).map(function(x,i){
+			return {key: start+i, value: list[start+i] };
+		});
+		this.iterations.splice.apply(this.iterations, [start, nbToRemove].concat(iterationsToAdd));
 		for(i = start; i < start + nbToAdd; i++) {
-			this.iterations[i] = {key: i, value: list[i] };
 			this.iterate(i);
+		}
+		 // need to update loopIndex of next iterations
+		for (i = start + nbToAdd; i < this.iterations.length; i++) {
+			this.iterations[i].scope.data[this.index] = i;
 		}
 	}
 };
