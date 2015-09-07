@@ -67,7 +67,7 @@ $(document).ready(function(){
 		try {
 			delete out.databinding;
 			out.innerHTML = document.getElementById("test-html").value;
-			eval('databind("#test-zone").set({'+$("#test-js").val() + '});');
+			eval('databind("#test-zone",{'+$("#test-js").val() + '});');
 		} catch(error){
 			$(out).empty().append($("<div class='error'></div>").text(error));
 		}
