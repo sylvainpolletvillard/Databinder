@@ -11,6 +11,7 @@
 			width: 48%;
 			height: auto;
 			margin: 0.5%;
+			vertical-align: middle;
 		}
 	</style>
 </head>
@@ -69,10 +70,23 @@
 			data.translations = Object.keys(translations).map(function(tr){
 				return { from: tr, to: translations[tr] }
 			});
+
+			[].slice.call(document.getElementsByTagName("textarea")).forEach(autosizeTextarea);
 		})
 	}
 
 	loadLang(data.currentLang);
+
+	function autosizeTextarea(el){
+		el.style.height = "auto";
+		el.style.height = (el.scrollHeight+2)+"px";
+	}
+
+	document.body.addEventListener("input",function(e){
+		if(e.target.tagName === "TEXTAREA"){
+			autosizeTextarea(e.target);
+		}
+	});
 </script>
 
 

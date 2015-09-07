@@ -1,5 +1,9 @@
 module.exports = function(grunt) {
 
+	function esc(text) {
+		return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+	}
+
 	function merge(){
 		var out = {};
 		for(var a=0; a<arguments.length; a++){
@@ -12,6 +16,8 @@ module.exports = function(grunt) {
 		}
 		return out;
 	}
+
+	var pkg = grunt.file.readJSON('package.json');
 
 	grunt.file.defaultEncoding = 'utf-8';
 
@@ -89,7 +95,20 @@ module.exports = function(grunt) {
 					})
 				})(grunt.file.readJSON("site/translations/fr.json"))
 			}
-		}
+		},
+
+		"regex-replace": {
+			site: { //specify a target with any name
+				src: ['index.html'],
+				actions: [
+					{
+						name: 'version number',
+						search: esc('Current version: v')+'\\d+\\.\\d+(?:\\.\\d+)?',
+						replace: 'Current version: v'+pkg.version
+					}
+				]
+			}
+		},
 
 	});
 
@@ -119,12 +138,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-prompt');
 	grunt.loadNpmTasks('grunt-text-replace');
+	grunt.loadNpmTasks('grunt-regex-replace');
 
 
 	grunt.registerTask('dist', ['jshint','concat:dist','concat:dist_umd','uglify']);
 	grunt.registerTask('test', ['qunit']);
 	grunt.registerTask('default', ['dist','test']);
-	grunt.registerTask('docs', ['replace:translate_fr']);
+	grunt.registerTask('docs', ['regex-replace:site','replace:translate_fr']);
 
 	grunt.registerTask('custom_build', require('./custom_build')(grunt, merge));
 

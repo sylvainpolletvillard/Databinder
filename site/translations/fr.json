@@ -2,6 +2,8 @@
 
 	"lang='en'": "lang='fr'",
 
+	"<img id='lang-button' src='site/res/fr.gif' alt='French' data-lang='fr'>": "<img id='lang-button' src='site/res/en.gif' alt='English' data-lang='en'>",
+
 	"Databinder is a client-side JavaScript DOM-based templating system which let you write templates directly in the DOM while remaining valid HTML5.": "Databinder est une bibliothèque JavaScript de templating côté client basée sur le DOM (Document Object Model) qui vous permet de coder directement vos templates dans le code HTML de vos pages tout en restant du HTML5 valide.",
 
 	"Inspired by <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> and <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, its goal is to facilitate the writing and maintenance of templates by following several principles:": "Inspiré par <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> et <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, son but est de faciliter l'écriture et la maintenance des templates en suivant plusieurs principes fondamentaux:",
@@ -10,7 +12,7 @@
 
 	"Bindings deducted by the HTML element type, ID, or class ; but no bad guessing, only the [data-bind] elements are treated.": "Des liaisons automatiques sont faites en se basant sur le type d'élément HTML, son ID, ses classes ou son attribut name ; pas de risque de liaisons par erreur, seuls les éléments avec l'attribut [data-bind] sont traités.",
 
-	"Automatic view updates": "Rafraîchissement automatique des vues",
+	"Automatic view updates": "Rafraîchissement partiel ou total des vues",
 
 	"Whenever a property of your models changes (either programmatically or in response to user input), the corresponding elements in your views are automatically updated thanks to the bundled 2-way data-binding system. Of course, you can still update your views manually if you prefer.": "Dès qu'une propriété de vos modèles change (que ce soit programmatiquement ou à la suite d'une saisie utilisateur), les zones correspondantes dans vos vues sont automatiquement mises à jour grâce au système de liaison double-sens intégré.",
 
@@ -54,9 +56,9 @@
 
 	"Current version:": "Version actuelle:",
 
-	"source file": "source compilée",
+	"</a> source file": "</a> source compilée",
 
-	"minified file": "source minifiée",
+	"</a> minified file": "</a> source minifiée",
 
 	"minified file with jQuery adapter (optional)": "source minifiée avec adaptateur jQuery (optionnel)",
 
@@ -94,5 +96,287 @@
 
 	"GitHub repository": "Dépôt GitHub",
 
-	"You can report bugs and contribute to the project on <a href=\"https://github.com/sylvainpolletvillard/Databinder\">Databinder Github's repository</a>.": "Vous pouvez signaler des bogues et contribuer au projet sur <a href=\"https://github.com/sylvainpolletvillard/Databinder\">le dépôt Github de Databinder</a>."
+	"You can report bugs and contribute to the project on <a href=\"https://github.com/sylvainpolletvillard/Databinder\">Databinder Github's repository</a>.": "Vous pouvez signaler les bugs et contribuer au projet sur <a href=\"https://github.com/sylvainpolletvillard/Databinder\">le dépôt Github de Databinder</a>.",
+
+	"<span class=\"legend\">Result</span>": "<span class=\"legend\">Résultat</span>",
+
+	"Binding content and attributes": "Lier du contenu et des attributs",
+
+	"My website": "Mon site web",
+
+	"The <mark>data-bind</mark> HTML attribute specifies all the data bindings between your model and the current HTML\telement. The value should be a comma separated list of attribute:value pairs. If no match is found in your data\tmodel, or if value matched is <code>undefined</code> or <code>null</code>, no binding is done and the element is kept unchanged.": "L'attribut HTML <mark>data-bind</mark> spécifie toutes les liaisons entre votre modèle de données et l'élément HTML correspondant. La valeur doit être une liste de paires attribut:valeur séparées par des virgules. Si aucune correspondance n'est trouvée dans votre modèle de données, ou si la valeur associée vaut <code>undefined</code> ou <code>null</code>, aucune liaison n'est faite et l'élément reste inchangé.",
+
+	"The <mark>text</mark> binding replaces inner tag content with the matching object in current scope evaluated as a HTML-escaped <code>String</code>. If you want to render unescaped HTML, use the <mark>html</mark> binding. The <mark>href</mark> and <mark>title</mark> bindings refer to the related HTML attributes. All bindings that do not refer to a binding keyword in <a href=\"#binding-attributes-list\">this list</a> are assigned as HTML attributes.": "La liaison <mark>text</mark> remplace le contenu de l'élément avec la valeur correspondante évaluée en tant que <code>String</code> avec échappement du code HTML. Si vous voulez ajouter du contenu HTML non échappé, utilisez la liaison <mark>html</mark>. Les liaisons <mark>href</mark> et <mark>title</mark> font référence aux attributs HTML respectifs. Toutes les liaisons ne faisant pas partie de <a href=\"#binding-attributes-list\">cette liste</a> et n'étant pas des évènements sont associés comme attributs à l'élément.",
+
+	"Loops over Arrays": "Boucles sur listes et tableaux",
+
+	"The <mark>loop</mark> attribute is used to loop over an array and repeat the inner HTML content for each array element. Each loop iteration is associated to the current array element as a new scope. In the inner scopes, you can refer to the current index and value with <mark>loopIndex</mark> and <mark>loopValue</mark> variables. To improve readability, you can rename these variables by specifying <mark>as</mark> attribute for the current value and <mark>at</mark> attribute for the current index.": "La liaison <mark>loop</mark> est utilisée pour parcourir les éléments d'une liste <code>Array</code> et répeter le contenu interne de l'élément pour chaque élément de la liste. Chaque itération crée un nouveau scope centré sur l'élement courant de la liste. Dans ce scope, vous pouvez récupérer l'index actuel avec la variable <mark>loopIndex</mark> et sa valeur avec la variable <mark>loopValue</mark>. Pour améliorer la lisibilité du template, vous pouvez renommer ces variables en spécifiant les attributs de liaison <mark>as</mark> pour la valeur et <mark>at</mark> pour l'index.",
+
+	"If you want to remove the element if the array passed is empty, add an <mark>if</mark> binding:": "Si vous souhaitez supprimer l'élément HTML dans le cas où la liste est vide, ajoutez une liaison:",
+
+	"Traversing properties and indexes": "Parcourir les propriétés et index",
+
+	"The <mark>loop</mark> binding also lets you iterate over all the enumerable properties of an object: <mark>in</mark> object, <mark>at</mark> keys, <mark>as</mark> values.": "La liaison <mark>loop</mark> vous permet également de parcourir toutes les propriétés énumérables d'un objet avec la syntaxe suivante: <mark>in</mark> objet, <mark>at</mark> clé, <mark>as</mark> valeur.",
+
+	"Conditionals with Booleans": "Conditions avec Booléens",
+
+	"I should not be here": "Je ne devrais pas être là",
+
+	"Okay I got it": "Okay j'ai pigé",
+
+	"Is it hard so far ?": "Est-ce que c'est dur jusqu'ici ?",
+
+	"Easy as pie": "Trop facile",
+
+	"It's all right": "Tout va bien",
+
+	"I need coffee !": "Il me faut un café !",
+
+	"Some HTML attributes such as <mark>checked</mark>, <mark>selected</mark> or <mark>disabled</mark> are expecting Boolean values - browsers treat them as <code>true</code> if they are present, regardless of the value. There is also some <a href=\"#binding-attributes-list\">special binding attributes</a> expecting booleans. For example, <mark>if</mark> will remove the element from the generated HTML if <code>false</code>, whereas <mark>visible</mark> will apply <code>style=\"display:none;\"</code> if <code>false</code>.": "Certains attributs d'éléments HTML tels que <mark>checked</mark>, <mark>selected</mark> ou <mark>disabled</mark> attendent des valeurs booléennes - les navigateurs les traitent comme <code>true</code> si ces attributs sont présents, peu importe leur valeur. Il y a également <a href=\"#binding-attributes-list\">certaines liaisons spéciales</a> qui attendent des booléens. Par exemple, <mark>if</mark> supprimera l'élement du code HTML généré si la valeur vaut <code>false</code>, tandis que <mark>visible</mark> appliquera <code>style=\"display:none;\"</code> si <code>false</code>.",
+
+	"Other attribute bindings are ignored and the element is kept unchanged when the value passed to the binding is <code>undefined</code> or <code>null</code>. However, when the value matched is a Boolean, the attribute is set without any value if <code>true</code> and removed if <code>false</code>.": "Lorsque la valeur passée à la liaison vaut <code>undefined</code> ou <code>null</code>, la liaison est ignorée et l'élément reste inchangé. Cependant, lorsque la valeur est un booléen, l'attribut est défini sans valeur si <code>true</code> et supprimé si <code>false</code>",
+
+	"Playing with Functions": "Jouer avec les fonctions",
+
+	"Prime Numbers In Fibonacci Suite": "Nombres premiers dans la suite de Fibonacci",
+
+	"When a <code>Function</code> is bound, it is executed in the context of the current scope and its result is used for the data-binding instruction. Inside the function, <code>this</code> refers to the current scope. The current scope of a node corresponds to the data attached to the closest data-bound parent node.\tIn this example, the current scope of the span tag is the data bound to the p tag, ie suiteGenerator with 'number' variable declared as iterator.": "Quand la valeur associée est de type <code>Function</code>, cette fonction est exécutée dans le contexte du scope courant et la valeur retournée par la fonction est utilisée pour la liaison. Au sein de la fonction, <code>this</code> fait référence au scope courant. Le scope courant d'un noeud correspond aux données attachées au plus proche noeud parent avec une liaison de données. Dans l'exemple ci-dessus, le scope de l'élément span est la donnée attachée à l'élément p, c'est-à-dire suiteGenerator avec une variable 'number' déclarée comme itérateur.",
+
+	"The arguments passed to binding functions are :": "Les arguments passés aux fonctions liées sont :",
+
+	"the root scope (the one you pass through <mark>databind</mark>)": "le scope racine (celui passé en argument à <mark>databind</mark>)",
+
+	"the current HTML element": "l'élément HTML courant",
+
+	"When a <code>Function</code> is used within a <code>loop</code> binding, it acts as a generator which iterate on return values until this function returns <code>null</code>. Using functions is very powerful and can help you implement complex things like generators or recursion. If you do not figure how to write your template, a function will probably help you to come through.": "Lorsqu'une fonction est utilisée comme valeur d'une liaison <code>loop</code>, celle-ci se comporte alors comme un générateur: elle va itérer sur les valeurs de retour jusqu'à ce que la fonction retourne <code>null</code>. Utiliser des fonctions est très efficace et peut vous aider à implémenter des choses complexes telles que des générateurs ou de la récursivité. Si vous hésitez sur la manière d'implémenter un template, une fonction viendra probablement résoudre votre problème.",
+
+	"You have been": "Vous avez passé",
+
+	"seconds on this page": "secondes sur cette page",
+
+	"The <mark>databind</mark> function takes as arguments an element/selector and the initial data, then returns this same data augmented to be observable. Once the data and the DOM are bound together, any modification of this <strong>bound data</strong> will update corresponding elements. To get the automatic data change detection working properly, the initial data passed to <code>databind</code> must be an object and must contain all the properties you want to observe.": "La fonction <mark>databind</mark> prend en arguments un élément ou sélecteur d'élément et un objet contenant les données initiales. Elle retourne ces mêmes données transformées pour être observables. Une fois que les données et le DOM ont été liés ensemble, toute modification aux <strong>données liées</strong> mettra à jour les éléments HTML correspondants. Pour que la détection automatique de changements fonctionne correctement, les données passées à <code>databind</code> doivent être un objet contenant toutes les propriétés que vous voulez observer.",
+
+	"In this example, when <code>timePassed</code> is modified, the only part which is updated is the text content of the <code>&lt;span&gt;</code> element. The rest is left untouched. This is one advantage of Databinder compared to other String-based templating solutions: you can easily update a subpart of a template without affecting the rest.": "Dans cet exemple, quand <code>timePassed</code> est modifié, la seule partie mise à jour est le contenu texte de l'élément <code>&lt;span&gt;</code>. Le reste du DOM n'est pas touché. C'est un avantage de Databinder comparé aux autres solutions basées sur les String: vous pouvez facilement mettre à jour une sous-partie d'un template sans affecter le reste.",
+
+	"It is also possible to update manually an element by calling <mark>element.databinding.reset()</mark>. You can call this method from any data-bound element, updating the whole view or just a small part of it. In the previous example, <code>document.body.databinding.reset()</code> will reset the entire document body while <code>document.querySelector(\"span\").databinding.reset()</code> would only reset the <code>&lt;span&gt;</code> element.": "Il est également possible de mettre à jour manuellement un élément en appelant <mark>element.databinding.reset()</mark>. Vous pouvez appeler cette méthode depuis n'importe quel élément lié, pour mettre à jour toute la vue ou juste une petite partie. Dans l'exemple précédent, <code>document.body.databinding.reset()</code> mettra à jour tout le document tandis que <code>document.querySelector(\"span\").databinding.reset()</code> actualisera uniquement l'élément <code>&lt;span&gt;</code>.",
+
+	"Listening to Events": "Réagir aux évènements",
+
+	"&lt;div id=\"mylist\"&gt;\n\t&lt;h3&gt;Dynamic list (currently\n\t\t&lt;span data-bind=\"itemCollection.length\"&gt;&lt;/span&gt;\n\titems)&lt;/h3&gt;\n\t&lt;ul data-bind=\"loop: itemCollection\"&gt;\n\t\t&lt;li&gt;\n\t\tItem &lt;span data-bind=\"num\"&gt;&lt;/span&gt;\n\t\t- &lt;a data-bind=\"click: remove\"&gt;remove&lt;/a&gt;\n\t\t&lt;/li&gt;\n\t&lt;/ul&gt;\n\t&lt;input type=\"button\" value=\"Add another item\"\n\tdata-bind=\"click: addItem\" /&gt;\n&lt;/div&gt;": "&lt;div id=\"mylist\"&gt;\n\t&lt;h3&gt;Liste dynamique (actuellement\n\t\t&lt;span data-bind=\"itemCollection.length\"&gt;&lt;/span&gt;\n\titems)&lt;/h3&gt;\n\t&lt;ul data-bind=\"loop: itemCollection\"&gt;\n\t\t&lt;li&gt;\n\t\tElement &lt;span data-bind=\"num\"&gt;&lt;/span&gt;\n\t\t- &lt;a data-bind=\"click: remove\"&gt;supprimer&lt;/a&gt;\n\t\t&lt;/li&gt;\n\t&lt;/ul&gt;\n\t&lt;input type=\"button\" value=\"Ajouter un autre élément\"\n\tdata-bind=\"click: addItem\" /&gt;\n&lt;/div&gt;",
+
+	"You already know how to listen to events on elements with on[event] attributes, such as onclick. But in the\tcallback function, you need to manually retrieve the object in your model associated to this element. The\tother option is to bind listeners from your Javascript controllers, using addEventListener for example. But when elements are generated from a templating system, you have to either use delegated events or redo all the event-bindings after rendering. It is quite annoying, so <mark>event bindings</mark> attributes have been added in order to quickly create listeners from your templates just after elements have been created.": "Vous savez déjà comment réagir aux évènements via les attributs on[evenement] tels que onclick. Mais dans la fonction callback, vous devez manuellement retrouver la donnée dans votre modèle associée à cet élément. L'autre option est de déclarer l'écoute d'évènements depuis vos contrôleurs JavaScript, avec addEventListener par exemple. Toutefois, quand les éléments HTML concernés sont générés dynamiquement par un template, vous devez soit utiliser des évènements délégués, soit déclarer à nouveau toutes les écoutes d'évènement après le rendu du template. C'est assez fastidieux, c'est pourquoi les <mark>liaisons évènement</mark> ont été ajoutées pour vous permettre de déclarer facilement une écoute d'évènement depuis vos templates juste après que les éléments correspondants aient été créés.",
+
+	"All the DOM events are supported. Some may say that it breaks the view/controller separation, so use it or not. Anyway, it can sometimes make things easier.": "Tous les évènements DOM sont supportés. D'aucuns diront que cela casse la séparation vue/contrôleur, à vous de décider si vous souhaitez utiliser ces liaisons. En tout cas, ça rend parfois les choses beaucoup plus simples.",
+
+	"In callbacks functions, <mark>this</mark> refers to the current scope just like data-binding functions. The arguments passed to callbacks are:": "Dans les fonctions callbacks, <mark>this</mark> fait référence au scope courant tout comme les autres fonctions dans les templates. Les arguments passés à ces fonctions sont:",
+
+	"the <mark>event</mark> object": "l'objet <mark>évènement</mark>",
+
+	"Saving data from form fields": "Enregistrer les saisies utilisateur depuis un formulaire",
+
+	"&lt;div id=\"scoreboard\"&gt;\n&lt;h2&gt;Scoreboard&lt;/h2&gt;\n&lt;form data-bind=\"submit: save\"&gt;\n\t&lt;dl data-bind=\"loop: scores\"&gt;\n\t\t&lt;dt&gt;&lt;input type=\"text\" data-bind=\"name\"&gt;&lt;/dt&gt;\n\t\t&lt;dd&gt;&lt;input type=\"number\" data-bind=\"score\"&gt;&lt;/dd&gt;\n\t&lt;/dl&gt;\n\t&lt;input type=\"submit\" value=\"Save\"&gt;\n&lt;/form&gt;\n&lt;p data-bind=\"with: winner\"&gt;\n\tThe winner is &lt;span data-bind=\"name\"&gt;&lt;/span&gt; with &lt;span data-bind=\"score\"&gt;&lt;/span&gt; points.\n&lt;/p&gt;\n&lt;/div&gt;": "&lt;div id=\"scoreboard\"&gt;\n&lt;h2&gt;Feuille des scores&lt;/h2&gt;\n&lt;form data-bind=\"submit: save\"&gt;\n\t&lt;dl data-bind=\"loop: scores\"&gt;\n\t\t&lt;dt&gt;&lt;input type=\"text\" data-bind=\"name\"&gt;&lt;/dt&gt;\n\t\t&lt;dd&gt;&lt;input type=\"number\" data-bind=\"score\"&gt;&lt;/dd&gt;\n\t&lt;/dl&gt;\n\t&lt;input type=\"submit\" value=\"Enregistrer\"&gt;\n&lt;/form&gt;\n&lt;p data-bind=\"with: winner\"&gt;\n\tLe gagnant est &lt;span data-bind=\"name\"&gt;&lt;/span&gt; avec &lt;span data-bind=\"score\"&gt;&lt;/span&gt; points.\n&lt;/p&gt;\n&lt;/div&gt;",
+
+	"<h2>Scoreboard</h2>\n\t\t\t<form data-bind=\"submit: save\">\n\t\t\t\t<dl data-bind=\"loop: scores\">\n\t\t\t\t\t<dt><input type=\"text\" data-bind=\"name\"></dt>\n\t\t\t\t\t<dd><input type=\"number\" data-bind=\"score\"></dd>\n\t\t\t\t</dl>\n\t\t\t\t<input type=\"submit\" value=\"Save\">\n\t\t\t</form>\n\t\t\t<p data-bind=\"with: winner\">\n\t\t\t\tThe winner is <span data-bind=\"name\"></span> with <span data-bind=\"score\"></span> points.\n\t\t\t</p>": "<h2>Feuille des scores</h2>\n\t\t\t<form data-bind=\"submit: save\">\n\t\t\t\t<dl data-bind=\"loop: scores\">\n\t\t\t\t\t<dt><input type=\"text\" data-bind=\"name\"></dt>\n\t\t\t\t\t<dd><input type=\"number\" data-bind=\"score\"></dd>\n\t\t\t\t</dl>\n\t\t\t\t<input type=\"submit\" value=\"Enregistrer\">\n\t\t\t</form>\n\t\t\t<p data-bind=\"with: winner\">\n\t\t\t\tLe gagnant est <span data-bind=\"name\"></span> avec <span data-bind=\"score\"></span> points.\n\t\t\t</p>",
+
+	"Using templates for code reuse": "Des templates réutilisables",
+
+	"Some flags by continent": "Drapeaux par continent",
+
+	"Capital:": "Capitale:",
+
+	"The <mark>template</mark> bindings  allow you to reuse HTML code fragments with optionally other bindings, instead of having redundant code. This helps to make your HTML cleaner and easier to maintain. This binding expects as value a template name corresponding to a <code>&lt;template&gt;</code> element <mark>id</mark> attribute in the document. The template HTML content will be copied into the current element and the binding process will continue in the same scope.": "Les liaisons <mark>template</mark> vous permettent de réutiliser des fragments de code HTML avec éventuellement d'autres liaisons plutôt que d'avoir du code redondant. Cela aide à rendre vos templates plus légers, lisibles et faciles à maintenir. Cette liaison attend comme valeur l'attribut <mark>id</mark> d'un élément HTML <code>&lt;template&gt;</code> dans le document. Le contenu HTML de ce template sera copié à l'intérieur de l'élément courant et le processus de data-binding continuera dans le même scope.",
+
+	"The <code>&lt;template&gt;</code> element has to be outside any data-bound element. Templates can be encapsulated and modified between two <code>databind</code> calls. Remember to put quotes around the template ID if it is not a dynamic variable in your scope.": "Les éléments <code>&lt;template&gt;</code> doivent impérativement être déclarés en dehors de tout élément avec une liaison de données. Les templates peuvent être encapsulés l'un dans l'autre et modifiés entre deux appels de <code>databind</code>. Pensez à mettre l'ID du template entre guillemets s'il ne s'agit pas d'une variable dynamique.",
+
+	"Special binding attributes list": "Liste des liaisons particulières",
+
+	"If a binding attribute is not in this list and is not an <a href=\"#listening-to-events\">event attribute</a>, it will be set as an attribute of the current HTML element.": "Si une liaison n'est pas dans cette liste et n'est pas une <a href=\"#listening-to-events\">liaison évènement</a>, alors elle sera assignée comme attribut à l'élément HTML courant.",
+
+	"<span class=\"expecting\">expecting": "<span class=\"expecting\">valeur:",
+
+	"or binding set": "ou groupe de liaison",
+
+	"add or remove specified classes to the current element": "ajoute ou retire les classes indiquées à l'élément courant",
+
+	"Example code": "Code d'exemple",
+
+	"databind('input',{\n\tproperties: {\n\t\tblue: false,\n\t\tred: true\n\t}\n});\ndatabind('button',{\n\tclassNames: \"some classes as string\"\n});\ndatabind('section',{\n\totherClasses: [\"some\", \"other\", \"classes\"]\n});\ndatabind('p.stuff',{\n\tmessage: \"This is important stuff dude !\",\n\tisImportant: true,\n\tisBusiness: false\n});": "databind('input',{\n\tproperties: {\n\t\tbleu: false,\n\t\trouge: true\n\t}\n});\ndatabind('button',{\n\tclassNames: \"plusieurs classes en string\"\n});\ndatabind('section',{\n\totherClasses: [\"ou\", \"en\", \"liste\"]\n});\ndatabind('p.truc',{\n\tmessage: \"C'est un truc important !\",\n\tisImportant: true,\n\tisBusiness: false\n});",
+
+	"&lt;input class=\"red\" /&gt;\n\n&lt;button class=\"some classes as string\"&gt;Click me&lt;/button&gt;\n\n&lt;section class=\"some other classes\"&gt;&lt;/section&gt;\n\n&lt;p class=\"stuff important\"&gt;\n\tThis is important stuff dude !\n&lt;/p&gt;": "&lt;input class=\"rouge\" /&gt;\n\n&lt;button class=\"plusieurs classes en string\"&gt;Click me&lt;/button&gt;\n\n&lt;section class=\"ou en liste\"&gt;&lt;/section&gt;\n\n&lt;p class=\"truc important\"&gt;\n\tC'est un truc important !\n&lt;/p&gt;",
+
+	"hide the current element by applying <code>style=\"display:none;\"</code> if <code>true</code>": "cache l'élément courant en lui appliquant <code>style=\"display:none;\"</code> si <code>true</code>",
+
+	"[\"Some\", \"items\", \"seem\", \"to\", \"have\", \"disappeared\"]": "[\"Certains\", \"éléments\", \"semblent\", \"avoir\", \"disparu\"]",
+
+	"set the inner HTML content of the current element. <a class=\"warning\" href=\"https://www.owasp.org/index.php/DOM_Based_XSS\">Beware of XSS attacks !</a> If the inserted content does not come from a trusted source, you should rather use the <mark>text</mark> binding.": "remplace le contenu HTML de l'élément courant. <a class=\"warning\" href=\"https://www.owasp.org/index.php/DOM_Based_XSS\">Attention aux attaques XSS !</a> Si le contenu inséré ne provient pas d'une source fiable, vous devriez plutôt utiliser la liaison <mark>text</mark>.",
+
+	"stuff lost after data-binding": "contenu perdu après liaison des données",
+
+	"I need &lt;strong style='color:blue;'&gt;unescaped HTML content&lt;/strong&gt; here.": "Il me faut &lt;strong style='color:blue;'&gt;du contenu HTML non échappé&lt;/strong&gt; ici.",
+
+	"I need <strong style='color:blue;'>unescaped HTML content</strong> here.": "Il me faut <strong style='color:blue;'>du contenu HTML non échappé</strong> ici.",
+
+	"delete the current element and stop processing of its child nodes if <code>false</code>": "supprime l'élément courant et stoppe le traitement des noeuds enfants si <code>false</code>",
+
+	"No results found": "Aucun résultat trouvé",
+
+	"same as a negated <mark>if</mark> binding ; delete the current element if <code>true</code>": "inverse de la liaison <mark>if</mark> ; supprime le noeud courant si <code>true</code>",
+
+	"</code> or <code>": "</code> ou <code>",
+
+	"repeats the inner content of the current element for each array element. Each iteration creates a new scope with <mark>loopValue</mark> and <mark>loopIndex</mark> variables which can be renamed by setting <mark>as</mark> or <mark>at</mark> attributes in the loop binding set.": "répète le contenu interne de l'élément courant pour chaque élément de la liste. Chaque itération crée un scope avec des variables <mark>loopValue</mark> et <mark>loopIndex</mark> pouvant être renommées en spécifiant les attributs <mark>as</mark> et <mark>at</mark> dans le groupe de liaison.",
+
+	"See example code for": "Code d'exemple avec",
+
+	"add or remove inline CSS styles to the current element": "ajoute ou retire des déclarations CSS dans l'attribut <mark>style</mark> de l'élément courant",
+
+	"Big red stuff !": "Gros truc rouge !",
+
+	"Click me": "Cliquez ici",
+
+	"set the text content of the current element, escaping HTML and replacing any existing content": "remplace le contenu texte de l'élément courant en échappant le HTML",
+
+	"Don't worry about": "Pas d'inquiétudes pour",
+
+	"import a <code>&lt;template&gt;</code> content into the current element and continues the datadinding in the same scope": "importe le contenu d'un <code>&lt;template&gt;</code> dans l'élément courant et continue le rendu du template dans le même scope",
+
+	"same as a negated <mark>hidden</mark> ; hide the current element by applying <code>style=\"display:none;\"</code> if <code>false</code>": "inverse de la liaison <mark>hidden</mark> ; cache l'élément courant en appliquant <code>style=\"display:none;\"</code> si <code>false</code>",
+
+	"creates a new scope based on the object passed": "crée un nouveau scope centré sur l'objet passé en paramètre",
+
+	"My name is ": "Mon nom est ",
+
+	"my son is called ": "mon fils s'appelle ",
+
+	"and my grand-son is ": "et mon petit-fils est ",
+
+	"Data scope resolution works similarly to closures in JavaScript: when a value is <code>undefined</code> in the current scope, Databinder will traverse the scope chain all the way up until it finds a matching value. However, when you specify a value beginning with one or more points, you explicitly specify what scope watch.": "La résolution d'un nom de variable dans un scope de données fonctionne de manière similaire aux fermetures en JavaScript: quand une valeur vaut <code>undefined</code> dans l'objet courant, Databinder va remonter la chaîne du scope de parent en parent jusqu'à trouver une valeur qui corresponde. Cependant, si vous spécifiez un nom de variable commençant par un ou plusieurs points, vous prévenez la résolution automatique et indiquez précisément à quel niveau du scope regarder.",
+
+	"Omitting attribute : Default Attribute Binding": "Omission de l'attribut de liaison: Liaison par défaut",
+
+	"When the attribute is omitted in a binding declaration, a default one is bound depending on the element and the matched data type. Note that the attribute cannot be omitted if the value matched is a function.": "Quand l'attribut n'est pas spécifié dans une déclaration de liaison, une liaison par défaut est choisie selon l'élément et le type de la valeur correspondante. Notez que cela ne fonctionne pas si la valeur correspondante est une fonction.",
+
+	"\t\t\t<th>Tag</th>\n\t\t\t<th>Data type</th>\n\t\t\t<th>Attribute bound by default</th>": "\t\t\t<th>Element</th>\n\t\t\t<th>Type de donnée</th>\n\t\t\t<th>Liaison par défaut</th>",
+
+	"<i>all</i>": "<i>tous</i>",
+
+	"Other &lt;input&gt; types": "Autres types &lt;input&gt;",
+
+	"<i>other tags</i>": "<i>autres éléments</i>",
+
+	"Omitting both attribute and value : automatic binding": "Omission de l'attribut et de la valeur de liaison: Liaison automatique",
+
+	">When the <mark>data-bind</mark> attribute is specified without any value, Databinder will try to guess what value you are referring to by checking\tthe <mark>id</mark>, <mark>name</mark> and <mark>class</mark> attributes of the element in this order.": "Quand l'attribut <mark>data-bind</mark> est spécifié sans aucune valeur, Databinder va essayer de deviner à quelle valeur vous faites référence en vérifiant les attributs <mark>id</mark>, <mark>name</mark> et <mark>class</mark> de l'élément, dans cet ordre. Ensuite, la liaison par défaut s'appliquera selon le type de la variable correspondante.",
+
+	"Automatic binding": "Liaison automatique",
+
+	"<li><code>ul</code> has ID <code>#people</code></li>\n\t\t\t\t<li><code>people</code> is defined in data as <code>Array</code></li>\n\t\t\t\t<li>bind <code>ul</code> to <strong><code>loop: people</code></strong></li>": "<li><code>ul</code> a comme ID <code>#people</code></li>\n\t\t\t\t<li><code>people</code> est défini dans les données comme <code>Array</code></li>\n\t\t\t\t<li>liaison appliquée à  <code>ul</code>: <strong><code>loop: people</code></strong></li>",
+
+	"<li><code>li</code> has no ID or <code>name</code></li>\n\t\t\t\t<li><code>li</code> has class <code>.item </code> but <code>item</code> is undefined in current data scope</li>\n\t\t\t\t<li><code>li</code> has class <code>.name </code> and <code>name</code> is defined as <code>String</code> </li>\n\t\t\t\t<li>bind each <code>li</code> to <strong><code>text: name</code></strong></li>": "<li><code>li</code> n'a pas d'ID ni de <code>name</code></li>\n\t\t\t\t<li><code>li</code> a la classe <code>.item </code> mais <code>item</code> n'est pas défini dans le scope courant</li>\n\t\t\t\t<li><code>li</code> a la classe <code>.name </code> et <code>name</code> est defini en tant que <code>String</code> </li>\n\t\t\t\t<li>liaison appliquée à chaque <code>li</code>: <strong><code>text: name</code></strong></li>",
+
+	"Declare extensions to extend template syntax": "Declarer des extensions pour étendre la syntaxe de vos templates",
+
+	"Extensions are helper functions called on values matched after the data binding. They are useful for adding basic logic instructions, better formatting and sorting/selecting options to your templates. You can apply a extension to a value by writing <code>|extensionName</code> behind the name of the value in the binding.": "Les extensions sont des fonctions utilitaires appliquées sur les valeurs trouvées via une liaison. Ils sont utiles pour ajouter des instructions logiques de base, pour afficher une variable dans un format particulier ou pour des options de tri/sélection sur les listes. Vous pouvez appliquer une extension à une valeur en écrivant <code>|extensionName</code> derrière le nom de la variable dans la liaison.",
+
+	"Extensions can be chained, so you can write:": "Plusieurs extensions peuvent être appliquées les unes à la suite des autres, en les enchaînant de cette manière:",
+
+	"Also, they can take number and words as parameters, separated by whitespaces after the extension name:": "Aussi, une extension peut recevoir des nombres ou des mots comme paramètres, séparés par des espaces après le nom de l'extension:",
+
+	"You can add your own extensions very easily. For example, let's say you want to use the super date formatting library <a href=\"http://momentjs.com/\">Moment.js</a>. Declare your extension this way:": "Ajouter vos propres extensions est très simple. Admettons que vous voulez utiliser la super librairie de formattage de date <a href=\"http://momentjs.com/\">Moment.js</a>. Déclarez l'extension comme ceci:",
+
+	"name: \"Author\"": "name: \"Auteur\"",
+
+	"message: \"Hello Databinder !\"": "message: \"Bonjour Databinder !\"",
+
+	"<script>databind.extensions.calendar =": "<script>\n\t\tmoment.lang('fr', {\n\t\t\tmonths : \"janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre\".split(\"_\"),\n\t\t\tmonthsShort : \"janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.\".split(\"_\"),\n\t\t\tweekdays : \"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi\".split(\"_\"),\n\t\t\tweekdaysShort : \"dim._lun._mar._mer._jeu._ven._sam.\".split(\"_\"),\n\t\t\tweekdaysMin : \"Di_Lu_Ma_Me_Je_Ve_Sa\".split(\"_\"),\n\t\t\tlongDateFormat : {\n\t\t\t\tLT : \"HH:mm\",\n\t\t\t\tL : \"DD/MM/YYYY\",\n\t\t\t\tLL : \"D MMMM YYYY\",\n\t\t\t\tLLL : \"D MMMM YYYY LT\",\n\t\t\t\tLLLL : \"dddd D MMMM YYYY LT\"\n\t\t\t},\n\t\t\tcalendar : {\n\t\t\t\tsameDay: \"[Aujourd'hui à] LT\",\n\t\t\t\tnextDay: '[Demain à] LT',\n\t\t\t\tnextWeek: 'dddd [à] LT',\n\t\t\t\tlastDay: '[Hier à] LT',\n\t\t\t\tlastWeek: 'dddd [dernier à] LT',\n\t\t\t\tsameElse: 'L'\n\t\t\t},\n\t\t\trelativeTime : {\n\t\t\t\tfuture : \"dans %s\",\n\t\t\t\tpast : \"il y a %s\",\n\t\t\t\ts : \"quelques secondes\",\n\t\t\t\tm : \"une minute\",\n\t\t\t\tmm : \"%d minutes\",\n\t\t\t\th : \"une heure\",\n\t\t\t\thh : \"%d heures\",\n\t\t\t\td : \"un jour\",\n\t\t\t\tdd : \"%d jours\",\n\t\t\t\tM : \"un mois\",\n\t\t\t\tMM : \"%d mois\",\n\t\t\t\ty : \"une année\",\n\t\t\t\tyy : \"%d années\"\n\t\t\t},\n\t\t\tordinal : function (number) {\n\t\t\t\treturn number + (number === 1 ? 'er' : 'ème');\n\t\t\t},\n\t\t\tweek : {\n\t\t\t\tdow : 1, // Monday is the first day of the week.\n\t\t\t\tdoy : 4  // The week that contains Jan 4th is the first week of the year.\n\t\t\t}\n\t\t});\n\n\t\tdatabind.extensions.calendar =",
+
+	"Some extensions as examples": "Quelques exemples d'extensions",
+
+	"<strong>There are no extensions bundled by default with Databinder basic build</strong>. A list of extensions is proposed to you below, so that you can pick just the ones you want and learn how to add your own extensions. Just use the custom build maker or copy the extension code at the end of Databinder source file or in a separate script, at your convenience.": "<strong>Aucune extension n'est fournie de base avec le build minimal de Databinder</strong>. Une liste d'extensions vous est proposée ci-dessous, afin que vous puissiez choisir juste celles qui vous  intéressent et apprendre comment ajouter les votres. Utilisez l'utilitaire de build personnalisé ou copiez simplement le code de l'extension à la fin du fichier source de Databinder ou dans un script à part, à votre convenance.",
+
+	"<span class=\"description\">return": "<span class=\"description\">retourne",
+
+	"<code>true</code> if": "<code>true</code> si",
+
+	"(or <code>value.length</code> for Arrays)": "(ou <code>value.length</code> pour les listes)",
+
+	"if every array elements have a truthy property <code>p</code> or returned a truthy value through function <code>f</code>": "si chaque élément de la liste a une propriété <code>p</code> vraie (dont le cast booléen est <code>true</code>) ou a retourné une valeur vraie à travers la fonction <code>f</code>",
+
+	"if some of the array elements have a truthy property <code>p</code> or returned a truthy value through function <code>f</code>": "si liste non vide, ou si au moins un élément de la liste a une propriété <code>p</code> vraie ou a retourné une valeur vraie à travers la fonction <code>f</code>",
+
+	"if <code>null</code>, <code>undefined</code>, empty array or if none of the array elements passed to the parameter function returned a truthy value": "si <code>null</code>, <code>undefined</code>, liste vide ou si aucun des éléments de la liste passé dans la fonction en paramètre n'a retourné une valeur vraie",
+
+	"Date at local date format": "une Date au format de date local",
+
+	"Date at local time format": "une Date au format d'heure locale",
+
+	"with an optional number of decimals to keep": "avec comme paramètre optionnel le nombre de décimales à conserver",
+
+	"a trimmed String": "une chaîne de caractères sans espaces blancs aux extrémités",
+
+	"a lower-cased String": "une chaîne de caractères en minuscules",
+
+	"an upper-cased String": "une chaîne de caractères en majuscules",
+
+	"a capitalized String": "une chaîne de caractères avec la première lettre en majuscule",
+
+	"Advanced examples": "Exemples avancés",
+
+	"Interval updates": "Mise à jour par intervalles",
+
+	"Recursive templating": "Templates récursifs",
+
+	"Templates can refer to themselves.": "Un template peut faire référence à lui-même pour les vues basées sur la récursivité.",
+
+	"Loading tree view...": "Chargement de l'arbre des dossiers...",
+
+	"Internationalization helpers": "Aides à l'internationalisation",
+
+	"Internationalization involves many issues that are adressed by many existing solutions on the server or client side. Some of these issues relate directly to templating, like currency or date formatting. You can declare a few extensions to help you connect templates to internationalization APIs.": "L'internationalisation d'un site amène de nombreuses problématiques qui sont résolues par diverses solutions existantes côté serveur ou client. Certaines de ces problématiques sont directement reliées aux templates, telles que le formattage de dates ou de sommes monétaires. Vous pouvez à cet effet déclarer quelques extensions pour vous aider à connecter vos templates aux API d'internationalisation existantes.",
+
+	"Your account activity": "Vos dernières dépenses",
+
+	"Change lang": "Changer la langue",
+
+	"The classic todo-app example as shown on <a target=\"_blank\" href=\"http://todomvc.com\">todomvc.com</a>": "L'exemple classique de la to-do-list reprenant celui du site <a target=\"_blank\" href=\"http://todomvc.com\">todomvc.com</a>",
+
+	"Open demo, play and read the source": "Voir la démonstration, jouer et lire le code source",
+
+	"Try by yourself !": "Essayez par vous-même !",
+
+	"Work in progress": "En cours de réalisation",
+
+	"<div id=\"mylist\">\n\t\t\t\t<h3>Dynamic list (currently\n\t\t\t\t\t<span data-bind=\"itemCollection.length\"></span>\n\t\t\t\t\titems)</h3>\n\t\t\t\t<ul data-bind=\"loop: itemCollection\">\n\t\t\t\t\t<li>\n\t\t\t\t\t\tItem <span data-bind=\"num\"></span>\n\t\t\t\t\t\t- <a data-bind=\"click: remove\">remove</a>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<input type=\"button\" value=\"Add another item\"\n\t\t\t\t       data-bind=\"click: addItem\" />\n\t\t\t</div>": "<div id=\"mylist\">\n\t\t\t\t<h3>Liste dynamique (actuellement\n\t\t\t\t\t<span data-bind=\"itemCollection.length\"></span>\n\t\t\t\t\titems)</h3>\n\t\t\t\t<ul data-bind=\"loop: itemCollection\">\n\t\t\t\t\t<li>\n\t\t\t\t\t\tElement <span data-bind=\"num\"></span>\n\t\t\t\t\t\t- <a data-bind=\"click: remove\">supprimer</a>\n\t\t\t\t\t</li>\n\t\t\t\t</ul>\n\t\t\t\t<input type=\"button\" value=\"Ajouter un autre élément\"\n\t\t\t\t       data-bind=\"click: addItem\" />\n\t\t\t</div>",
+
+	"String or Function": "String ou Function",
+
+	"With some bindings, Databinder can listen to user inputs and automatically update your data. Note that it only works if your data has not been transformed through an <a href=\"#extensions\">extension</a>.": "Pour certaines liaisons, Databinder peut réagir aux saisies utilisateur et automatiquement mettre à jour vos données. Notez que cela fonctionne uniquement si la donnée n'a pas été transformée par une <a href=\"#extensions\">extension</a>.",
+
+	"Currently, these automatic updates are trigerred by:": "Actuellement, ces mises à jour automatiques sont déclenchées par:",
+
+	"<code>input</code> events on <code>&lt;input&gt;</code> and <code>&lt;textarea&gt;</code> with a <code>value</code> binding": "les évènements <code>input</code> sur les éléments <code>&lt;input&gt;</code> et <code>&lt;textarea&gt;</code> avec une liaison <code>value</code>",
+
+	"<code>change</code> events on <code>&lt;select&gt;</code> with a <code>value</code> binding": "les évènements <code>change</code> sur les éléments <code>&lt;select&gt;</code> avec une liaison <code>value</code>",
+
+	"<code>input</code> events on <code>[contenteditable]</code> elements with a <code>text</code> or <code>html</code> binding": "les évènements <code>input</code> sur les éléments ayant l'attribut <code>[contenteditable]</code> et une liaison <code>text</code> ou <code>html</code>",
+
+	"Just like the <code>reset()</code> method but in the opposite way, you can manually retrieve data from a form by calling <mark>element.databinding.get()</mark>. You can call this method from any element and Databinder will look for inputable bindings in this element and its child nodes.": "Tout comme la méthode <code>reset()</code> mais dans le sens inverse, vous pouvez récupérer manuellement les données depuis vos formulaires avec <mark>element.databinding.get()</mark>. Vous pouvez appeler cette méthode depuis n'importe quel élément et Databinder cherchera toutes les liaisons récupérables dans cet élément et ses descendants.",
+
+	"View on Github": "Voir sur Github",
+
+	"Design Principles": "Principes de conception",
+
+	"Common questions": "Questions fréquentes",
+
+	"Browser support": "Support navigateur",
+
+	"View updates": "Mise à jour des vues",
+
+	"Data inputs from form fields": "Réagir à la saisie",
+
+	"Binding attributes list": "Liste des liaisons",
+
+	"Extensions for custom syntax": "Extensions de syntaxe",
+
+	"Internationalization": "Internationalisation"
 }
