@@ -15,7 +15,7 @@ databind.bindings.on = {
 
 		function makeHandler(fn, element){
 			return function(event){
-				fn.call(scope.data, event, root.data, element);
+				fn.call(scope.getContextualizedData(), event, root.data, element);
 			};
 		}
 

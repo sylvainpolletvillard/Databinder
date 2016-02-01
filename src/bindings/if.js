@@ -8,7 +8,7 @@ databind.bindings.if = {
 	set: function(scope, invert){
 		var value = scope.resolve(this.declaration);
 		if(Boolean(value) === Boolean(invert)){
-			if(this.parentNode){
+			if(this.parentNode && this.parentNode.contains(this.element)){
 				this.parentNode.removeChild(this.element);
 			}
 			return false; //prevent other bindings to apply

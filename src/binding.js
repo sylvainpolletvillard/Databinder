@@ -17,18 +17,21 @@ function Binding(element, attribute, declaration){
 	}
 	this.element = element;
 	this.attribute = attribute;
+	this.signature = attribute+"||"+declaration+"||"+getXPathFromElement(element);
 	this.declaration = (declaration[0] === '{' ? this.getBindingSet(declaration) : declaration);
 	this.inputable = (declaration.indexOf('|') === -1 && isFunction(this.get) && element.matches("input,textarea,select,[contenteditable]"));
 
 	if(this.inputable) {
+		var self = this,
+		    handleInput = function(){ self.handleInput(); };
 		if(element.matches("input,textarea") && attribute === "value") {
-			element.addEventListener("input", this.handleInput.bind(this));
+			element.addEventListener("input", handleInput);
 		}
 		if(element.tagName === "SELECT" && attribute === "value") {
-			element.addEventListener("change", this.handleInput.bind(this));
+			element.addEventListener("change", handleInput);
 		}
 		if(element.isContentEditable && (attribute === "text" || attribute === "html")) {
-			element.addEventListener("input", this.handleInput.bind(this));
+			element.addEventListener("input", handleInput);
 		}
 	}
 

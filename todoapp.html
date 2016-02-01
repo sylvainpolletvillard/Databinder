@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>ToDoApp</title>
 	<script src="dist/databinder.js"></script>
+	<script src="dist/databinder.extensions.js"></script>
 	<link rel="stylesheet" href="site/style/todoapp.css"/>
 </head>
 <body>
@@ -47,7 +48,7 @@
 			this.todos = [];
 			this.currentFilter = this.filters.all;
 			this.currentInput = "";
-			this.databinding = databind(this.elm, this);
+			databind(this.elm, this);
 		},
 		filters: {
 			all: { label: "All", test: function(i){ return true; } },
@@ -56,7 +57,6 @@
 		},
 		add: function(e){
 			if(String.fromCharCode(e.keyCode) === "\r" && e.target.value != ""){
-				//this.databinding.get(); //TODO
 				this.todos.push({ title: this.currentInput, completed: false, editing: false });
 				this.currentInput = "";
 				this.elm.querySelector("#new-todo").focus();
@@ -69,7 +69,7 @@
 		save: function(e, list){
 			if(e.type === "blur" || String.fromCharCode(e.keyCode) === "\r") {
 				list.databinding.get();
-				//this.editing = false;
+				this.editing = false;
 			}
 		},
 		toggle: function(e, list){

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Databinder - view input binding and auto updates</title>
+	<script type="text/javascript" src="../dist/databinder.js"></script>
+</head>
+<body>
+
+<div id="mylist">
+	<h3>Dynamic list (currently	<span data-bind="array.length"></span> items)</h3>
+	<ul data-bind="loop: { in: array, at: index, as: item }">
+		<li>
+			Item <span data-bind="text: index"></span> - <a data-bind="click: remove">remove</a>
+		</li>
+	</ul>
+	<input type="button" value="Add another item"
+	       data-bind="click: addItem" />
+</div>
+
+<script>
+	var List = function(selector) {
+		var list = Object.create(List.prototype);
+		list.array = [];
+		return databind(selector, list);
+	};
+
+	List.prototype = {
+		addItem: function(){
+			this.array.push({});
+		},
+		remove: function(event, list){
+			event.preventDefault();
+			list.array.splice(this.index, 1);
+		}
+	};
+
+	var myList = List("#mylist");
+	myList.addItem();
+	myList.addItem();
+</script>
+
+</body>
+</html>

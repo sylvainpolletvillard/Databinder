@@ -92,7 +92,9 @@ databind.bindings.loop = {
 		var i, j, n, list;
 		for(i = start; i < start + nbToRemove && i in this.iterations; i++) {
 			for (j = 0, n = this.iterations[i].nodes.length; j < n; j++) {
-				this.element.removeChild(this.iterations[i].nodes[j]);
+				if(this.element.contains(this.iterations[i].nodes[j])){
+					this.element.removeChild(this.iterations[i].nodes[j]);
+				}
 			}
 		}
 		list = this.innerScope.resolve(this.list, true);

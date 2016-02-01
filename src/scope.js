@@ -9,7 +9,7 @@ function Scope(data, parent) {
 		return data;
 	}
 	this.observers = {};
-	this.data = this.makeObservable(wrapPrimitives(data || {}));
+	this.data = this.makeObservable(wrapPrimitives(data || {})); //TODO: deal with data = contextualizedData
 	this.parent = parent;
 }
 
@@ -19,32 +19,26 @@ Scope.prototype = {
 	lookup: function(name, inner) {
 		var key, names, i, l;
 		var scope = this;
-		var data = this.data;
+		var data = this.getContextualizedData();
 
 		if(name === ".") return scope;
 
 		if (name[0] === '/') {
 			while(scope.parent){ scope = scope.parent; }
-			data = scope.data;
+			data = scope.getContextualizedData();
 			name = name.slice(1);
 		} else if(name[0] === "."){
 			i = 0;
 			while(name[++i] === '.' && scope.parent){ scope = scope.parent; }
-			data = scope.data;
+			data = scope.getContextualizedData();
 			name = name.slice(i);
 		} else {
 			//Lookup to find a scope with a matching value
 			key = name.split(".")[0];
 			while(scope.parent){
-				data = scope.data;
-				if(ContextualizedData.isPrototypeOf(data) && data.contextualizedData.hasOwnProperty(key)){
-					data = data.contextualizedData;
-					break;
-				}
-				if(isObject(data) && data.hasOwnProperty(key)){
-					break;
-				}
+				if(isObject(data) && data.hasOwnProperty(key)){ break; }
 				scope = scope.parent;
+				data = scope.getContextualizedData();
 			}
 		}
 
@@ -72,7 +66,7 @@ Scope.prototype = {
 				root = root.parent;
 			}
 
-			fn = fn.call(this.data, root.data, _currentBinding.element);
+			fn = fn.call(this.getContextualizedData(), root.data, _currentBinding.element);
 		}
 		return fn;
 	},
@@ -118,11 +112,11 @@ Scope.prototype = {
 		if(param === "."){
 			parent = scope;
 			prop = "data";
-			value = ContextualizedData.isPrototypeOf(scope.data) ? scope.data.contextualizedData : scope.data;
+			value = scope.getContextualizedData();
 		} else {
-			parent = scope.data;
+			parent = scope.getContextualizedData();
 			prop = param.match(/([^\/\.\s]+)\s*$/)[1];
-			value = ContextualizedData.isPrototypeOf(parent) ? parent.contextualizedData[prop] : parent[prop];
+			value = parent[prop];
 		}
 		return { value: value, parent: parent, prop: prop };
 	},
@@ -131,7 +125,7 @@ Scope.prototype = {
 		var res = this.resolveParam(binding.declaration.split("|")[0].trim());
 		if(res.parent && res.prop){
 			var data = binding.get();
-			res.parent[res.prop] = (res.value === null || res.value === undefined) ? data : Object.getPrototypeOf(res.value).constructor(data);
+			res.parent[res.prop] = isObject(res.value) ? Object.getPrototypeOf(res.value).constructor(data) : data;
 		}
 	},
 
@@ -184,7 +178,9 @@ Scope.prototype = {
 					if (!(signature in scope.observers)) {
 						scope.observers[signature] = [];
 					}
-					if(_currentBinding && scope.observers[signature].indexOf(_currentBinding) === -1){
+					if(_currentBinding && !scope.observers[signature].some(function(binding){
+						return binding.signature === _currentBinding.signature;
+					})){
 						scope.observers[signature].push(_currentBinding);
 					}
 					if (obj[key] instanceof Object) {
@@ -226,6 +222,10 @@ Scope.prototype = {
 			}
 			scope = scope.parent; //bubbling up
 		}
+	},
+
+	getContextualizedData: function(){
+		return ContextualizedData.isPrototypeOf(this.data) ? this.data.contextualizedData : this.data;
 	}
 };
 

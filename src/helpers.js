@@ -16,6 +16,12 @@ function wrapPrimitives(obj){
 	}
 }
 
+function getXPathFromElement(elm){
+	if(!elm){ return ""; }
+	if(!elm.parentNode  || elm === document.body){ return elm.tagName; }
+	return getXPathFromElement(elm.parentNode) + "/" + elm.tagName+"["+[].indexOf.call(elm.parentNode.childNodes,elm)+"]";
+}
+
 if (Element && !Element.prototype.matches) {
 	var p = Element.prototype;
 	p.matches = p.matchesSelector || p.mozMatchesSelector || p.msMatchesSelector ||	p.oMatchesSelector || p.webkitMatchesSelector || function (selector) {
