@@ -85,7 +85,7 @@
 
 <section id="introduction">
 	<header>
-		<h1>Databinder</h1>
+		<h1><img src="site/res/logo.png" alt="Databinder"></h1>
 		<hr>
 		<p>Databinder is a client-side JavaScript DOM-based templating system which let you write templates directly in the DOM while remaining valid HTML5. Inspired by <a href='http://knockoutjs.com/' target='_blank'>Knockout</a> and <a href='http://leonidas.github.io/transparency/' target='_blank'>Transparency</a>, its goal is to facilitate the writing and maintenance of templates by following several principles:</p>
 		<dl class="guidelines">
@@ -97,6 +97,8 @@
 			<dd>Each data representation deserves its own HTML Element : whether to apply special CSS rules, to add <a href='http://www.w3.org/TR/microdata/'>microdata</a>, to extract it from another script or an external program, or just to remind the importance of choosing the correct tags for each data type.</dd>
 		</dl>
 	</header>
+
+	<hr>
 
 		<h3 id="why-templating">Why should I need templating ?</h3>
 		<p>Quick answer: dynamically generated content. Generating pages with custom data inside can be done with string interpolation, but when dealing with more complex data structures (loops, conditional formatting, advanced data transformations), it requires a more powerful solution. Template engines have enough functionnalites to adress most of these issues. Templates are easy to read, easy to maintain, and can be modified to some extent by other people than developers.</p>
@@ -1610,7 +1612,7 @@ setInterval(function(){ clock.time = new Date(); }, 1000);</code></pre>
 	</div>
 	<div class="panel">
 		<span class="legend">Result</span>
-		<div style="position:absolute; left:0; right:0; top: 2em;">
+		<div style="position:relative; margin: 2em 0;">
 			<div id="clock">
 				<div class="needle hour" data-bind="style: { transform: hour }"></div>
 				<div class="needle minute" data-bind="style: { transform: minute }"></div>
