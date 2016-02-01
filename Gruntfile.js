@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 
 		concat: {
 			dist: {
-				src: ['src/config.js', 'src/helpers.js', 'src/databinding.js', 'src/scope.js', 'src/binding.js', 'src/databind.js', 'src/bindings/*.js', 'src/extensions/*.js'],
+				src: ['src/config.js', 'src/helpers.js', 'src/databinding.js', 'src/scope.js', 'src/binding.js', 'src/databind.js', 'src/bindings/*.js'],
 				dest: 'dist/<%= pkg.name.toLowerCase() %>.js',
 				options: {
 					banner: "/* \n"
@@ -39,6 +39,20 @@ module.exports = function(grunt) {
 					+ "*/\n\n"
 					+ ";(function(global){\n",
 					footer: "\n\nglobal[DB_GLOBAL] = databind;\n})(this);",
+					separator: '\n\n'
+				}
+			},
+			extensions: {
+				src: ['src/extensions/*.js'],
+				dest: 'dist/<%= pkg.name.toLowerCase() %>.extensions.js',
+				options: {
+					banner: "/* \n"
+					        + " <%= pkg.name %> extensions \n"
+					        + " @version <%= pkg.version %> \n"
+					        + " @author  <%= pkg.author %> \n"
+					        + " @license <%= pkg.license %> \n"
+					        + " @website <%= pkg.homepage %> \n"
+					        + "*/\n\n",
 					separator: '\n\n'
 				}
 			},
@@ -141,7 +155,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-regex-replace');
 
 
-	grunt.registerTask('dist', ['jshint','concat:dist','concat:dist_umd','uglify']);
+	grunt.registerTask('dist', ['jshint','concat:dist','concat:dist_umd','concat:extensions','uglify']);
 	grunt.registerTask('test', ['qunit']);
 	grunt.registerTask('default', ['dist','test']);
 	grunt.registerTask('docs', ['regex-replace:site','replace:translate_fr']);
